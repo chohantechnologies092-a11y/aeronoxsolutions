@@ -91,7 +91,7 @@ export default async function EditServicePage({
 
           <div className="flex flex-col gap-2">
             <label className="text-sm font-medium text-white">Banner Image (Optional)</label>
-            <ImageUpload name="image" defaultValue={service.image} />
+            <ImageUpload name="image" defaultValue={service.image || undefined} />
           </div>
 
           <div className="flex flex-col gap-2">
