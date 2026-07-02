@@ -1,0 +1,94 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-background: #fcfcfd;
+  --color-foreground: #1e1e2d;
+  --color-card: #ffffff;
+  --color-card-border: #f3f4f6;
+  --color-muted: #6b7280;
+  
+  /* Devlyx Primary Gradients */
+  --color-accent: #6a35ff;
+  --color-accent-secondary: #00c2cb;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    overflow-x: hidden;
+    @apply antialiased selection:bg-accent/20 selection:text-accent;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(135deg, #24182e 0%, #ffbe00 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  
+  .bg-mesh {
+    background-color: #fcfcfd;
+    background-image: 
+        radial-gradient(at 0% 0%, rgba(36, 24, 46, 0.04) 0px, transparent 50%),
+        radial-gradient(at 100% 0%, rgba(255, 190, 0, 0.04) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(36, 24, 46, 0.04) 0px, transparent 50%),
+        radial-gradient(at 0% 100%, rgba(255, 190, 0, 0.04) 0px, transparent 50%);
+  }
+
+  .glass-nav {
+    @apply bg-white/80 backdrop-blur-xl border-b border-gray-100 shadow-sm;
+  }
+}
+
+@layer components {
+  /* Complex Animations & Specific Component Styles */
+  .reveal-nav {
+      animation: centerReveal 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  @keyframes centerReveal {
+      0% { transform: scaleX(0); opacity: 0; }
+      100% { transform: scaleX(1); opacity: 1; }
+  }
+
+  /* Bento Grid */
+  .bento-card {
+      transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 10px 30px -15px rgba(0,0,0,0.1);
+      @apply bg-white border border-gray-100 rounded-[2rem];
+  }
+  .bento-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(106, 53, 255, 0.1);
+  }
+
+  /* Editor Overrides */
+  .ql-container {
+    font-family: inherit !important;
+    font-size: 1rem !important;
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+    min-height: 200px;
+    background-color: var(--color-card) !important;
+    border-color: var(--color-card-border) !important;
+    color: var(--color-foreground) !important;
+  }
+
+  .ql-toolbar {
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    border-color: var(--color-card-border) !important;
+    background-color: var(--color-background) !important;
+  }
+}
