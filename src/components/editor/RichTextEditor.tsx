@@ -146,6 +146,7 @@ export function RichTextEditor({ name, defaultValue = "", placeholder }: RichTex
       <input type="hidden" name={name} id={`${name}-hidden`} defaultValue={defaultValue} />
       
       <ReactQuill
+        // @ts-expect-error - ReactQuill types are outdated and don't include ref
         ref={quillRef}
         theme="snow"
         defaultValue={defaultValue}
