@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Services } from "@/components/sections/Services";
 import { CTA } from "@/components/sections/CTA";
-import { prisma } from "@/lib/db";
+import { getServices } from "@/lib/data";
 import Image from "next/image";
 
 export const metadata: Metadata = {
@@ -12,9 +12,7 @@ export const metadata: Metadata = {
 export const revalidate = 0;
 
 export default async function ServicesPage() {
-  const services = await prisma.service.findMany({
-    orderBy: { createdAt: "desc" }
-  });
+  const services = await getServices();
 
   return (
     <>

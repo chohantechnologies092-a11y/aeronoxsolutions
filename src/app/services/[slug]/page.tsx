@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import { getServiceBySlug } from "@/lib/data";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
@@ -11,9 +11,7 @@ export default async function ServiceDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const service = await prisma.service.findUnique({
-    where: { slug },
-  });
+  const service = await getServiceBySlug(slug);
 
   if (!service) {
     notFound();

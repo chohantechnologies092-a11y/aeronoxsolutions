@@ -1,8 +1,11 @@
 "use server";
 
-import { prisma } from "@/lib/db";
+import { db } from "@/lib/firebase-admin";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+
+// Helper for dates
+const getNow = () => new Date().toISOString();
 
 // ────────────────────────────────────────────────────────────────────────────
 // Projects
@@ -23,18 +26,16 @@ export async function createProject(formData: FormData) {
 
   const slug = rawSlug || title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
-  await prisma.project.create({
-    data: {
-      title,
-      slug,
-      content: content || "",
-      description,
-      client: client || null,
-      tags,
-      image:
-        image ||
-        "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=2000",
-    },
+  await db.collection("projects").add({
+    title,
+    slug,
+    content: content || "",
+    description,
+    client: client || null,
+    tags,
+    image: image || "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=2000",
+    createdAt: getNow(),
+    updatedAt: getNow(),
   });
 
   revalidatePath("/portfolio");
@@ -43,7 +44,7 @@ export async function createProject(formData: FormData) {
 }
 
 export async function deleteProject(id: string) {
-  await prisma.project.delete({ where: { id } });
+  await db.collection("projects").doc(id).delete();
   revalidatePath("/portfolio");
   revalidatePath("/admin/projects");
 }
@@ -63,19 +64,15 @@ export async function updateProject(id: string, formData: FormData) {
 
   const slug = rawSlug || title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
-  await prisma.project.update({
-    where: { id },
-    data: {
-      title,
-      slug,
-      content: content || "",
-      description,
-      client: client || null,
-      tags,
-      image:
-        image ||
-        "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=2000",
-    },
+  await db.collection("projects").doc(id).update({
+    title,
+    slug,
+    content: content || "",
+    description,
+    client: client || null,
+    tags,
+    image: image || "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=2000",
+    updatedAt: getNow(),
   });
 
   revalidatePath("/portfolio");
@@ -103,17 +100,17 @@ export async function createService(formData: FormData) {
 
   const slug = rawSlug || title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
-  await prisma.service.create({
-    data: {
-      title,
-      slug,
-      shortDescription,
-      content: content || "",
-      image: image || null,
-      icon: icon || "search",
-      color: color || "#ffbe00",
-      bentoClass: bentoClass || "md:col-span-1",
-    },
+  await db.collection("services").add({
+    title,
+    slug,
+    shortDescription,
+    content: content || "",
+    image: image || null,
+    icon: icon || "search",
+    color: color || "#ffbe00",
+    bentoClass: bentoClass || "md:col-span-1",
+    createdAt: getNow(),
+    updatedAt: getNow(),
   });
 
   revalidatePath("/services");
@@ -138,18 +135,16 @@ export async function updateService(id: string, formData: FormData) {
 
   const slug = rawSlug || title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
-  await prisma.service.update({
-    where: { id },
-    data: {
-      title,
-      slug,
-      shortDescription,
-      content: content || "",
-      image: image || null,
-      icon: icon || "search",
-      color: color || "#ffbe00",
-      bentoClass: bentoClass || "md:col-span-1",
-    },
+  await db.collection("services").doc(id).update({
+    title,
+    slug,
+    shortDescription,
+    content: content || "",
+    image: image || null,
+    icon: icon || "search",
+    color: color || "#ffbe00",
+    bentoClass: bentoClass || "md:col-span-1",
+    updatedAt: getNow(),
   });
 
   revalidatePath("/services");
@@ -159,7 +154,7 @@ export async function updateService(id: string, formData: FormData) {
 }
 
 export async function deleteService(id: string) {
-  await prisma.service.delete({ where: { id } });
+  await db.collection("services").doc(id).delete();
   revalidatePath("/services");
   revalidatePath("/admin/services");
   revalidatePath("/");
@@ -179,23 +174,19 @@ export async function createBlog(formData: FormData) {
     throw new Error("Title and content are required.");
   }
 
-  // Build a URL-safe slug and guarantee uniqueness
-  const baseSlug = title
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/(^-|-$)/g, "");
+  const baseSlug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
   const suffix = Date.now().toString(36);
   const slug = `${baseSlug}-${suffix}`;
 
-  await prisma.blog.create({
-    data: {
-      title,
-      slug,
-      content,
-      excerpt: excerpt || content.slice(0, 160),
-      author: author || "Admin",
-      published: true,
-    },
+  await db.collection("blogs").add({
+    title,
+    slug,
+    content,
+    excerpt: excerpt || content.slice(0, 160),
+    author: author || "Admin",
+    published: true,
+    createdAt: getNow(),
+    updatedAt: getNow(),
   });
 
   revalidatePath("/blog");
@@ -204,7 +195,7 @@ export async function createBlog(formData: FormData) {
 }
 
 export async function deleteBlog(id: string) {
-  await prisma.blog.delete({ where: { id } });
+  await db.collection("blogs").doc(id).delete();
   revalidatePath("/blog");
   revalidatePath("/admin/blogs");
 }
@@ -218,15 +209,13 @@ export async function upsertSEO(formData: FormData) {
   const description = formData.get("description") as string;
   const keywords = formData.get("keywords") as string;
 
-  const existing = await prisma.sEO.findFirst();
-  if (existing) {
-    await prisma.sEO.update({
-      where: { id: existing.id },
-      data: { title, description, keywords, updatedAt: new Date() },
-    });
-  } else {
-    await prisma.sEO.create({ data: { title, description, keywords } });
-  }
+  const seoRef = db.collection("seo").doc("global");
+  await seoRef.set({
+    title,
+    description,
+    keywords,
+    updatedAt: getNow(),
+  }, { merge: true });
 
   revalidatePath("/");
   revalidatePath("/admin/seo");
@@ -246,12 +235,12 @@ export async function createClient(formData: FormData) {
     throw new Error("Name and logo are required.");
   }
 
-  await prisma.client.create({
-    data: {
-      name,
-      logo,
-      link: link || null,
-    },
+  await db.collection("clients").add({
+    name,
+    logo,
+    link: link || null,
+    createdAt: getNow(),
+    updatedAt: getNow(),
   });
 
   revalidatePath("/admin/clients");
@@ -268,13 +257,11 @@ export async function updateClient(id: string, formData: FormData) {
     throw new Error("Name and logo are required.");
   }
 
-  await prisma.client.update({
-    where: { id },
-    data: {
-      name,
-      logo,
-      link: link || null,
-    },
+  await db.collection("clients").doc(id).update({
+    name,
+    logo,
+    link: link || null,
+    updatedAt: getNow(),
   });
 
   revalidatePath("/admin/clients");
@@ -283,8 +270,7 @@ export async function updateClient(id: string, formData: FormData) {
 }
 
 export async function deleteClient(id: string) {
-  await prisma.client.delete({ where: { id } });
+  await db.collection("clients").doc(id).delete();
   revalidatePath("/admin/clients");
   revalidatePath("/");
 }
-

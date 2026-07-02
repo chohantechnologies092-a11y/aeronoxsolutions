@@ -1,41 +1,20 @@
-import { prisma } from "@/lib/db";
-import { revalidatePath } from "next/cache";
+import { getSEO } from "@/lib/data";
+import { upsertSEO } from "@/lib/actions";
 
 export default async function AdminSEO() {
-  const seo = await prisma.sEO.findFirst() || {
+  const seo = await getSEO() || {
     id: "new",
     title: "Premium Digital Agency",
     description: "Your digital partner.",
     keywords: "digital, agency",
   };
 
-  async function saveSEO(formData: FormData) {
-    "use server";
-    const title = formData.get("title") as string;
-    const description = formData.get("description") as string;
-    const keywords = formData.get("keywords") as string;
-
-    const existing = await prisma.sEO.findFirst();
-    if (existing) {
-      await prisma.sEO.update({
-        where: { id: existing.id },
-        data: { title, description, keywords }
-      });
-    } else {
-      await prisma.sEO.create({
-        data: { title, description, keywords }
-      });
-    }
-
-    revalidatePath("/", "layout");
-  }
-
   return (
     <div className="max-w-2xl mx-auto">
       <h1 className="text-3xl font-bold text-white mb-8">Global SEO Settings</h1>
       
       <div className="bg-[#24182e] p-8 rounded-2xl border border-white/10">
-        <form action={saveSEO} className="flex flex-col gap-6">
+        <form action={upsertSEO} className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
             <label htmlFor="title" className="text-sm font-medium text-white">Default Title</label>
             <input 

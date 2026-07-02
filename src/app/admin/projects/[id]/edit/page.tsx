@@ -2,7 +2,7 @@ import { updateProject } from "@/lib/actions";
 import { Button } from "@/components/ui/Button";
 import { ImageUpload } from "@/components/ui/ImageUpload";
 import { RichTextEditor } from "@/components/editor/RichTextEditor";
-import { prisma } from "@/lib/db";
+import { getProjectById } from "@/lib/data";
 import { notFound } from "next/navigation";
 
 export default async function EditProjectPage({
@@ -12,9 +12,7 @@ export default async function EditProjectPage({
 }) {
   const { id } = await params;
   
-  const project = await prisma.project.findUnique({
-    where: { id },
-  });
+  const project = await getProjectById(id);
 
   if (!project) {
     notFound();

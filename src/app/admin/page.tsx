@@ -1,8 +1,9 @@
-import { prisma } from "@/lib/db";
+import { getCount } from "@/lib/data";
 
 export default async function AdminDashboard() {
-  const projectsCount = await prisma.project.count();
-  const blogsCount = await prisma.blog.count();
+  const projectsCount = await getCount("projects");
+  const blogsCount = await getCount("blogs");
+  const servicesCount = await getCount("services");
 
   return (
     <div>

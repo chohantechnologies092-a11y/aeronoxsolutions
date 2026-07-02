@@ -1,12 +1,10 @@
-import { prisma } from "@/lib/db";
+import { getServices } from "@/lib/data";
 import Link from "next/link";
 import { Plus, Trash2, Edit } from "lucide-react";
 import { deleteService } from "@/lib/actions";
 
 export default async function ServicesAdminPage() {
-  const services = await prisma.service.findMany({
-    orderBy: { createdAt: "desc" },
-  });
+  const services = await getServices();
 
   return (
     <div>

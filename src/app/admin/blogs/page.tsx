@@ -1,12 +1,10 @@
-import { prisma } from "@/lib/db";
+import { getBlogs } from "@/lib/data";
 import { Button } from "@/components/ui/Button";
 import { deleteBlog } from "@/lib/actions";
 import { Plus, Trash2, Calendar, Eye } from "lucide-react";
 
 export default async function AdminBlogs() {
-  const blogs = await prisma.blog.findMany({
-    orderBy: { createdAt: "desc" },
-  });
+  const blogs = await getBlogs();
 
   return (
     <div>

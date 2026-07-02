@@ -36,7 +36,7 @@ const staggerContainer = {
 };
 
 export function PortfolioContent({ project }: { project: Project }) {
-  const tags = project.tags.split(",").map(tag => tag.trim());
+  const tags = project.tags.split(",").map((tag: string) => tag.trim());
 
   return (
     <article className="min-h-screen pt-36 pb-24 bg-mesh relative overflow-hidden">

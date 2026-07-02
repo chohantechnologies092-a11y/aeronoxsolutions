@@ -2,7 +2,7 @@ import { updateService } from "@/lib/actions";
 import { Button } from "@/components/ui/Button";
 import { RichTextEditor } from "@/components/editor/RichTextEditor";
 import { ImageUpload } from "@/components/ui/ImageUpload";
-import { prisma } from "@/lib/db";
+import { getServiceById } from "@/lib/data";
 import { notFound } from "next/navigation";
 
 export default async function EditServicePage({
@@ -12,9 +12,7 @@ export default async function EditServicePage({
 }) {
   const { id } = await params;
   
-  const service = await prisma.service.findUnique({
-    where: { id },
-  });
+  const service = await getServiceById(id);
 
   if (!service) {
     notFound();

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/db";
+import { db } from "@/lib/firebase-admin";
+
 export async function POST(request: Request) {
   try {
     const body = await request.json();
@@ -22,12 +23,11 @@ export async function POST(request: Request) {
     }
 
     // Save to database
-    await prisma.contactMessage.create({
-      data: {
-        name,
-        email,
-        message,
-      },
+    await db.collection("messages").add({
+      name,
+      email,
+      message,
+      createdAt: new Date().toISOString(),
     });
 
     // Output submission details to server log

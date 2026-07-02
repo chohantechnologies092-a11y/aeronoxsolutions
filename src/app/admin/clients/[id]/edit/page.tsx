@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import { getClientById } from "@/lib/data";
 import { notFound } from "next/navigation";
 import EditClientForm from "./EditClientForm";
 
@@ -8,9 +8,7 @@ export default async function EditClientPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const client = await prisma.client.findUnique({
-    where: { id },
-  });
+  const client = await getClientById(id);
 
   if (!client) {
     notFound();

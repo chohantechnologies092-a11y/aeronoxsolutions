@@ -1,13 +1,11 @@
-import { prisma } from "@/lib/db";
+import { getClients } from "@/lib/data";
 import Link from "next/link";
 import { Plus, Trash2, Edit } from "lucide-react";
 import { deleteClient } from "@/lib/actions";
 import Image from "next/image";
 
 export default async function ClientsAdminPage() {
-  const clients = await prisma.client.findMany({
-    orderBy: { createdAt: "desc" },
-  });
+  const clients = await getClients();
 
   return (
     <div>

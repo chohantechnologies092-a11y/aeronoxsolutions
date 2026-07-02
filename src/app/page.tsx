@@ -1,4 +1,4 @@
-import { prisma } from "@/lib/db";
+import { getServices, getProjects, getClients } from "@/lib/data";
 import { Hero } from "@/components/sections/Hero";
 import { LogoMarquee } from "@/components/sections/LogoMarquee";
 import { Services } from "@/components/sections/Services";
@@ -11,9 +11,9 @@ export const revalidate = 0;
 
 export default async function HomePage() {
   const [services, projects, clients] = await Promise.all([
-    prisma.service.findMany({ orderBy: { createdAt: "desc" } }),
-    prisma.project.findMany({ orderBy: { createdAt: "desc" } }),
-    prisma.client.findMany({ orderBy: { createdAt: "desc" } }),
+    getServices(),
+    getProjects(),
+    getClients(),
   ]);
 
   return (

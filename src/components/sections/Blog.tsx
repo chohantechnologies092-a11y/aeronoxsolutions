@@ -3,7 +3,17 @@
 import { motion } from "framer-motion";
 import { ArrowRight, Clock } from "lucide-react";
 import Link from "next/link";
-import { Blog as BlogType } from "@prisma/client";
+type BlogType = {
+  id: string;
+  title: string;
+  slug: string;
+  content: string;
+  excerpt: string | null;
+  author: string;
+  published: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
 
 export function Blog({ blogPosts }: { blogPosts: BlogType[] }) {
   return (

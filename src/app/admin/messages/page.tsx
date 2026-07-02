@@ -1,10 +1,8 @@
-import { prisma } from "@/lib/db";
+import { getMessages } from "@/lib/data";
 import { MessageCircle, Calendar } from "lucide-react";
 
 export default async function AdminMessages() {
-  const messages = await prisma.contactMessage.findMany({
-    orderBy: { createdAt: "desc" },
-  });
+  const messages = await getMessages();
 
   return (
     <div>

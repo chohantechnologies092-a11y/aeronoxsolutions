@@ -1,13 +1,11 @@
-import { prisma } from "@/lib/db";
+import { getProjects } from "@/lib/data";
 import { Button } from "@/components/ui/Button";
 import { deleteProject } from "@/lib/actions";
 import { Plus, Trash2, Calendar, User, Edit } from "lucide-react";
 import Link from "next/link";
 
 export default async function AdminProjects() {
-  const projects = await prisma.project.findMany({
-    orderBy: { createdAt: "desc" },
-  });
+  const projects = await getProjects();
 
   return (
     <div>
@@ -57,7 +55,7 @@ export default async function AdminProjects() {
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex flex-wrap gap-1">
-                      {project.tags.split(",").slice(0, 2).map((tag) => (
+                      {project.tags.split(",").slice(0, 2).map((tag: string) => (
                         <span key={tag} className="px-2 py-0.5 rounded-full bg-[#ffbe00]/10 text-[#ffbe00] text-xs border border-[#ffbe00]/20">
                           {tag.trim()}
                         </span>

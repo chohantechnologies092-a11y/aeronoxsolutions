@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, Clock, Calendar, ChevronRight } from "lucide-react";
-import { prisma } from "@/lib/db";
+import { getBlogBySlug } from "@/lib/data";
 
 type Props = {
   params: Promise<{ slug: string }>;
@@ -10,7 +10,7 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const resolvedParams = await params;
-  const post = await prisma.blog.findUnique({ where: { slug: resolvedParams.slug } });
+  const post = await getBlogBySlug(resolvedParams.slug);
   if (!post) return {};
 
   return {
@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogPostPage({ params }: Props) {
   const resolvedParams = await params;
-  const post = await prisma.blog.findUnique({ where: { slug: resolvedParams.slug } });
+  const post = await getBlogBySlug(resolvedParams.slug);
 
   if (!post || !post.published) {
     notFound();
@@ -78,7 +78,7 @@ export default async function BlogPostPage({ params }: Props) {
 
         {/* Blog Post Content Body */}
         <div className="mt-8 prose prose-invert max-w-none text-muted leading-relaxed text-sm sm:text-base space-y-6">
-          {post.content.split("\n\n").map((paragraph, index) => {
+          {post.content.split("\n\n").map((paragraph: string, index: number) => {
             // Very simple rendering of markdown-like formats
             if (paragraph.startsWith("## ")) {
               return (

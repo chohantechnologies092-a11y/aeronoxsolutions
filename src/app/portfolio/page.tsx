@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Portfolio } from "@/components/sections/Portfolio";
 import { CTA } from "@/components/sections/CTA";
-import { prisma } from "@/lib/db";
+import { getProjects } from "@/lib/data";
 import Image from "next/image";
 
 export const metadata: Metadata = {
@@ -12,9 +12,7 @@ export const metadata: Metadata = {
 export const revalidate = 0; // Disable caching for dynamic data
 
 export default async function PortfolioPage() {
-  const projects = await prisma.project.findMany({
-    orderBy: { createdAt: "desc" }
-  });
+  const projects = await getProjects();
 
   return (
     <>
