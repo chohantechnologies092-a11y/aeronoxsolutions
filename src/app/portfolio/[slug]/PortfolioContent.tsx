@@ -36,7 +36,7 @@ const staggerContainer = {
 };
 
 export function PortfolioContent({ project }: { project: Project }) {
-  const tags = project.tags.split(",").map((tag: string) => tag.trim());
+  const tags = (project.tags || "").split(",").map((tag: string) => tag.trim()).filter(Boolean);
 
   return (
     <article className="min-h-screen pt-36 pb-24 bg-mesh relative overflow-hidden">
@@ -114,33 +114,52 @@ export function PortfolioContent({ project }: { project: Project }) {
           />
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 mb-24">
+        <div className="max-w-4xl mx-auto mb-24">
           <motion.div 
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.7 }}
-            className="lg:col-span-4"
+            className="mb-12"
           >
-            <div className="sticky top-32 p-8 bg-card/60 backdrop-blur-md rounded-3xl border border-card-border shadow-xl">
-              <h3 className="text-lg font-black mb-4 uppercase tracking-widest text-[#24182e]">The Challenge</h3>
-              <p className="text-base font-medium leading-relaxed text-muted">
-                {project.description}
-              </p>
+            <div className="p-8 md:p-12 bg-gradient-to-br from-[#24182e] to-[#1a1122] backdrop-blur-md rounded-[2rem] border border-white/10 shadow-2xl relative overflow-hidden group">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-[#ffbe00]/20 rounded-full blur-[80px] transform translate-x-1/2 -translate-y-1/2 group-hover:scale-110 transition-transform duration-700" />
+              
+              <div className="flex flex-col md:flex-row md:items-center gap-6 relative z-10">
+                <div className="w-16 h-16 shrink-0 rounded-full bg-[#ffbe00]/10 flex items-center justify-center">
+                  <span className="text-[#ffbe00] font-black text-2xl">💡</span>
+                </div>
+                <div>
+                  <h3 className="text-xl font-black uppercase tracking-widest text-white mb-2">Project Overview</h3>
+                  <p className="text-lg md:text-xl font-medium leading-relaxed text-gray-300">
+                    {project.description}
+                  </p>
+                </div>
+              </div>
             </div>
           </motion.div>
           
           <motion.div 
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.7 }}
-            className="lg:col-span-8"
           >
-            <div className="bg-white/50 backdrop-blur-sm p-8 md:p-12 rounded-3xl border border-card-border shadow-sm">
+            <div className="bg-white/80 backdrop-blur-xl p-8 md:p-12 lg:p-16 rounded-[2rem] border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#ffbe00] to-[#24182e]" />
+              
               <div 
-                className="prose prose-lg md:prose-xl max-w-none prose-headings:font-display prose-headings:font-bold prose-headings:tracking-tight prose-a:text-[#ffbe00] prose-a:no-underline hover:prose-a:underline marker:text-[#ffbe00] prose-ul:space-y-2 prose-li:marker:text-[#ffbe00]"
-                dangerouslySetInnerHTML={{ __html: project.content }}
+                className="max-w-none 
+                [&_h2]:text-3xl md:[&_h2]:text-4xl [&_h2]:font-display [&_h2]:font-extrabold [&_h2]:tracking-tight [&_h2]:text-[#24182e] [&_h2]:mt-12 [&_h2]:mb-6 [&_h2:first-child]:mt-0
+                [&_h3]:text-2xl [&_h3]:font-display [&_h3]:font-bold [&_h3]:text-[#24182e] [&_h3]:mt-10 [&_h3]:mb-4
+                [&_p]:text-gray-600 [&_p]:leading-[1.8] [&_p]:mb-8 [&_p]:text-lg
+                [&_strong]:text-[#24182e] [&_strong]:font-bold
+                [&_ul]:bg-gray-50/80 [&_ul]:p-6 md:[&_ul]:p-10 [&_ul]:rounded-3xl [&_ul]:border [&_ul]:border-gray-100 [&_ul]:space-y-4 [&_ul]:my-10 [&_ul]:shadow-sm [&_ul]:list-none
+                [&_li]:text-gray-700 [&_li]:text-lg [&_li]:relative [&_li]:pl-6
+                [&_li::before]:content-['•'] [&_li::before]:absolute [&_li::before]:left-0 [&_li::before]:text-[#ffbe00] [&_li::before]:font-black [&_li::before]:text-xl
+                [&_a]:text-[#ffbe00] [&_a]:font-bold [&_a]:no-underline hover:[&_a]:underline 
+                break-words overflow-hidden"
+                dangerouslySetInnerHTML={{ __html: project.content.replace(/:-/g, '') }}
               />
             </div>
           </motion.div>

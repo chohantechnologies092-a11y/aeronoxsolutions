@@ -10,7 +10,8 @@ type Props = {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const resolvedParams = await params;
-  const post = await getBlogBySlug(resolvedParams.slug);
+  const slug = decodeURIComponent(resolvedParams.slug);
+  const post = await getBlogBySlug(slug);
   if (!post) return {};
 
   return {
@@ -21,7 +22,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function BlogPostPage({ params }: Props) {
   const resolvedParams = await params;
-  const post = await getBlogBySlug(resolvedParams.slug);
+  const slug = decodeURIComponent(resolvedParams.slug);
+  const post = await getBlogBySlug(slug);
 
   if (!post || !post.published) {
     notFound();

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Portfolio } from "@/components/sections/Portfolio";
+import { PortfolioList } from "@/components/sections/PortfolioList";
 import { CTA } from "@/components/sections/CTA";
 import { getProjects } from "@/lib/data";
 import Image from "next/image";
@@ -41,7 +41,7 @@ export default async function PortfolioPage() {
           </div>
         </div>
       </div>
-      <Portfolio projects={projects} />
+      <PortfolioList projects={projects} />
       <CTA />
     </>
   );

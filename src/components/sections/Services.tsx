@@ -64,7 +64,7 @@ export function Services({ services }: { services: any[] }) {
             {[
               { id: "all", label: "All Services" },
               { id: "marketing", label: "SEO & Marketing" },
-              { id: "development", label: "Devlyx Engineering" }
+              { id: "development", label: "Custom Engineering" }
             ].map((tab) => {
               const isActive = filter === tab.id;
               return (

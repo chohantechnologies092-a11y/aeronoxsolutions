@@ -24,7 +24,7 @@ export async function createProject(formData: FormData) {
     throw new Error("Title, description and tags are required.");
   }
 
-  const slug = rawSlug || title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  const slug = (rawSlug || title).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
   await db.collection("projects").add({
     title,
@@ -62,7 +62,7 @@ export async function updateProject(id: string, formData: FormData) {
     throw new Error("Title, description and tags are required.");
   }
 
-  const slug = rawSlug || title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  const slug = (rawSlug || title).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
   await db.collection("projects").doc(id).update({
     title,
@@ -98,7 +98,7 @@ export async function createService(formData: FormData) {
     throw new Error("Title and short description are required.");
   }
 
-  const slug = rawSlug || title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  const slug = (rawSlug || title).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
   await db.collection("services").add({
     title,
@@ -133,7 +133,7 @@ export async function updateService(id: string, formData: FormData) {
     throw new Error("Title and short description are required.");
   }
 
-  const slug = rawSlug || title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  const slug = (rawSlug || title).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
   await db.collection("services").doc(id).update({
     title,
