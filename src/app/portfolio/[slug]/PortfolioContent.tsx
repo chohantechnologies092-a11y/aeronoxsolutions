@@ -74,7 +74,7 @@ export function PortfolioContent({ project }: { project: Project }) {
           </motion.h1>
           
           <motion.div variants={fadeIn} className="flex flex-wrap items-center justify-between gap-8 text-sm font-medium border-y border-card-border py-8 bg-card/20 backdrop-blur-sm px-8 rounded-3xl">
-            {project.client && (
+            {project.client && project.client.toLowerCase() !== project.title.toLowerCase() && (
               <div>
                 <span className="block text-xs font-bold uppercase tracking-widest text-muted mb-2">Client</span>
                 <span className="text-xl font-bold text-foreground">{project.client}</span>
