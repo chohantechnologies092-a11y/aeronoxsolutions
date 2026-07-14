@@ -46,6 +46,7 @@ export default function RootLayout({
     <html lang="en" className="antialiased" suppressHydrationWarning>
       <body
         className={`${inter.variable} ${spaceGrotesk.variable} bg-background text-foreground font-sans`}
+        suppressHydrationWarning
       >
         <LayoutShell>{children}</LayoutShell>
       </body>

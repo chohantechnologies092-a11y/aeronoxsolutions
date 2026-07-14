@@ -1,10 +1,26 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Mail, MapPin, Phone, ArrowUpRight } from "lucide-react";
 import { FaLinkedin, FaXTwitter, FaFacebook, FaInstagram } from "react-icons/fa6";
 import { navLinks, siteConfig } from "@/lib/constants";
+import { fetchSettingsAction } from "@/lib/actions";
 
 export function Footer() {
+  const [socials, setSocials] = useState(siteConfig.socials);
+
+  useEffect(() => {
+    async function loadSettings() {
+      const settings = await fetchSettingsAction();
+      if (settings?.socials) {
+        setSocials(settings.socials);
+      }
+    }
+    loadSettings();
+  }, []);
+
   return (
     <footer className="relative bg-[#24182e] border-t border-gray-800 py-16 text-white font-sans">
       <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
@@ -18,48 +34,55 @@ export function Footer() {
                 height={40}
                 className="object-contain h-10 w-auto group-hover:opacity-80 transition-opacity"
               />
-
             </Link>
             <p className="mt-6 max-w-sm text-sm leading-relaxed text-gray-400">
               {siteConfig.description}
             </p>
             <div className="mt-8 flex items-center gap-4">
-              <a
-                href={siteConfig.socials.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex h-9 w-9 items-center justify-center rounded-xl border border-gray-700 bg-gray-800 text-gray-400 transition-all hover:border-[#ffbe00]/50 hover:bg-[#ffbe00]/10 hover:text-[#ffbe00]"
-                aria-label="LinkedIn"
-              >
-                <FaLinkedin size={16} />
-              </a>
-              <a
-                href={siteConfig.socials.twitter}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex h-9 w-9 items-center justify-center rounded-xl border border-gray-700 bg-gray-800 text-gray-400 transition-all hover:border-[#ffbe00]/50 hover:bg-[#ffbe00]/10 hover:text-[#ffbe00]"
-                aria-label="Twitter"
-              >
-                <FaXTwitter size={16} />
-              </a>
-              <a
-                href={siteConfig.socials.facebook}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex h-9 w-9 items-center justify-center rounded-xl border border-gray-700 bg-gray-800 text-gray-400 transition-all hover:border-[#ffbe00]/50 hover:bg-[#ffbe00]/10 hover:text-[#ffbe00]"
-                aria-label="Facebook"
-              >
-                <FaFacebook size={16} />
-              </a>
-              <a
-                href={siteConfig.socials.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex h-9 w-9 items-center justify-center rounded-xl border border-gray-700 bg-gray-800 text-gray-400 transition-all hover:border-[#ffbe00]/50 hover:bg-[#ffbe00]/10 hover:text-[#ffbe00]"
-                aria-label="Instagram"
-              >
-                <FaInstagram size={16} />
-              </a>
+              {socials.linkedin && (
+                <a
+                  href={socials.linkedin}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-9 w-9 items-center justify-center rounded-xl border border-gray-700 bg-gray-800 text-gray-400 transition-all hover:border-[#0A66C2] hover:bg-[#0A66C2]/10 hover:text-[#0A66C2]"
+                  aria-label="LinkedIn"
+                >
+                  <FaLinkedin size={16} />
+                </a>
+              )}
+              {socials.twitter && (
+                <a
+                  href={socials.twitter}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-9 w-9 items-center justify-center rounded-xl border border-gray-700 bg-gray-800 text-gray-400 transition-all hover:border-white hover:bg-white/10 hover:text-white"
+                  aria-label="Twitter"
+                >
+                  <FaXTwitter size={16} />
+                </a>
+              )}
+              {socials.facebook && (
+                <a
+                  href={socials.facebook}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-9 w-9 items-center justify-center rounded-xl border border-gray-700 bg-gray-800 text-gray-400 transition-all hover:border-[#1877F2] hover:bg-[#1877F2]/10 hover:text-[#1877F2]"
+                  aria-label="Facebook"
+                >
+                  <FaFacebook size={16} />
+                </a>
+              )}
+              {socials.instagram && (
+                <a
+                  href={socials.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-9 w-9 items-center justify-center rounded-xl border border-gray-700 bg-gray-800 text-gray-400 transition-all hover:border-[#E1306C] hover:bg-[#E1306C]/10 hover:text-[#E1306C]"
+                  aria-label="Instagram"
+                >
+                  <FaInstagram size={16} />
+                </a>
+              )}
             </div>
           </div>
 

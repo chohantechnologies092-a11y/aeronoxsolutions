@@ -45,6 +45,12 @@ export async function getSEO(): Promise<any> {
   return { id: doc.id, ...doc.data() };
 }
 
+export async function getSettings(): Promise<any> {
+  const doc = await db.collection("settings").doc("global").get();
+  if (!doc.exists) return null;
+  return { id: doc.id, ...doc.data() };
+}
+
 export async function getMessages(): Promise<any[]> {
   const snapshot = await db.collection("messages").orderBy("createdAt", "desc").get();
   return snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));

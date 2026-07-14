@@ -29,8 +29,8 @@ export function Header() {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
           className={`pointer-events-auto flex items-center justify-between w-full max-w-4xl rounded-full transition-all duration-300 ${isScrolled
-            ? "bg-gray-950/95 backdrop-blur-xl border border-gray-800 shadow-2xl py-3 px-6"
-            : "bg-gray-950 border border-gray-800 shadow-xl py-4 px-8"
+            ? "bg-[#24182e]/95 backdrop-blur-xl border border-gray-800 shadow-2xl py-3 px-6"
+            : "bg-[#24182e] border border-gray-800 shadow-xl py-4 px-8"
             }`}
         >
           {/* Logo */}
@@ -88,7 +88,7 @@ export function Header() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed top-24 left-4 right-4 z-40 md:hidden bg-gray-950 border border-gray-800 rounded-3xl shadow-2xl overflow-hidden"
+            className="fixed top-24 left-4 right-4 z-40 md:hidden bg-[#24182e] border border-gray-800 rounded-3xl shadow-2xl overflow-hidden"
           >
             <div className="px-6 py-8 flex flex-col gap-6">
               {headerLinks.map((link) => (

@@ -274,3 +274,33 @@ export async function deleteClient(id: string) {
   revalidatePath("/admin/clients");
   revalidatePath("/");
 }
+
+// ────────────────────────────────────────────────────────────────────────────
+// Settings & SEO
+// ────────────────────────────────────────────────────────────────────────────
+
+export async function upsertSettings(formData: FormData) {
+  const linkedin = formData.get("linkedin") as string;
+  const twitter = formData.get("twitter") as string;
+  const facebook = formData.get("facebook") as string;
+  const instagram = formData.get("instagram") as string;
+
+  await db.collection("settings").doc("global").set({
+    socials: {
+      linkedin: linkedin || "",
+      twitter: twitter || "",
+      facebook: facebook || "",
+      instagram: instagram || ""
+    },
+    updatedAt: getNow()
+  }, { merge: true });
+
+  revalidatePath("/", "layout");
+}
+
+export async function fetchSettingsAction() {
+  const doc = await db.collection("settings").doc("global").get();
+  if (!doc.exists) return null;
+  return doc.data();
+}
+

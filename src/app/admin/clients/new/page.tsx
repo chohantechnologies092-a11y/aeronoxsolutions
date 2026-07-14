@@ -110,6 +110,50 @@ export default function NewClientPage() {
             />
           </div>
 
+          <div className="pt-4 border-t border-white/10 mt-4">
+            <h3 className="text-lg font-bold text-[#ffbe00] mb-4">Case Study Details</h3>
+          </div>
+
+          <div>
+            <label htmlFor="servicesProvided" className="block text-sm font-medium text-gray-300 mb-2">
+              Services Provided (comma separated)
+            </label>
+            <input
+              type="text"
+              id="servicesProvided"
+              name="servicesProvided"
+              className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent"
+              placeholder="e.g. SEO, Web Development, Social Media"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label htmlFor="beforeData" className="block text-sm font-medium text-gray-300 mb-2">
+                Before (Challenges/Stats)
+              </label>
+              <textarea
+                id="beforeData"
+                name="beforeData"
+                rows={4}
+                className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent resize-none"
+                placeholder="e.g. 500 monthly visitors, slow load time..."
+              ></textarea>
+            </div>
+            <div>
+              <label htmlFor="afterData" className="block text-sm font-medium text-gray-300 mb-2">
+                After (Results/Stats)
+              </label>
+              <textarea
+                id="afterData"
+                name="afterData"
+                rows={4}
+                className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent resize-none"
+                placeholder="e.g. 50,000 monthly visitors, 95+ performance..."
+              ></textarea>
+            </div>
+          </div>
+
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-2">
               Client Logo <span className="text-red-400">*</span>

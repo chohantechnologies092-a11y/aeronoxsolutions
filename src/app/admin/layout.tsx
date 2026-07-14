@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth, signOut } from "@/auth";
 import { siteConfig } from "@/lib/constants";
-import { LayoutDashboard, FolderKanban, FileText, Search, LogOut, Globe, Layers, Users } from "lucide-react";
+import { LayoutDashboard, FolderKanban, FileText, Search, LogOut, Globe, Layers, Users, Settings } from "lucide-react";
 
 const navItems = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
@@ -11,6 +11,7 @@ const navItems = [
   { href: "/admin/clients", label: "Clients", icon: Users },
   { href: "/admin/blogs", label: "Blogs", icon: FileText },
   { href: "/admin/seo", label: "Global SEO", icon: Search },
+  { href: "/admin/settings", label: "Settings", icon: Settings },
 ];
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
