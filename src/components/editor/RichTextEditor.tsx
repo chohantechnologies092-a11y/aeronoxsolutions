@@ -42,7 +42,14 @@ export function RichTextEditor({ name, defaultValue = "", placeholder }: RichTex
           body: formData,
         });
 
-        if (!res.ok) throw new Error("Upload failed");
+        if (!res.ok) {
+          let errorMsg = "Upload failed";
+          try {
+            const errData = await res.json();
+            if (errData.error) errorMsg = errData.error;
+          } catch(e) {}
+          throw new Error(errorMsg);
+        }
         
         const data = await res.json();
         const url = data.url;
@@ -54,9 +61,9 @@ export function RichTextEditor({ name, defaultValue = "", placeholder }: RichTex
           quill.insertEmbed(range.index, "image", url);
           quill.setSelection(range.index + 1);
         }
-      } catch (error) {
+      } catch (error: any) {
         console.error("Image upload failed:", error);
-        alert("Failed to upload image. Please try again.");
+        alert(error.message || "Failed to upload image. Please try again.");
       }
     };
   };

@@ -26,11 +26,18 @@ export default function NewClientPage() {
         body: formData,
       });
 
-      if (!res.ok) throw new Error("Upload failed");
+      if (!res.ok) {
+        let errorMsg = "Upload failed";
+        try {
+          const errData = await res.json();
+          if (errData.error) errorMsg = errData.error;
+        } catch(e) {}
+        throw new Error(errorMsg);
+      }
       const data = await res.json();
       setLogoPreview(data.url);
-    } catch (error) {
-      alert("Failed to upload image.");
+    } catch (error: any) {
+      alert(error.message || "Failed to upload image.");
     } finally {
       setUploading(false);
     }
