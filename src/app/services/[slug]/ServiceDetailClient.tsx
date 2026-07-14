@@ -77,8 +77,8 @@ export function ServiceDetailClient({ service }: { service: Service }) {
       <div className="absolute inset-0 bg-mesh opacity-30 pointer-events-none -z-10" />
 
       {/* Hero Section */}
-      <section className="relative pt-24 pb-12 md:pt-28 md:pb-16 overflow-hidden border-b border-border/50">
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
+      <section className="relative min-h-screen flex flex-col justify-center pt-24 pb-12 overflow-hidden border-b border-border/50">
+        <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">
           <motion.div 
             initial={{ opacity: 0, x: -20 }} 
             animate={{ opacity: 1, x: 0 }} 
