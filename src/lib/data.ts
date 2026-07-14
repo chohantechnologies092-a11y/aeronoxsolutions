@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { db } from "@/lib/firebase-admin";
 
 export async function getServices(): Promise<any[]> {

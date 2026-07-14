@@ -47,7 +47,7 @@ export function AboutAgency() {
                 href="/about"
                 className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-[#24182e] hover:text-[#ffbe00] transition-colors group"
               >
-                Meet The Full Team
+                Let&apos;s Build the Future
                 <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
               </Link>
             </motion.div>

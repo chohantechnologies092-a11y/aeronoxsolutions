@@ -14,6 +14,7 @@ const devSlugs = [
   'saas-development'
 ];
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export function Services({ services }: { services: any[] }) {
   const [filter, setFilter] = useState("all");
 
@@ -93,7 +94,7 @@ export function Services({ services }: { services: any[] }) {
         {/* Services Grid */}
         <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <AnimatePresence mode="popLayout">
-            {filteredServices.map((service, index) => {
+            {filteredServices.map((service) => {
               const Icon = (LucideIcons as any)[
                 service.icon.charAt(0).toUpperCase() + service.icon.slice(1)
               ] || LucideIcons.Search;

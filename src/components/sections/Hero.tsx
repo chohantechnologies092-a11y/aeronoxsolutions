@@ -5,23 +5,25 @@ import { motion } from 'framer-motion';
 import { Search, ArrowRight, TrendingUp, Users, ShieldCheck, Activity, BarChart3, Globe2 } from 'lucide-react';
 
 function Particles() {
-    const [isMounted, setIsMounted] = useState(false);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const [particles, setParticles] = useState<any[]>([]);
     
     useEffect(() => {
-        setIsMounted(true);
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setParticles(Array.from({ length: 50 }).map((_, i) => ({
+            id: i,
+            size: Math.random() * 6 + 2, 
+            x: Math.random() * 100,
+            y: Math.random() * 100,
+            duration: Math.random() * 15 + 10,
+            delay: Math.random() * 5,
+            color: Math.random() > 0.5 ? '#24182e' : '#ffbe00',
+            animX: Math.random() * 100 - 50,
+            animY: Math.random() * 100 - 50
+        })));
     }, []);
 
-    if (!isMounted) return null;
-
-    const particles = Array.from({ length: 50 }).map((_, i) => ({
-        id: i,
-        size: Math.random() * 6 + 2, 
-        x: Math.random() * 100,
-        y: Math.random() * 100,
-        duration: Math.random() * 15 + 10,
-        delay: Math.random() * 5,
-        color: Math.random() > 0.5 ? '#24182e' : '#ffbe00'
-    }));
+    if (particles.length === 0) return null;
 
     return (
         <div className="absolute inset-0 overflow-hidden pointer-events-none z-[1]">
@@ -30,8 +32,8 @@ function Particles() {
                     key={p.id}
                     initial={{ left: `${p.x}%`, top: `${p.y}%`, opacity: 0 }}
                     animate={{
-                        x: [0, Math.random() * 100 - 50, 0],
-                        y: [0, Math.random() * 100 - 50, 0],
+                        x: [0, p.animX, 0],
+                        y: [0, p.animY, 0],
                         opacity: [0, 0.8, 0]
                     }}
                     transition={{
@@ -234,7 +236,7 @@ export function Hero() {
                     transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
                     className="text-gray-500 text-lg md:text-xl max-w-2xl leading-relaxed mb-10 font-medium"
                 >
-                    Data-driven SEO, Performance Ads, and Content Architecture. We don't just increase traffic—we multiply your revenue.
+                    Data-driven SEO, Performance Ads, and Content Architecture. We don&apos;t just increase traffic—we multiply your revenue.
                 </motion.p>
 
                 {/* Domain Audit Search Bar */}

@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react";
 import Image from "next/image";
-import { UploadCloud, X, Loader2, Image as ImageIcon } from "lucide-react";
+import { UploadCloud, X, Loader2 } from "lucide-react";
 
 interface ImageUploadProps {
   name: string;
@@ -13,12 +13,10 @@ export function ImageUpload({ name, defaultValue = "" }: ImageUploadProps) {
   const [previewUrl, setPreviewUrl] = useState<string>(defaultValue);
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isDragOver, setIsDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
+  const processFile = async (file: File) => {
     // Validate type and size (e.g. max 5MB)
     if (!file.type.startsWith("image/")) {
       setError("Please select an image file.");
@@ -59,6 +57,37 @@ export function ImageUpload({ name, defaultValue = "" }: ImageUploadProps) {
     }
   };
 
+  };
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    await processFile(file);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(true);
+  };
+
+  const handleDragLeave = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
+  };
+
+  const handleDrop = async (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragOver(false);
+
+    const file = e.dataTransfer.files?.[0];
+    if (file) {
+      await processFile(file);
+    }
+  };
+
   const handleRemove = () => {
     setPreviewUrl("");
     setError(null);
@@ -89,8 +118,13 @@ export function ImageUpload({ name, defaultValue = "" }: ImageUploadProps) {
       ) : (
         <div 
           onClick={() => !isUploading && fileInputRef.current?.click()}
+          onDragOver={handleDragOver}
+          onDragLeave={handleDragLeave}
+          onDrop={handleDrop}
           className={`relative w-full h-48 rounded-xl border-2 border-dashed flex flex-col items-center justify-center gap-3 transition-colors ${
-            error ? "border-red-500/50 bg-red-500/5" : "border-white/10 bg-white/5 hover:bg-white/10 hover:border-[#ffbe00]/50 cursor-pointer"
+            error ? "border-red-500/50 bg-red-500/5" : 
+            isDragOver ? "border-[#ffbe00] bg-white/10" :
+            "border-white/10 bg-white/5 hover:bg-white/10 hover:border-[#ffbe00]/50 cursor-pointer"
           }`}
         >
           {isUploading ? (

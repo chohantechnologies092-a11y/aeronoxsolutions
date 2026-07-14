@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React from "react";
@@ -332,7 +333,7 @@ export function ServiceDetailClient({ service }: { service: Service }) {
                       href="/contact" 
                       className="w-full flex items-center justify-between p-4 bg-foreground text-background font-black uppercase tracking-widest rounded-xl hover:opacity-90 transition-all group/btn"
                     >
-                      <span>Let's Talk</span>
+                      <span>Let&apos;s Talk</span>
                       <div className="w-8 h-8 rounded-full bg-background/20 flex items-center justify-center group-hover/btn:translate-x-1 transition-transform">
                         <ArrowRight size={16} />
                       </div>
