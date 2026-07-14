@@ -40,14 +40,19 @@ export function ImageUpload({ name, defaultValue = "" }: ImageUploadProps) {
       });
 
       if (!res.ok) {
-        throw new Error("Upload failed");
+        let errorMsg = "Upload failed";
+        try {
+          const errorData = await res.json();
+          if (errorData.error) errorMsg = errorData.error;
+        } catch(e) {}
+        throw new Error(errorMsg);
       }
 
       const data = await res.json();
       setPreviewUrl(data.url);
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
-      setError("Failed to upload image. Please try again.");
+      setError(err.message || "Failed to upload image. Please try again.");
     } finally {
       setIsUploading(false);
       // Reset input so the same file can be selected again if needed

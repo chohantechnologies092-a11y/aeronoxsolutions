@@ -29,19 +29,24 @@ export async function POST(request: Request) {
     const bucket = storage.bucket();
     const fileRef = bucket.file(`uploads/${uniqueFilename}`);
     
+    // Generate a unique token for Firebase Storage download URL
+    const token = crypto.randomUUID();
+
     await fileRef.save(buffer, {
-      metadata: { contentType: file.type },
+      metadata: { 
+        contentType: file.type,
+        metadata: {
+          firebaseStorageDownloadTokens: token
+        }
+      },
     });
     
-    // Generate a virtually non-expiring signed URL to avoid "makePublic" IAM permission issues
-    const [publicUrl] = await fileRef.getSignedUrl({
-      action: "read",
-      expires: "01-01-2100", 
-    });
+    // Construct the standard Firebase Storage public URL
+    const publicUrl = `https://firebasestorage.googleapis.com/v0/b/${bucket.name}/o/${encodeURIComponent(fileRef.name)}?alt=media&token=${token}`;
 
     return NextResponse.json({ url: publicUrl });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Upload error:", error);
-    return NextResponse.json({ error: "Failed to upload file" }, { status: 500 });
+    return NextResponse.json({ error: error.message || "Failed to upload file" }, { status: 500 });
   }
 }
