@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import * as LucideIcons from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -105,49 +106,53 @@ export function Services({ services }: { services: any[] }) {
                   exit={{ opacity: 0, scale: 0.9, y: 20 }}
                   transition={{ duration: 0.4, type: "spring", bounce: 0.3 }}
                   key={service.id}
-                  className="bento-card p-8 flex flex-col h-full"
+                  className="p-8 flex flex-col h-full relative group overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl"
                 >
-                  {/* Background Glow */}
-                  <div 
-                    className="absolute -top-24 -right-24 w-64 h-64 rounded-full blur-3xl opacity-0 group-hover:opacity-20 transition-opacity duration-700 pointer-events-none"
-                    style={{ backgroundColor: service.color }}
-                  />
-
-                  <div className="flex-1 flex flex-col">
-                    {/* Abstract Icon Container */}
-                    <div className="mb-8 relative w-fit">
-                      <div 
-                        className="w-16 h-16 rounded-2xl flex items-center justify-center transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-3 shadow-md border border-border bg-background relative z-10"
-                      >
-                        <Icon size={28} style={{ color: service.color }} strokeWidth={2.5} />
-                      </div>
-                      {/* Icon shadow/glow */}
-                      <div 
-                        className="absolute inset-0 w-16 h-16 rounded-2xl blur-xl opacity-30 transition-opacity group-hover:opacity-60"
-                        style={{ backgroundColor: service.color }}
+                  {/* Background Image */}
+                  {service.image && (
+                    <>
+                      <Image 
+                        src={service.image} 
+                        alt={service.title}
+                        fill
+                        className="object-cover transition-transform duration-1000 group-hover:scale-110 z-0"
                       />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#1a1122] via-[#1a1122]/80 to-[#1a1122]/20 z-0" />
+                    </>
+                  )}
+
+                  <div className="relative z-10 flex-1 flex flex-col h-full">
+                    {/* Abstract Icon Container */}
+                    <div className="mb-auto relative w-fit">
+                      <div 
+                        className="w-14 h-14 rounded-2xl flex items-center justify-center transition-transform duration-500 group-hover:scale-110 group-hover:-rotate-6 shadow-xl border border-white/20 bg-white/10 backdrop-blur-md relative z-10"
+                      >
+                        <Icon size={24} style={{ color: service.color || "#ffbe00" }} strokeWidth={2.5} />
+                      </div>
                     </div>
 
                     {/* Content */}
-                    <h3 className="font-black text-foreground mb-4 transition-colors text-2xl">
-                      {service.title}
-                    </h3>
-                    
-                    <p className="text-muted-foreground font-medium leading-relaxed mb-8 flex-grow">
-                      {service.shortDescription}
-                    </p>
-                  </div>
+                    <div className="mt-12">
+                      <h3 className="font-black text-white mb-4 transition-colors text-2xl drop-shadow-lg">
+                        {service.title}
+                      </h3>
+                      
+                      <p className="text-gray-300 font-medium leading-relaxed mb-8 drop-shadow-md line-clamp-3">
+                        {service.shortDescription}
+                      </p>
+                    </div>
 
-                  {/* Animated Arrow Link */}
-                  <div className="mt-auto">
-                    <Link 
-                      href={`/services/${service.slug}`} 
-                      className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-widest transition-colors hover:opacity-80"
-                      style={{ color: service.color }}
-                    >
-                      Explore Service
-                      <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
-                    </Link>
+                    {/* Animated Arrow Link */}
+                    <div className="mt-auto pt-6 border-t border-white/10">
+                      <Link 
+                        href={`/services/${service.slug}`} 
+                        className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-widest transition-colors hover:text-white"
+                        style={{ color: service.color || "#ffbe00" }}
+                      >
+                        Explore Service
+                        <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
+                      </Link>
+                    </div>
                   </div>
                 </motion.div>
               );
