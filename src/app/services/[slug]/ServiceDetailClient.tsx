@@ -37,6 +37,38 @@ const getServiceCapabilities = (slug: string) => {
   return ["Advanced Analytics", "Custom Strategy", "Dedicated Support", "Performance Tracking", "Scalable Solutions", "Rapid Execution"];
 };
 
+const getBrandIcon = (cap: string) => {
+  const capLower = cap.toLowerCase();
+  
+  if (capLower.includes('react') || capLower.includes('next.js')) return { type: 'simple', id: "react" };
+  if (capLower.includes('node') || capLower.includes('express')) return { type: 'simple', id: "nodedotjs" };
+  if (capLower.includes('cloud')) return { type: 'simple', id: "googlecloud" };
+  if (capLower.includes('api') || capLower.includes('graphql')) return { type: 'simple', id: "graphql" };
+  if (capLower.includes('sync') || capLower.includes('real-time data')) return { type: 'simple', id: "firebase" };
+  
+  if (capLower.includes('google analytics') || capLower.includes('tracking')) return { type: 'simple', id: "googleanalytics" };
+  if (capLower.includes('meta') || capLower.includes('pixel')) return { type: 'simple', id: "meta" };
+  if (capLower.includes('testing') || capLower.includes('a/b')) return { type: 'simple', id: "testinglibrary" };
+  if (capLower.includes('bidding') || capLower.includes('ppc')) return { type: 'simple', id: "googleads" };
+  if (capLower.includes('audit')) return { type: 'simple', id: "lighthouse" };
+  if (capLower.includes('dashboards') || capLower.includes('reporting')) return { type: 'simple', id: "grafana" };
+  
+  if (capLower.includes('figma') || capLower.includes('prototyping')) return { type: 'simple', id: "figma" };
+  if (capLower.includes('competitor') || capLower.includes('seo')) return { type: 'simple', id: "semrush" };
+  if (capLower.includes('inventory')) return { type: 'simple', id: "googlesheets" };
+  
+  // Domains for missing simpleicons
+  if (capLower.includes('erp') || capLower.includes('crm')) return { type: 'domain', id: "salesforce.com" };
+  if (capLower.includes('adobe') || capLower.includes('creative cloud')) return { type: 'domain', id: "adobe.com" };
+  if (capLower.includes('davinci') || capLower.includes('video') || capLower.includes('motion') || capLower.includes('effects')) return { type: 'domain', id: "blackmagicdesign.com" };
+  if (capLower.includes('ai') || capLower.includes('generation')) return { type: 'domain', id: "openai.com" };
+  if (capLower.includes('identity') || capLower.includes('brand')) return { type: 'domain', id: "adobe.com" };
+  if (capLower.includes('amazon') || capLower.includes('fba')) return { type: 'domain', id: "amazon.com" };
+  if (capLower.includes('content design')) return { type: 'domain', id: "canva.com" };
+  
+  return null;
+};
+
 export function ServiceDetailClient({ service }: { service: Service }) {
   const { scrollYProgress } = useScroll();
   const y1 = useTransform(scrollYProgress, [0, 1], [0, 200]);
@@ -232,26 +264,42 @@ export function ServiceDetailClient({ service }: { service: Service }) {
                   Our Capabilities
                 </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {capabilities.map((cap, idx) => (
-                    <motion.div 
-                      key={idx}
-                      initial={{ opacity: 0, y: 10 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.4, delay: idx * 0.1 }}
-                      className="flex items-center gap-4 bg-card/60 backdrop-blur-sm p-5 rounded-2xl border border-border shadow-sm hover:shadow-md transition-shadow group cursor-default"
-                    >
-                      <div 
-                        className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-110"
-                        style={{ backgroundColor: `${service.color}15`, color: service.color, border: `1px solid ${service.color}30` }}
+                  {capabilities.map((cap, idx) => {
+                    const brandData = getBrandIcon(cap);
+                    const colorHex = service.color.replace('#', '');
+                    return (
+                      <motion.div 
+                        key={idx}
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.4, delay: idx * 0.1 }}
+                        className="flex items-center gap-4 bg-card/60 backdrop-blur-sm p-5 rounded-2xl border border-border shadow-sm hover:shadow-md transition-shadow group cursor-default"
                       >
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                          <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
-                      </div>
-                      <span className="font-bold text-sm tracking-wide text-foreground uppercase">{cap}</span>
-                    </motion.div>
-                  ))}
+                        <div 
+                          className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-110"
+                          style={{ backgroundColor: `${service.color}15`, color: service.color, border: `1px solid ${service.color}30` }}
+                        >
+                          {brandData ? (
+                            <img 
+                              src={brandData.type === 'simple' 
+                                ? `https://cdn.simpleicons.org/${brandData.id}/${colorHex}`
+                                : `https://www.google.com/s2/favicons?domain=${brandData.id}&sz=128`
+                              } 
+                              alt={`${brandData.id} icon`} 
+                              className="w-5 h-5 object-contain" 
+                              style={brandData.type === 'domain' ? { filter: 'grayscale(100%) opacity(80%)' } : {}}
+                            />
+                          ) : (
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                              <polyline points="20 6 9 17 4 12"></polyline>
+                            </svg>
+                          )}
+                        </div>
+                        <span className="font-bold text-sm tracking-wide text-foreground uppercase">{cap}</span>
+                      </motion.div>
+                    );
+                  })}
                 </div>
               </div>
             </motion.div>

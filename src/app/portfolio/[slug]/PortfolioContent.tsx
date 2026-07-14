@@ -39,29 +39,31 @@ export function PortfolioContent({ project }: { project: Project }) {
   const tags = (project.tags || "").split(",").map((tag: string) => tag.trim()).filter(Boolean);
 
   return (
-    <article className="min-h-screen pt-36 pb-24 bg-mesh relative overflow-hidden">
+    <article className="pb-24 bg-mesh relative overflow-hidden">
       {/* Ambient Gradients */}
       <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-[#ffbe00]/10 rounded-full blur-[150px] pointer-events-none" />
       <div className="absolute bottom-1/4 left-1/4 w-[600px] h-[600px] bg-[#24182e]/10 rounded-full blur-[150px] pointer-events-none" />
 
       <div className="max-w-6xl mx-auto px-6 lg:px-8 relative z-10">
-        <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }}>
-          <Link 
-            href="/portfolio" 
-            className="inline-flex items-center gap-2 text-muted uppercase tracking-widest text-xs font-bold group mb-12 hover:text-[#ffbe00] transition-colors"
-          >
-            <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" />
-            Back to Portfolio
-          </Link>
-        </motion.div>
+        {/* Full Screen Hero Wrapper */}
+        <div className="h-[100dvh] min-h-[700px] flex flex-col pt-32 pb-8">
+          <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }} className="shrink-0">
+            <Link 
+              href="/portfolio" 
+              className="inline-flex items-center gap-2 text-muted uppercase tracking-widest text-xs font-bold group mb-6 hover:text-[#ffbe00] transition-colors"
+            >
+              <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" />
+              Back to Portfolio
+            </Link>
+          </motion.div>
 
-        <motion.header 
-          variants={staggerContainer}
-          initial="initial"
-          animate="animate"
-          className="mb-16"
-        >
-          <motion.div variants={fadeIn} className="flex flex-wrap gap-2 mb-8">
+          <motion.header 
+            variants={staggerContainer}
+            initial="initial"
+            animate="animate"
+            className="mb-8 shrink-0 flex flex-col"
+          >
+            <motion.div variants={fadeIn} className="flex flex-wrap gap-2 mb-4">
             {tags.map((tag, idx) => (
               <span key={idx} className="px-4 py-1.5 bg-[#ffbe00]/10 text-[#24182e] rounded-full text-xs font-black uppercase tracking-[0.15em] border border-[#ffbe00]/30 shadow-sm">
                 {tag}
@@ -69,11 +71,11 @@ export function PortfolioContent({ project }: { project: Project }) {
             ))}
           </motion.div>
           
-          <motion.h1 variants={fadeIn} className="text-4xl md:text-6xl lg:text-7xl font-black text-foreground tracking-tight leading-[1.1] mb-10 max-w-4xl">
+          <motion.h1 variants={fadeIn} className="text-4xl md:text-5xl lg:text-6xl font-black text-foreground tracking-tight leading-[1.1] mb-6 max-w-4xl">
             {project.title}
           </motion.h1>
           
-          <motion.div variants={fadeIn} className="flex flex-wrap items-center justify-between gap-8 text-sm font-medium border-y border-card-border py-8 bg-card/20 backdrop-blur-sm px-8 rounded-3xl">
+          <motion.div variants={fadeIn} className="flex flex-wrap items-center justify-between gap-6 text-sm font-medium border-y border-card-border py-6 bg-card/20 backdrop-blur-sm px-8 rounded-3xl">
             {project.client && project.client.toLowerCase() !== project.title.toLowerCase() && (
               <div>
                 <span className="block text-xs font-bold uppercase tracking-widest text-muted mb-2">Client</span>
@@ -83,15 +85,15 @@ export function PortfolioContent({ project }: { project: Project }) {
             
             <div className="flex flex-wrap gap-4">
               {project.liveUrl && (
-                <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-[#24182e] hover:text-[#ffbe00] transition-colors bg-white px-6 py-3 rounded-full border border-gray-200 shadow-sm hover:shadow-[0_5px_15px_rgba(255,190,0,0.15)] group">
-                  <ExternalLink size={18} className="group-hover:scale-110 transition-transform" />
-                  <span className="font-bold tracking-wide">Live Site</span>
+                <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-[#24182e] hover:text-[#ffbe00] transition-colors bg-white px-5 py-2.5 rounded-full border border-gray-200 shadow-sm hover:shadow-[0_5px_15px_rgba(255,190,0,0.15)] group">
+                  <ExternalLink size={16} className="group-hover:scale-110 transition-transform" />
+                  <span className="font-bold tracking-wide text-sm">Live Site</span>
                 </a>
               )}
               {project.githubUrl && (
-                <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white bg-[#24182e] hover:bg-[#ffbe00] hover:text-[#24182e] transition-colors px-6 py-3 rounded-full shadow-sm hover:shadow-[0_5px_15px_rgba(255,190,0,0.2)] group">
-                  <Code size={18} className="group-hover:scale-110 transition-transform" />
-                  <span className="font-bold tracking-wide">Source Code</span>
+                <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white bg-[#24182e] hover:bg-[#ffbe00] hover:text-[#24182e] transition-colors px-5 py-2.5 rounded-full shadow-sm hover:shadow-[0_5px_15px_rgba(255,190,0,0.2)] group">
+                  <Code size={16} className="group-hover:scale-110 transition-transform" />
+                  <span className="font-bold tracking-wide text-sm">Source Code</span>
                 </a>
               )}
             </div>
@@ -102,7 +104,7 @@ export function PortfolioContent({ project }: { project: Project }) {
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-          className="w-full aspect-[21/9] relative rounded-3xl overflow-hidden mb-20 shadow-2xl border border-card-border group"
+          className="w-full flex-1 min-h-[250px] relative rounded-3xl overflow-hidden shadow-2xl border border-card-border group"
         >
           <div className="absolute inset-0 bg-gradient-to-tr from-[#ffbe00]/20 to-[#24182e]/20 mix-blend-overlay z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
           <Image 
@@ -113,8 +115,9 @@ export function PortfolioContent({ project }: { project: Project }) {
             priority
           />
         </motion.div>
+        </div>
 
-        <div className="max-w-4xl mx-auto mb-24">
+        <div className="max-w-4xl mx-auto mb-24 mt-16">
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
