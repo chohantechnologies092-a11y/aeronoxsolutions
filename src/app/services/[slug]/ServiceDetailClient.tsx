@@ -77,7 +77,7 @@ export function ServiceDetailClient({ service }: { service: Service }) {
       <div className="absolute inset-0 bg-mesh opacity-30 pointer-events-none -z-10" />
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-20 md:pt-40 md:pb-32 overflow-hidden border-b border-border/50">
+      <section className="relative pt-24 pb-12 md:pt-28 md:pb-16 overflow-hidden border-b border-border/50">
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <motion.div 
             initial={{ opacity: 0, x: -20 }} 
@@ -86,7 +86,7 @@ export function ServiceDetailClient({ service }: { service: Service }) {
           >
             <Link 
               href="/services" 
-              className="inline-flex items-center gap-2 text-muted-foreground uppercase tracking-[0.15em] text-xs font-bold group mb-12 hover:text-foreground transition-colors"
+              className="inline-flex items-center gap-2 text-muted-foreground uppercase tracking-[0.15em] text-xs font-bold group mb-6 hover:text-foreground transition-colors"
             >
               <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" />
               Back to Services
@@ -94,19 +94,19 @@ export function ServiceDetailClient({ service }: { service: Service }) {
           </motion.div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
-            {/* Hero Content */}
+              {/* Hero Content */}
             <motion.div 
               variants={staggerContainer}
               initial="initial"
               animate="animate"
               className="max-w-3xl"
             >
-              <motion.div variants={fadeIn} className="flex items-center gap-4 mb-8">
+              <motion.div variants={fadeIn} className="flex items-center gap-4 mb-6">
                 <div 
-                  className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-lg relative group"
+                  className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg relative group"
                   style={{ backgroundColor: `${service.color}15`, border: `1px solid ${service.color}30` }}
                 >
-                  <IconComponent size={32} style={{ color: service.color }} strokeWidth={2} className="relative z-10" />
+                  <IconComponent size={28} style={{ color: service.color }} strokeWidth={2} className="relative z-10" />
                   <div 
                     className="absolute inset-0 rounded-2xl blur-xl opacity-0 group-hover:opacity-50 transition-opacity duration-500"
                     style={{ backgroundColor: service.color }}
@@ -117,11 +117,11 @@ export function ServiceDetailClient({ service }: { service: Service }) {
                 </span>
               </motion.div>
 
-              <motion.h1 variants={fadeIn} className="text-5xl md:text-7xl font-black text-foreground tracking-tight leading-[1.05] mb-8">
+              <motion.h1 variants={fadeIn} className="text-4xl md:text-6xl font-black text-foreground tracking-tight leading-[1.05] mb-6">
                 {service.title}
               </motion.h1>
               
-              <motion.p variants={fadeIn} className="text-xl text-muted-foreground leading-relaxed font-medium mb-10 max-w-xl">
+              <motion.p variants={fadeIn} className="text-lg md:text-xl text-muted-foreground leading-relaxed font-medium mb-8 max-w-xl">
                 {service.shortDescription}
               </motion.p>
               
@@ -142,11 +142,11 @@ export function ServiceDetailClient({ service }: { service: Service }) {
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative lg:h-[500px] w-full hidden lg:block"
+              className="relative lg:h-[400px] w-full hidden lg:block"
               style={{ y: y1 }}
             >
               {service.image ? (
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[450px] h-[450px] rounded-[3rem] overflow-hidden shadow-2xl group border border-border/50">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] md:w-[400px] md:h-[400px] rounded-[3rem] overflow-hidden shadow-2xl group border border-border/50">
                   <div className="absolute inset-0 bg-gradient-to-tr from-black/20 to-transparent z-10 pointer-events-none" />
                   <img 
                     src={service.image} 
