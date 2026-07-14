@@ -33,9 +33,11 @@ export async function POST(request: Request) {
       metadata: { contentType: file.type },
     });
     
-    await fileRef.makePublic();
-    
-    const publicUrl = fileRef.publicUrl();
+    // Generate a virtually non-expiring signed URL to avoid "makePublic" IAM permission issues
+    const [publicUrl] = await fileRef.getSignedUrl({
+      action: "read",
+      expires: "01-01-2100", 
+    });
 
     return NextResponse.json({ url: publicUrl });
   } catch (error) {
