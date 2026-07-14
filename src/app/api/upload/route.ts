@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
-import { writeFile, mkdir } from "fs/promises";
-import path from "path";
 import { auth } from "@/auth";
+import { storage } from "@/lib/firebase-admin";
 
 export async function POST(request: Request) {
   try {
@@ -25,17 +24,18 @@ export async function POST(request: Request) {
     const safeName = file.name.replace(/[^a-zA-Z0-9.\-_]/g, "_");
     const uniqueFilename = `${Date.now()}-${safeName}`;
 
-    const uploadDir = path.join(process.cwd(), "public/uploads");
-    const filePath = path.join(uploadDir, uniqueFilename);
-
-    // Ensure directory exists
-    await mkdir(uploadDir, { recursive: true });
-
-    // Save the file
-    await writeFile(filePath, buffer);
-
-    // Return the public URL
-    const publicUrl = `/uploads/${uniqueFilename}`;
+    // Upload to Firebase Storage instead of local filesystem
+    // Netlify/Vercel serverless functions have a read-only filesystem
+    const bucket = storage.bucket();
+    const fileRef = bucket.file(`uploads/${uniqueFilename}`);
+    
+    await fileRef.save(buffer, {
+      metadata: { contentType: file.type },
+    });
+    
+    await fileRef.makePublic();
+    
+    const publicUrl = fileRef.publicUrl();
 
     return NextResponse.json({ url: publicUrl });
   } catch (error) {
