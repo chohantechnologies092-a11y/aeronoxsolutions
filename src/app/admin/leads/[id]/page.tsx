@@ -14,7 +14,7 @@ export default async function ViewLead({ params }: { params: Promise<{ id: strin
   return (
     <div className="max-w-3xl mx-auto">
       <div className="flex items-center gap-4 mb-8">
-        <Button href="/admin/leads" variant="outline" className="px-3">
+        <Button href="/admin/leads" variant="secondary" className="px-3">
           <ArrowLeft size={16} />
         </Button>
         <div>
