@@ -283,7 +283,7 @@ export function ServiceDetailClient({ service }: { service: Service }) {
                   whileInView={{ opacity: 1, scale: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ duration: 0.5, delay: idx * 0.05 }}
-                  className={`${spanClass} relative rounded-[2rem] bg-card/60 backdrop-blur-xl p-8 flex flex-col justify-between group transition-colors overflow-hidden`}
+                  className={`${spanClass} relative rounded-[2rem] bg-card/60 backdrop-blur-xl border border-black/5 dark:border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-8 flex flex-col justify-between group transition-colors overflow-hidden`}
                 >
                   {/* Hover Gradient Glow */}
                   <div 
@@ -292,17 +292,17 @@ export function ServiceDetailClient({ service }: { service: Service }) {
                   />
 
                   <div 
-                    className="w-14 h-14 rounded-2xl flex items-center justify-center relative z-10 bg-background shadow-sm group-hover:scale-110 transition-transform duration-300"
+                    className="w-14 h-14 rounded-2xl flex items-center justify-center relative z-10 bg-background border border-black/5 dark:border-white/10 shadow-sm group-hover:scale-110 transition-transform duration-300"
                   >
                     {brandData ? (
                       <img 
                         src={brandData.type === 'simple' 
-                          ? `https://cdn.simpleicons.org/${brandData.id}/ffffff`
+                          ? `https://cdn.simpleicons.org/${brandData.id}/${colorHex}`
                           : `https://www.google.com/s2/favicons?domain=${brandData.id}&sz=128`
                         } 
                         alt={`${brandData.id} icon`} 
                         className="w-6 h-6 object-contain" 
-                        style={brandData.type === 'domain' ? { filter: 'grayscale(100%) brightness(200%) opacity(80%)' } : { opacity: 0.8 }}
+                        style={brandData.type === 'domain' ? { filter: 'grayscale(100%) opacity(60%)' } : { opacity: 0.9 }}
                       />
                     ) : (
                       <IconComponent size={24} style={{ color: service.color }} />
