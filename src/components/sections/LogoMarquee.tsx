@@ -96,31 +96,29 @@ export function LogoMarquee({ clients = [] }: { clients?: ClientType[] }) {
 
 function MarqueeCard({ item, hasClients }: { item: any, hasClients: boolean }) {
   const content = (
-    <div className="flex flex-col items-center justify-center p-6 rounded-2xl bg-white shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group cursor-pointer w-[300px] h-[160px] border border-transparent hover:border-[#ffbe00]/30">
-      <div className="relative w-full h-20 flex items-center justify-center mb-3">
+    <div className="relative flex flex-col items-center justify-center p-4 rounded-3xl bg-white shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group cursor-pointer w-[320px] h-[180px] border border-transparent hover:border-[#ffbe00]/30 overflow-hidden">
+      <div className="relative w-full h-full flex items-center justify-center transition-transform duration-500 group-hover:scale-105">
         {hasClients ? (
           <Image 
             src={item.logo} 
             alt={item.name} 
             fill 
             className="object-contain" 
+            sizes="320px"
           />
         ) : (
-          <item.icon size={56} strokeWidth={1} className="text-gray-300 group-hover:text-[#ffbe00] transition-colors" />
+          <item.icon size={64} strokeWidth={1} className="text-gray-300 group-hover:text-[#ffbe00] transition-colors" />
         )}
       </div>
-      <div className="flex flex-col items-center text-center">
-        {hasClients && item.servicesProvided && (
-          <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest group-hover:text-gray-600 transition-colors">
+      
+      {/* Hover Text Overlay (Saves vertical space) */}
+      {hasClients && item.servicesProvided && (
+        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-white via-white/95 to-transparent pt-12 pb-3 px-4 flex justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+          <span className="text-[11px] font-bold text-gray-500 uppercase tracking-widest text-center">
             {item.servicesProvided.split(',')[0]}
           </span>
-        )}
-        {!hasClients && (
-          <span className="text-sm font-bold text-gray-500 group-hover:text-gray-900 transition-colors mt-2">
-            {item.name}
-          </span>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 
