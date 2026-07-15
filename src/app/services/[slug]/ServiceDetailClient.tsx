@@ -118,12 +118,12 @@ export function ServiceDetailClient({ service }: { service: Service }) {
     <article className="min-h-screen bg-background font-sans selection:bg-foreground selection:text-background pb-20">
       
       {/* 1. Split Layout Hero */}
-      <section className="pt-32 pb-16 px-6 max-w-7xl mx-auto border-b border-border">
+      <section className="pt-32 pb-16 px-6 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           
           {/* Hero Content */}
           <div className="flex flex-col items-start">
-            <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full bg-muted/50 border border-border text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+            <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full bg-card shadow-sm ring-1 ring-black/5 dark:ring-white/10 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
               <IconComponent size={16} style={{ color: service.color }} />
               Service Overview
             </div>
@@ -146,7 +146,7 @@ export function ServiceDetailClient({ service }: { service: Service }) {
               </Link>
               <Link 
                 href="/portfolio" 
-                className="inline-flex items-center justify-center px-8 py-4 bg-transparent border-2 border-border text-foreground font-bold rounded-lg hover:bg-muted transition-colors"
+                className="inline-flex items-center justify-center px-8 py-4 bg-card shadow-sm hover:shadow-md ring-1 ring-black/5 dark:ring-white/10 text-foreground font-bold rounded-lg transition-all"
               >
                 View Portfolio
               </Link>
@@ -154,7 +154,7 @@ export function ServiceDetailClient({ service }: { service: Service }) {
           </div>
 
           {/* Hero Image */}
-          <div className="relative w-full aspect-video lg:aspect-[4/3] rounded-2xl overflow-hidden bg-muted border border-border shadow-lg">
+          <div className="relative w-full aspect-video lg:aspect-[4/3] rounded-2xl overflow-hidden bg-card shadow-xl ring-1 ring-black/5 dark:ring-white/10">
             {service.image ? (
               <img 
                 src={service.image} 
@@ -186,7 +186,7 @@ export function ServiceDetailClient({ service }: { service: Service }) {
               />
             </div>
 
-            <hr className="border-border" />
+            <hr className="border-black/5 dark:border-white/5" />
 
             {/* Structured Capabilities */}
             <div>
@@ -201,10 +201,10 @@ export function ServiceDetailClient({ service }: { service: Service }) {
                   return (
                     <div 
                       key={idx}
-                      className="p-6 rounded-xl border border-border bg-card/50 flex items-start gap-4 hover:border-border/80 hover:bg-card transition-all"
+                      className="p-6 rounded-xl bg-card shadow-sm hover:shadow-md ring-1 ring-black/5 dark:ring-white/5 flex items-start gap-4 transition-all"
                     >
                       <div 
-                        className="w-12 h-12 rounded-lg bg-background border border-border flex items-center justify-center flex-shrink-0"
+                        className="w-12 h-12 rounded-lg bg-background shadow-sm ring-1 ring-black/5 dark:ring-white/10 flex items-center justify-center flex-shrink-0"
                       >
                         {brandData ? (
                           <img 
@@ -230,7 +230,7 @@ export function ServiceDetailClient({ service }: { service: Service }) {
               </div>
             </div>
 
-            <hr className="border-border" />
+            <hr className="border-black/5 dark:border-white/5" />
 
             {/* Structured Process */}
             <div>
@@ -258,7 +258,7 @@ export function ServiceDetailClient({ service }: { service: Service }) {
               </div>
             </div>
 
-            <hr className="border-border" />
+            <hr className="border-black/5 dark:border-white/5" />
 
             {/* Clean FAQs */}
             <div>
@@ -269,7 +269,7 @@ export function ServiceDetailClient({ service }: { service: Service }) {
                   return (
                     <div
                       key={idx}
-                      className="border border-border rounded-lg overflow-hidden bg-card/50"
+                      className="bg-card shadow-sm ring-1 ring-black/5 dark:ring-white/5 rounded-xl overflow-hidden"
                     >
                       <button
                         onClick={() => setActiveFaq(isActive ? null : idx)}
@@ -292,7 +292,7 @@ export function ServiceDetailClient({ service }: { service: Service }) {
                             exit={{ height: 0, opacity: 0 }}
                             transition={{ duration: 0.2 }}
                           >
-                            <div className="p-5 pt-0 text-muted-foreground border-t border-border/50 leading-relaxed">
+                            <div className="p-5 pt-0 text-muted-foreground border-t border-black/5 dark:border-white/5 leading-relaxed">
                               {faq.answer}
                             </div>
                           </motion.div>
@@ -311,7 +311,7 @@ export function ServiceDetailClient({ service }: { service: Service }) {
             <div className="sticky top-24 flex flex-col gap-6">
               
               {/* Contact Card */}
-              <div className="bg-card border border-border rounded-xl p-8 shadow-sm">
+              <div className="bg-card rounded-2xl p-8 shadow-xl ring-1 ring-black/5 dark:ring-white/10">
                 <div className="flex items-center gap-3 mb-6">
                   <span className="relative flex h-3 w-3">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
@@ -336,7 +336,7 @@ export function ServiceDetailClient({ service }: { service: Service }) {
                   </Link>
                   <a 
                     href="mailto:contact@aeronoxsolutions.com" 
-                    className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-transparent border-2 border-border text-foreground font-semibold rounded-lg hover:bg-muted transition-colors"
+                    className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-muted/50 hover:bg-muted text-foreground font-semibold rounded-lg transition-colors"
                   >
                     <Mail size={18} className="text-muted-foreground" />
                     Send an Email
@@ -345,7 +345,7 @@ export function ServiceDetailClient({ service }: { service: Service }) {
               </div>
 
               {/* Quick Info Card */}
-              <div className="bg-muted/30 border border-border rounded-xl p-6">
+              <div className="bg-card shadow-md ring-1 ring-black/5 dark:ring-white/10 rounded-xl p-6">
                 <h4 className="font-bold text-foreground mb-4">Why choose us?</h4>
                 <ul className="space-y-3">
                   {["Dedicated project manager", "Transparent communication", "Agile methodology", "Long-term support"].map((item, i) => (
