@@ -96,14 +96,14 @@ export function LogoMarquee({ clients = [] }: { clients?: ClientType[] }) {
 
 function MarqueeCard({ item, hasClients }: { item: any, hasClients: boolean }) {
   const content = (
-    <div className="relative flex flex-col items-center justify-center p-4 rounded-3xl bg-white shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group cursor-pointer w-[320px] h-[180px] border border-transparent hover:border-[#ffbe00]/30 overflow-hidden">
-      <div className="relative w-full h-full flex items-center justify-center transition-transform duration-500 group-hover:scale-105">
+    <div className="relative flex flex-col items-center justify-center p-2 rounded-3xl bg-white shadow-sm hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group cursor-pointer w-[320px] h-[180px] border border-transparent hover:border-[#ffbe00]/30 overflow-hidden">
+      <div className="relative w-full h-full flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
         {hasClients ? (
           <Image 
             src={item.logo} 
             alt={item.name} 
             fill 
-            className="object-contain" 
+            className="object-contain scale-110" 
             sizes="320px"
           />
         ) : (
