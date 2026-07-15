@@ -147,11 +147,12 @@ export function Services({ services }: { services: any[] }) {
                     <div className="mt-auto pt-6 border-t border-white/10">
                       <Link 
                         href={`/services/${service.slug}`} 
-                        className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-widest transition-colors hover:text-white"
-                        style={{ color: service.color || "#ffbe00" }}
+                        className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-widest transition-all hover:scale-105 px-6 py-3 rounded-full shadow-[0_0_20px_rgba(0,0,0,0.3)] relative overflow-hidden group/btn text-white"
+                        style={{ backgroundColor: service.color || "#ffbe00" }}
                       >
-                        Explore Service
-                        <ArrowRight size={14} className="transition-transform duration-300 group-hover:translate-x-1" />
+                        <span className="relative z-10">Explore Service</span>
+                        <ArrowRight size={14} className="relative z-10 transition-transform duration-300 group-hover/btn:translate-x-1" />
+                        <div className="absolute inset-0 bg-white/20 translate-y-full group-hover/btn:translate-y-0 transition-transform duration-300 ease-out" />
                       </Link>
                     </div>
                   </div>

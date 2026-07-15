@@ -170,8 +170,8 @@ export function ServiceDetailClient({ service }: { service: Service }) {
           <motion.div variants={fadeIn} className="flex flex-wrap items-center justify-center gap-4">
             <Link 
               href="/contact" 
-              className="inline-flex items-center justify-center px-10 py-5 text-background font-black uppercase tracking-widest rounded-full hover:scale-105 transition-all duration-300 shadow-2xl relative overflow-hidden group"
-              style={{ backgroundColor: service.color }}
+              className="inline-flex items-center justify-center px-10 py-5 text-white font-black uppercase tracking-widest rounded-full hover:scale-105 transition-all duration-300 shadow-2xl relative overflow-hidden group"
+              style={{ backgroundColor: service.color || "#3b82f6" }}
             >
               <span className="relative z-10">Start Project</span>
               <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
