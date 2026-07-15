@@ -152,7 +152,7 @@ export function ServiceDetailClient({ service }: { service: Service }) {
           className="flex flex-col items-center w-full"
         >
           {/* Top Badge */}
-          <motion.div variants={fadeIn} className="flex items-center gap-3 mb-8 bg-card/50 backdrop-blur-md border border-border/50 rounded-full px-5 py-2 shadow-lg">
+          <motion.div variants={fadeIn} className="flex items-center gap-3 mb-8 bg-card/50 backdrop-blur-md rounded-full px-5 py-2 shadow-lg">
             <IconComponent size={16} style={{ color: service.color }} strokeWidth={2.5} />
             <span className="text-xs font-black uppercase tracking-[0.25em] text-foreground">
               Premium Service
@@ -187,9 +187,9 @@ export function ServiceDetailClient({ service }: { service: Service }) {
           style={{ y: y1, scale: scaleHeroImage }}
           className="w-full max-w-6xl mx-auto mt-20 relative z-20"
         >
-          <div className="relative aspect-video rounded-t-3xl md:rounded-t-[3rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-border/80 bg-card/30 backdrop-blur-2xl">
+          <div className="relative aspect-video rounded-t-3xl md:rounded-t-[3rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-card/30 backdrop-blur-2xl">
             {/* Mac-style Window Header */}
-            <div className="absolute top-0 left-0 right-0 h-12 bg-black/40 backdrop-blur-md border-b border-white/5 flex items-center px-6 z-30">
+            <div className="absolute top-0 left-0 right-0 h-12 bg-black/40 backdrop-blur-md flex items-center px-6 z-30">
               <div className="flex gap-2">
                 <div className="w-3 h-3 rounded-full bg-red-500/80" />
                 <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
@@ -225,7 +225,7 @@ export function ServiceDetailClient({ service }: { service: Service }) {
       </section>
       
       {/* 2. Central Focused Content Area */}
-      <section className="py-24 relative z-30 bg-background border-t border-border/50">
+      <section className="py-24 relative z-30 bg-background">
         <div className="max-w-4xl mx-auto px-6">
           <motion.div 
             initial={{ opacity: 0, y: 30 }}
@@ -242,7 +242,7 @@ export function ServiceDetailClient({ service }: { service: Service }) {
 
             <div 
               className="prose prose-lg md:prose-xl dark:prose-invert prose-headings:font-black prose-headings:tracking-tight max-w-none prose-a:font-bold prose-a:no-underline hover:prose-a:underline prose-p:leading-relaxed prose-p:text-muted-foreground prose-strong:text-foreground break-words
-              prose-ul:space-y-4 prose-li:marker:text-current bg-card/30 p-8 md:p-16 rounded-[3rem] border border-border/50 shadow-2xl backdrop-blur-md"
+              prose-ul:space-y-4 prose-li:marker:text-current bg-card/30 p-8 md:p-16 rounded-[3rem] shadow-2xl backdrop-blur-md"
               style={{ 
                 '--tw-prose-links': service.color,
                 '--tw-prose-bullets': service.color,
@@ -282,7 +282,7 @@ export function ServiceDetailClient({ service }: { service: Service }) {
                   whileInView={{ opacity: 1, scale: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ duration: 0.5, delay: idx * 0.05 }}
-                  className={`${spanClass} relative rounded-[2rem] bg-card/60 backdrop-blur-xl border border-border/60 p-8 flex flex-col justify-between group hover:border-white/20 transition-colors overflow-hidden`}
+                  className={`${spanClass} relative rounded-[2rem] bg-card/60 backdrop-blur-xl p-8 flex flex-col justify-between group transition-colors overflow-hidden`}
                 >
                   {/* Hover Gradient Glow */}
                   <div 
@@ -291,7 +291,7 @@ export function ServiceDetailClient({ service }: { service: Service }) {
                   />
 
                   <div 
-                    className="w-14 h-14 rounded-2xl flex items-center justify-center relative z-10 bg-background border border-border shadow-sm group-hover:scale-110 transition-transform duration-300"
+                    className="w-14 h-14 rounded-2xl flex items-center justify-center relative z-10 bg-background shadow-sm group-hover:scale-110 transition-transform duration-300"
                   >
                     {brandData ? (
                       <img 
@@ -321,7 +321,7 @@ export function ServiceDetailClient({ service }: { service: Service }) {
       </section>
 
       {/* 4. Horizontal/Grid Process Section */}
-      <section className="py-32 relative z-20 bg-background border-t border-border/50">
+      <section className="py-32 relative z-20 bg-background">
         <div className="max-w-7xl mx-auto px-6">
           <div className="mb-20">
             <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tight mb-6">
@@ -362,7 +362,7 @@ export function ServiceDetailClient({ service }: { service: Service }) {
       </section>
 
       {/* 5. FAQs Section */}
-      <section className="py-32 relative z-20 bg-muted/10 border-t border-border/50">
+      <section className="py-32 relative z-20 bg-muted/10">
         <div className="max-w-4xl mx-auto px-6">
           <div className="text-center mb-16">
             <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tight mb-6">
@@ -380,7 +380,7 @@ export function ServiceDetailClient({ service }: { service: Service }) {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.4, delay: idx * 0.1 }}
-                  className={`border rounded-3xl overflow-hidden transition-all duration-300 ${isActive ? 'bg-card border-border shadow-xl' : 'bg-transparent border-border/50 hover:bg-card/30 hover:border-border/80'}`}
+                  className={`rounded-3xl overflow-hidden transition-all duration-300 ${isActive ? 'bg-card shadow-xl' : 'bg-transparent hover:bg-card/30'}`}
                 >
                   <button
                     onClick={() => setActiveFaq(isActive ? null : idx)}
@@ -419,7 +419,7 @@ export function ServiceDetailClient({ service }: { service: Service }) {
       </section>
 
       {/* 6. Massive Bottom CTA */}
-      <section className="py-40 relative z-20 border-t border-border overflow-hidden">
+      <section className="py-40 relative z-20 overflow-hidden">
         <div className="absolute inset-0 bg-background" />
         
         {/* Intense background glow for CTA */}
