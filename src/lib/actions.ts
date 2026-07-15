@@ -93,6 +93,7 @@ export async function createService(formData: FormData) {
   const bentoClass = formData.get("bentoClass") as string;
   const rawSlug = formData.get("slug") as string;
   const image = formData.get("image") as string | null;
+  const capabilities = formData.get("capabilities") as string | null;
 
   if (!title || !shortDescription) {
     throw new Error("Title and short description are required.");
@@ -109,6 +110,7 @@ export async function createService(formData: FormData) {
     icon: icon || "search",
     color: color || "#ffbe00",
     bentoClass: bentoClass || "md:col-span-1",
+    capabilities: capabilities || "",
     createdAt: getNow(),
     updatedAt: getNow(),
   });
@@ -128,6 +130,7 @@ export async function updateService(id: string, formData: FormData) {
   const bentoClass = formData.get("bentoClass") as string;
   const rawSlug = formData.get("slug") as string;
   const image = formData.get("image") as string | null;
+  const capabilities = formData.get("capabilities") as string | null;
 
   if (!title || !shortDescription) {
     throw new Error("Title and short description are required.");
@@ -144,6 +147,7 @@ export async function updateService(id: string, formData: FormData) {
     icon: icon || "search",
     color: color || "#ffbe00",
     bentoClass: bentoClass || "md:col-span-1",
+    capabilities: capabilities || "",
     updatedAt: getNow(),
   });
 

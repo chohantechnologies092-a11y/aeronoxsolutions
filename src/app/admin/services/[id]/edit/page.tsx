@@ -104,6 +104,18 @@ export default async function EditServicePage({
               placeholder="Brief summary for the card..."
             />
           </div>
+
+          <div className="flex flex-col gap-2">
+            <label htmlFor="capabilities" className="text-sm font-medium text-admin-text">Capabilities (comma-separated, Optional)</label>
+            <input 
+              type="text" 
+              id="capabilities" 
+              name="capabilities" 
+              defaultValue={service.capabilities || ""}
+              className="bg-black/10 dark:bg-black/20 border border-admin-border rounded-lg px-4 py-3 text-admin-text placeholder:text-muted focus:outline-none focus:border-accent transition-colors"
+              placeholder="e.g. React, Node.js, Next.js, Figma"
+            />
+          </div>
           
           <div className="flex flex-col gap-2">
             <label className="text-sm font-medium text-admin-text">Detailed Content</label>

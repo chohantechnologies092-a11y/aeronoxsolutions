@@ -79,7 +79,9 @@ export function ServiceDetailClient({ service }: { service: Service }) {
     service.icon.charAt(0).toUpperCase() + service.icon.slice(1)
   ] || LucideIcons.Search;
 
-  const capabilities = getServiceCapabilities(service.slug);
+  const capabilities: string[] = service.capabilities && service.capabilities.trim() !== "" 
+    ? service.capabilities.split(',').map((c: string) => c.trim()).filter(Boolean)
+    : getServiceCapabilities(service.slug);
 
   // Animation variants
   const fadeIn = {
