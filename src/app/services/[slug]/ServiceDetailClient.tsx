@@ -343,12 +343,12 @@ export function ServiceDetailClient({ service }: { service: Service }) {
               >
                 {/* Connecting Line (Desktop) */}
                 {idx !== processSteps.length - 1 && (
-                  <div className="hidden lg:block absolute top-10 left-full w-full h-px border-t-2 border-dashed border-border/30 -translate-x-4 z-0" />
+                  <div className="hidden lg:block absolute top-10 left-1/2 w-full h-px border-t-2 border-dashed border-border/20 z-0" />
                 )}
                 
-                <div className="relative z-10">
+                <div className="relative z-10 bg-background/50 backdrop-blur-[2px] pr-4 inline-block">
                   <div 
-                    className="text-6xl md:text-8xl font-black mb-6 opacity-5 group-hover:opacity-10 transition-opacity duration-500 leading-none -ml-1"
+                    className="text-6xl md:text-8xl font-black mb-6 opacity-15 dark:opacity-5 group-hover:opacity-30 dark:group-hover:opacity-15 transition-opacity duration-500 leading-none -ml-1"
                     style={{ color: service.color }}
                   >
                     {step.id}
