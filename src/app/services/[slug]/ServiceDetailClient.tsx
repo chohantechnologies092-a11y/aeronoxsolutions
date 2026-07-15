@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import * as LucideIcons from "lucide-react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 
 type Service = {
   id: string;
@@ -70,7 +70,38 @@ const getBrandIcon = (cap: string) => {
   return null;
 };
 
+// Dummy FAQ Data
+const getServiceFAQs = (slug: string) => {
+  return [
+    {
+      question: "How long does a typical project take?",
+      answer: "Project timelines vary based on scope and complexity. However, a standard engagement usually ranges from 4 to 12 weeks from discovery to final delivery."
+    },
+    {
+      question: "Do you offer ongoing support and maintenance?",
+      answer: "Absolutely. We provide flexible retainer and maintenance packages to ensure your solution remains optimized, secure, and up-to-date long after launch."
+    },
+    {
+      question: "What is your pricing structure?",
+      answer: "Our pricing is highly tailored to the specific needs and deliverables of your project. After our initial discovery call, we provide a transparent, customized proposal."
+    },
+    {
+      question: "Can you integrate with our existing tools?",
+      answer: "Yes! We specialize in creating seamless integrations with your existing CRM, ERP, and marketing stacks to ensure smooth data flow."
+    }
+  ];
+};
+
+// Dummy Process Data
+const processSteps = [
+  { id: "01", title: "Discovery & Audit", desc: "We dive deep into your business goals, target audience, and current infrastructure." },
+  { id: "02", title: "Strategy & Planning", desc: "Crafting a customized roadmap with clear milestones and deliverables." },
+  { id: "03", title: "Execution & Dev", desc: "Our experts build, design, and optimize your solution with precision." },
+  { id: "04", title: "Delivery & Scale", desc: "Smooth launch followed by iterative improvements for maximum growth." },
+];
+
 export function ServiceDetailClient({ service }: { service: Service }) {
+  const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const { scrollYProgress } = useScroll();
   const y1 = useTransform(scrollYProgress, [0, 1], [0, 200]);
   
@@ -82,6 +113,8 @@ export function ServiceDetailClient({ service }: { service: Service }) {
   const capabilities: string[] = service.capabilities && service.capabilities.trim() !== "" 
     ? service.capabilities.split(',').map((c: string) => c.trim()).filter(Boolean)
     : getServiceCapabilities(service.slug);
+    
+  const faqs = getServiceFAQs(service.slug);
 
   // Animation variants
   const fadeIn = {
@@ -182,7 +215,7 @@ export function ServiceDetailClient({ service }: { service: Service }) {
             >
               {service.image ? (
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] md:w-[400px] md:h-[400px] rounded-[3rem] overflow-hidden shadow-2xl group border border-border/50">
-                  <div className="absolute inset-0 bg-gradient-to-tr from-black/20 to-transparent z-10 pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-tr from-black/40 via-transparent to-transparent z-10 pointer-events-none" />
                   <img 
                     src={service.image} 
                     alt={service.title}
@@ -199,12 +232,30 @@ export function ServiceDetailClient({ service }: { service: Service }) {
                   />
                   
                   {/* Small floating icon badge */}
-                  <div 
-                    className="absolute bottom-8 right-8 w-16 h-16 rounded-2xl flex items-center justify-center shadow-2xl z-30 backdrop-blur-md"
-                    style={{ backgroundColor: `${service.color}dd`, border: '1px solid rgba(255,255,255,0.2)' }}
+                  <motion.div 
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: [0, -10, 0], opacity: 1 }}
+                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                    className="absolute bottom-8 right-8 w-16 h-16 rounded-2xl flex items-center justify-center shadow-2xl z-30 backdrop-blur-md border border-white/20"
+                    style={{ backgroundColor: `${service.color}dd` }}
                   >
                     <IconComponent size={28} color="#fff" strokeWidth={2.5} />
-                  </div>
+                  </motion.div>
+                  
+                  {/* Extra floating element for premium feel */}
+                  <motion.div 
+                    initial={{ x: -20, opacity: 0 }}
+                    animate={{ x: [0, 10, 0], opacity: 1 }}
+                    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                    className="absolute top-8 left-8 p-3 rounded-xl shadow-xl z-30 backdrop-blur-md border border-white/10"
+                    style={{ backgroundColor: `rgba(0,0,0,0.4)` }}
+                  >
+                    <div className="flex gap-1 items-end h-4">
+                      <div className="w-1.5 h-2 bg-white/60 rounded-full" />
+                      <div className="w-1.5 h-3 bg-white/80 rounded-full" />
+                      <div className="w-1.5 h-4 bg-white rounded-full" style={{ backgroundColor: service.color }} />
+                    </div>
+                  </motion.div>
                 </div>
               ) : (
                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px]">
@@ -305,6 +356,91 @@ export function ServiceDetailClient({ service }: { service: Service }) {
                   })}
                 </div>
               </div>
+
+              {/* Our Process Section */}
+              <div className="mt-20">
+                <h3 className="text-xl font-black text-foreground mb-8 uppercase tracking-widest flex items-center gap-4">
+                  Our Process
+                  <div className="h-px flex-1 bg-border/50" />
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                  {processSteps.map((step, idx) => (
+                    <motion.div
+                      key={step.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.5, delay: idx * 0.1 }}
+                      className="relative p-6 rounded-[2rem] bg-card/40 backdrop-blur-sm border border-border group overflow-hidden"
+                    >
+                      <div 
+                        className="absolute -top-10 -right-10 w-32 h-32 blur-3xl opacity-0 group-hover:opacity-20 transition-opacity duration-500"
+                        style={{ backgroundColor: service.color }}
+                      />
+                      <div 
+                        className="text-4xl font-black mb-4 opacity-20 group-hover:opacity-100 transition-opacity duration-300"
+                        style={{ color: service.color }}
+                      >
+                        {step.id}
+                      </div>
+                      <h4 className="text-lg font-bold text-foreground mb-2">{step.title}</h4>
+                      <p className="text-sm text-muted-foreground leading-relaxed">{step.desc}</p>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+
+              {/* FAQ Section */}
+              <div className="mt-20">
+                <h3 className="text-xl font-black text-foreground mb-8 uppercase tracking-widest flex items-center gap-4">
+                  Frequently Asked Questions
+                  <div className="h-px flex-1 bg-border/50" />
+                </h3>
+                <div className="flex flex-col gap-4">
+                  {faqs.map((faq, idx) => {
+                    const isActive = activeFaq === idx;
+                    return (
+                      <motion.div
+                        key={idx}
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.4, delay: idx * 0.1 }}
+                        className={`border rounded-2xl overflow-hidden transition-colors ${isActive ? 'bg-card/60 border-border shadow-sm' : 'bg-card/20 border-border/50 hover:bg-card/40'}`}
+                      >
+                        <button
+                          onClick={() => setActiveFaq(isActive ? null : idx)}
+                          className="w-full flex items-center justify-between p-5 text-left"
+                        >
+                          <span className={`font-bold transition-colors ${isActive ? 'text-foreground' : 'text-muted-foreground'}`}>
+                            {faq.question}
+                          </span>
+                          <div 
+                            className={`w-8 h-8 rounded-full flex items-center justify-center transition-transform duration-300 ${isActive ? 'rotate-180' : ''}`}
+                            style={{ backgroundColor: isActive ? `${service.color}20` : 'transparent', color: isActive ? service.color : 'inherit' }}
+                          >
+                            <LucideIcons.ChevronDown size={18} />
+                          </div>
+                        </button>
+                        <AnimatePresence>
+                          {isActive && (
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: "auto", opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.3, ease: "easeInOut" }}
+                            >
+                              <div className="p-5 pt-0 text-muted-foreground text-sm leading-relaxed">
+                                {faq.answer}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              </div>
             </motion.div>
 
             {/* Sidebar (Right) */}
@@ -369,6 +505,24 @@ export function ServiceDetailClient({ service }: { service: Service }) {
                     ))}
                   </ul>
                 </div>
+
+                {/* Trust / Expert Badge */}
+                <div className="bg-card p-6 rounded-[2rem] border border-border/50 shadow-sm flex items-center gap-4 group cursor-pointer hover:shadow-md transition-all">
+                  <div className="relative">
+                    <img 
+                      src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=100" 
+                      alt="Expert"
+                      className="w-14 h-14 rounded-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300 border-2 border-transparent group-hover:border-current"
+                      style={{ color: service.color }}
+                    />
+                    <div className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-green-500 border-2 border-card" />
+                  </div>
+                  <div>
+                    <h5 className="text-sm font-bold text-foreground">Speak to an Expert</h5>
+                    <p className="text-xs text-muted-foreground mt-0.5">Available for consultation</p>
+                  </div>
+                </div>
+
               </div>
             </motion.div>
             
