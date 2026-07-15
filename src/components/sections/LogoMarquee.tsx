@@ -38,14 +38,17 @@ export function LogoMarquee({ clients = [] }: { clients?: ClientType[] }) {
   const row2Items = [...row2, ...row2, ...row2, ...row2];
 
   return (
-    <section className="py-20 bg-muted/10 border-y border-border overflow-hidden flex flex-col items-center relative">
+    <section className="py-20 bg-[#020306] border-y border-white/5 overflow-hidden flex flex-col items-center relative">
+      {/* Background glowing effects */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,190,0,0.03)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-mesh opacity-10 pointer-events-none" />
       
       <div className="relative z-10 w-full max-w-7xl px-4 flex flex-col items-center mb-12">
-        <span className="px-4 py-1.5 rounded-full border border-border bg-card shadow-sm text-muted-foreground text-xs font-bold uppercase tracking-widest mb-4">
+        <span className="px-4 py-1.5 rounded-full border border-[#ffbe00]/20 bg-[#ffbe00]/5 text-[#ffbe00] text-xs font-bold uppercase tracking-widest mb-4">
           Our Clients
         </span>
-        <h2 className="text-3xl md:text-4xl font-bold text-center text-foreground tracking-tight">
-          Trusted by <span className="text-foreground font-black">Innovative Brands</span> Worldwide
+        <h2 className="text-3xl md:text-4xl font-bold text-center text-white/90 tracking-tight">
+          Trusted by <span className="text-[#ffbe00]">Innovative Brands</span> Worldwide
         </h2>
       </div>
       
@@ -93,25 +96,25 @@ export function LogoMarquee({ clients = [] }: { clients?: ClientType[] }) {
 
 function MarqueeCard({ item, hasClients }: { item: any, hasClients: boolean }) {
   const content = (
-    <div className="flex items-center gap-4 px-6 py-4 rounded-2xl bg-card border border-black/5 dark:border-white/10 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 group cursor-pointer w-[280px]">
-      <div className="relative w-14 h-14 rounded-xl bg-background border border-black/5 dark:border-white/5 p-2 flex items-center justify-center group-hover:scale-105 transition-all duration-300 overflow-hidden shadow-sm">
+    <div className="flex items-center gap-4 px-6 py-4 rounded-2xl bg-white/[0.02] border border-white/5 backdrop-blur-sm hover:bg-white/[0.06] hover:border-white/10 hover:-translate-y-1 transition-all duration-300 group cursor-pointer w-[280px]">
+      <div className="relative w-14 h-14 rounded-xl bg-white/95 border border-white/20 p-2 flex items-center justify-center group-hover:scale-110 group-hover:border-[#ffbe00]/50 transition-all duration-300 shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)]">
         {hasClients ? (
           <Image 
             src={item.logo} 
             alt={item.name} 
             fill 
-            className="object-contain p-2 grayscale contrast-0 brightness-0 dark:brightness-200 opacity-60 group-hover:opacity-100 transition-opacity duration-300" 
+            className="object-contain p-1.5 drop-shadow-[0_0_3px_rgba(0,0,0,0.6)]" 
           />
         ) : (
-          <item.icon size={24} strokeWidth={1.5} className="text-muted-foreground group-hover:text-foreground transition-colors" />
+          <item.icon size={24} strokeWidth={1.5} className="text-black/70 group-hover:text-[#ffbe00] transition-colors" />
         )}
       </div>
       <div className="flex flex-col">
-        <span className="text-lg font-bold tracking-tight text-foreground/80 group-hover:text-foreground transition-colors">
+        <span className="text-lg font-bold tracking-tight text-white/80 group-hover:text-white transition-colors">
           {item.name}
         </span>
         {hasClients && item.servicesProvided && (
-          <span className="text-xs text-muted-foreground truncate max-w-[150px]">
+          <span className="text-xs text-white/40 truncate max-w-[150px]">
             {item.servicesProvided.split(',')[0]}
           </span>
         )}
