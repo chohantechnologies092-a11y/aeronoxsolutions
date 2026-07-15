@@ -64,7 +64,7 @@ export function LogoMarquee({ clients = [] }: { clients?: ClientType[] }) {
         <motion.div
           animate={{ x: ["0%", "-50%"] }}
           transition={{
-            duration: 120,
+            duration: 240,
             ease: "linear",
             repeat: Infinity,
           }}
@@ -79,7 +79,7 @@ export function LogoMarquee({ clients = [] }: { clients?: ClientType[] }) {
         <motion.div
           animate={{ x: ["-50%", "0%"] }}
           transition={{
-            duration: 135,
+            duration: 270,
             ease: "linear",
             repeat: Infinity,
           }}
