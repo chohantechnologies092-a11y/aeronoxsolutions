@@ -136,9 +136,10 @@ export function ServiceDetailClient({ service }: { service: Service }) {
   return (
     <article className="min-h-screen bg-background font-sans relative overflow-hidden selection:bg-foreground selection:text-background">
       
-      {/* Immersive Ambient Glows */}
+      {/* Immersive Ambient Glows & Subtle Light Beam */}
+      <div className="absolute top-0 inset-x-0 h-[500px] bg-gradient-to-b from-white/5 to-transparent pointer-events-none -z-10" />
       <div 
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-[80vw] max-w-[1200px] h-[600px] rounded-[100%] blur-[160px] opacity-[0.15] pointer-events-none -z-10"
+        className="absolute -top-[200px] left-1/2 -translate-x-1/2 w-[80vw] max-w-[1200px] h-[600px] rounded-[100%] blur-[120px] opacity-[0.12] pointer-events-none -z-10"
         style={{ backgroundColor: service.color }}
       />
       
@@ -159,7 +160,7 @@ export function ServiceDetailClient({ service }: { service: Service }) {
             </span>
           </motion.div>
 
-          <motion.h1 variants={fadeIn} className="text-5xl md:text-7xl lg:text-8xl font-black text-foreground tracking-tighter leading-[0.95] mb-8">
+          <motion.h1 variants={fadeIn} className="text-5xl md:text-7xl lg:text-8xl font-black text-foreground tracking-tight leading-[1.05] mb-8">
             {service.title}
           </motion.h1>
           
@@ -255,7 +256,7 @@ export function ServiceDetailClient({ service }: { service: Service }) {
 
       {/* 3. Bento Grid Capabilities */}
       <section className="py-32 relative z-20 overflow-hidden">
-        <div className="absolute inset-0 bg-muted/20" />
+        <div className="absolute inset-0 bg-muted/10 bg-[radial-gradient(rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:24px_24px] opacity-70" />
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="text-center mb-20">
             <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tight mb-6">
@@ -296,12 +297,12 @@ export function ServiceDetailClient({ service }: { service: Service }) {
                     {brandData ? (
                       <img 
                         src={brandData.type === 'simple' 
-                          ? `https://cdn.simpleicons.org/${brandData.id}/${colorHex}`
+                          ? `https://cdn.simpleicons.org/${brandData.id}/ffffff`
                           : `https://www.google.com/s2/favicons?domain=${brandData.id}&sz=128`
                         } 
                         alt={`${brandData.id} icon`} 
                         className="w-6 h-6 object-contain" 
-                        style={brandData.type === 'domain' ? { filter: 'grayscale(100%) opacity(80%)' } : {}}
+                        style={brandData.type === 'domain' ? { filter: 'grayscale(100%) brightness(200%) opacity(80%)' } : { opacity: 0.8 }}
                       />
                     ) : (
                       <IconComponent size={24} style={{ color: service.color }} />
@@ -342,12 +343,12 @@ export function ServiceDetailClient({ service }: { service: Service }) {
               >
                 {/* Connecting Line (Desktop) */}
                 {idx !== processSteps.length - 1 && (
-                  <div className="hidden lg:block absolute top-10 left-full w-full h-px bg-border -translate-x-4 z-0" />
+                  <div className="hidden lg:block absolute top-10 left-full w-full h-px border-t-2 border-dashed border-border/30 -translate-x-4 z-0" />
                 )}
                 
                 <div className="relative z-10">
                   <div 
-                    className="text-6xl md:text-8xl font-black mb-6 opacity-10 group-hover:opacity-30 transition-opacity duration-500 leading-none -ml-1"
+                    className="text-6xl md:text-8xl font-black mb-6 opacity-5 group-hover:opacity-10 transition-opacity duration-500 leading-none -ml-1"
                     style={{ color: service.color }}
                   >
                     {step.id}
