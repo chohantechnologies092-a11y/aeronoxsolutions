@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import { Search, ArrowRight, TrendingUp, Users, ShieldCheck, Activity, BarChart3, Globe2 } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Search, ArrowRight, TrendingUp, Users, ShieldCheck, Activity, BarChart3, Globe2, X, CheckCircle2 } from 'lucide-react';
+import { submitLead } from '@/lib/actions';
 
 function Particles() {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -154,6 +155,46 @@ function DashboardMockup() {
 }
 
 export function Hero() {
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [websiteUrl, setWebsiteUrl] = useState("");
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [isSuccess, setIsSuccess] = useState(false);
+    const [formData, setFormData] = useState({ name: "", phone: "", email: "", message: "" });
+
+    const handleAnalyzeSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        if (websiteUrl) {
+            setIsModalOpen(true);
+        }
+    };
+
+    const handleLeadSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        try {
+            const data = new FormData();
+            data.append("name", formData.name);
+            data.append("phone", formData.phone);
+            data.append("email", formData.email);
+            data.append("message", formData.message);
+            data.append("websiteUrl", websiteUrl);
+            
+            await submitLead(data);
+            setIsSuccess(true);
+            setTimeout(() => {
+                setIsModalOpen(false);
+                setIsSuccess(false);
+                setWebsiteUrl("");
+                setFormData({ name: "", phone: "", email: "", message: "" });
+            }, 3000);
+        } catch (error) {
+            console.error(error);
+            alert("Something went wrong. Please try again.");
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
     return (
         <section className="relative min-h-[100dvh] flex flex-col items-center justify-start bg-mesh px-4 md:px-6 pt-40 pb-0 overflow-hidden">
             {/* Animated Particles */}
@@ -247,7 +288,7 @@ export function Hero() {
                     className="w-full max-w-2xl mb-4 relative z-30"
                 >
                     <form 
-                        onSubmit={(e) => { e.preventDefault(); alert("Audit request submitted!"); }}
+                        onSubmit={handleAnalyzeSubmit}
                         className="relative flex items-center w-full bg-white rounded-full border-2 border-gray-100 shadow-[0_20px_60px_rgba(0,0,0,0.06)] overflow-hidden transition-all focus-within:border-[#ffbe00] focus-within:shadow-[0_20px_60px_rgba(255,190,0,0.15)] p-2"
                     >
                         <div className="pl-6 text-gray-400">
@@ -257,6 +298,8 @@ export function Hero() {
                             type="url" 
                             placeholder="https://yourwebsite.com" 
                             required
+                            value={websiteUrl}
+                            onChange={(e) => setWebsiteUrl(e.target.value)}
                             className="w-full bg-transparent border-none outline-none px-4 py-4 text-gray-900 text-lg placeholder:text-gray-300 font-medium"
                         />
                         <button 
@@ -275,6 +318,100 @@ export function Hero() {
             {/* Dashboard Mockup Layer */}
             <DashboardMockup />
 
+            {/* Lead Modal */}
+            <AnimatePresence>
+                {isModalOpen && (
+                    <>
+                        <motion.div 
+                            initial={{ opacity: 0 }} 
+                            animate={{ opacity: 1 }} 
+                            exit={{ opacity: 0 }}
+                            className="fixed inset-0 bg-black/60 backdrop-blur-md z-[100]"
+                            onClick={() => !isSubmitting && setIsModalOpen(false)}
+                        />
+                        <motion.div 
+                            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                            animate={{ opacity: 1, scale: 1, y: 0 }}
+                            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                            className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-[#050505] border border-white/10 rounded-3xl p-8 z-[101] shadow-[0_30px_100px_rgba(0,0,0,0.5)] flex flex-col"
+                        >
+                            {isSuccess ? (
+                                <motion.div 
+                                    initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }}
+                                    className="flex flex-col items-center justify-center py-10 text-center gap-4"
+                                >
+                                    <div className="w-16 h-16 rounded-full bg-emerald-500/10 flex items-center justify-center">
+                                        <CheckCircle2 size={32} className="text-emerald-500" />
+                                    </div>
+                                    <h3 className="text-2xl font-bold text-white tracking-tight">Request Received</h3>
+                                    <p className="text-white/60">Our team will contact you soon with your free audit.</p>
+                                </motion.div>
+                            ) : (
+                                <>
+                                    <div className="flex justify-between items-start mb-6">
+                                        <div>
+                                            <h3 className="text-2xl font-bold text-white tracking-tight mb-1">Let's Get Started</h3>
+                                            <p className="text-sm text-white/50">Enter your details below to receive your free audit for <span className="text-[#ffbe00] font-medium">{websiteUrl}</span></p>
+                                        </div>
+                                        <button 
+                                            onClick={() => setIsModalOpen(false)}
+                                            className="p-2 bg-white/5 hover:bg-white/10 rounded-full transition-colors text-white/60 hover:text-white"
+                                        >
+                                            <X size={16} />
+                                        </button>
+                                    </div>
+                                    
+                                    <form onSubmit={handleLeadSubmit} className="flex flex-col gap-4">
+                                        <div>
+                                            <label className="text-xs font-bold text-white/40 uppercase tracking-wider mb-2 block">Full Name</label>
+                                            <input 
+                                                type="text" required
+                                                value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})}
+                                                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-[#ffbe00]/50 focus:bg-white/10 transition-all"
+                                                placeholder="John Doe"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="text-xs font-bold text-white/40 uppercase tracking-wider mb-2 block">Phone Number</label>
+                                            <input 
+                                                type="tel" required
+                                                value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})}
+                                                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-[#ffbe00]/50 focus:bg-white/10 transition-all"
+                                                placeholder="+1 (555) 000-0000"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="text-xs font-bold text-white/40 uppercase tracking-wider mb-2 block">Email Address</label>
+                                            <input 
+                                                type="email" required
+                                                value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})}
+                                                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-[#ffbe00]/50 focus:bg-white/10 transition-all"
+                                                placeholder="john@example.com"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="text-xs font-bold text-white/40 uppercase tracking-wider mb-2 block">Message (Optional)</label>
+                                            <textarea 
+                                                value={formData.message} onChange={e => setFormData({...formData, message: e.target.value})}
+                                                className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white outline-none focus:border-[#ffbe00]/50 focus:bg-white/10 transition-all min-h-[100px] resize-none"
+                                                placeholder="Tell us about your goals..."
+                                            />
+                                        </div>
+                                        
+                                        <button 
+                                            type="submit" disabled={isSubmitting}
+                                            className="w-full bg-[#ffbe00] hover:bg-[#ffbe00]/90 text-black font-bold py-4 rounded-xl mt-4 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                                        >
+                                            {isSubmitting ? "Submitting..." : "Get Free Audit"}
+                                            {!isSubmitting && <ArrowRight size={18} />}
+                                        </button>
+                                    </form>
+                                </>
+                            )}
+                        </motion.div>
+                    </>
+                )}
+            </AnimatePresence>
         </section>
     );
 }

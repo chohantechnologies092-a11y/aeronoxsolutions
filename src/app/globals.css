@@ -2,6 +2,24 @@
 
 @custom-variant dark (&:is(.dark *));
 
+:root {
+  /* Admin Panel Light Mode Variables */
+  --admin-bg: #f3f4f6;
+  --admin-card: #ffffff;
+  --admin-border: rgba(0, 0, 0, 0.1);
+  --admin-text: #111827;
+  --admin-muted: #6b7280;
+}
+
+.dark {
+  /* Admin Panel Dark Mode Variables */
+  --admin-bg: #1b1223;
+  --admin-card: #24182e;
+  --admin-border: rgba(255, 255, 255, 0.1);
+  --admin-text: #ffffff;
+  --admin-muted: rgba(220, 215, 227, 0.6);
+}
+
 @theme {
   --color-background: #fcfcfd;
   --color-foreground: #1e1e2d;
@@ -9,6 +27,13 @@
   --color-card-border: #f3f4f6;
   --color-muted: #6b7280;
   
+  /* Admin Colors */
+  --color-admin-bg: var(--admin-bg);
+  --color-admin-card: var(--admin-card);
+  --color-admin-border: var(--admin-border);
+  --color-admin-text: var(--admin-text);
+  --color-admin-muted: var(--admin-muted);
+
   /* Devlyx Primary Gradients */
   --color-accent: #6a35ff;
   --color-accent-secondary: #00c2cb;

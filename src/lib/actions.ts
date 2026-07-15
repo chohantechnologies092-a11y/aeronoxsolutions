@@ -276,7 +276,7 @@ export async function deleteClient(id: string) {
 }
 
 // ────────────────────────────────────────────────────────────────────────────
-// Settings & SEO
+// Settings & SEO & Analytics
 // ────────────────────────────────────────────────────────────────────────────
 
 export async function upsertSettings(formData: FormData) {
@@ -302,5 +302,67 @@ export async function fetchSettingsAction() {
   const doc = await db.collection("settings").doc("global").get();
   if (!doc.exists) return null;
   return doc.data();
+}
+
+export async function resetAnalyticsData() {
+  // In a real application, you would delete tracking data or reset a counter in the database.
+  // For now, since we're using mock analytics data, we can just pretend it succeeded or log it.
+  console.log("Analytics data reset initiated by admin.");
+  // Add a small delay to simulate backend work
+  await new Promise(resolve => setTimeout(resolve, 500));
+  
+  revalidatePath("/admin/analytics");
+  revalidatePath("/admin");
+  return { success: true };
+}
+
+// ────────────────────────────────────────────────────────────────────────────
+// Leads
+// ────────────────────────────────────────────────────────────────────────────
+
+export async function submitLead(formData: FormData) {
+  const name = formData.get("name") as string;
+  const email = formData.get("email") as string;
+  const phone = formData.get("phone") as string;
+  const message = formData.get("message") as string;
+  const websiteUrl = formData.get("websiteUrl") as string;
+
+  if (!name || !email || !phone) {
+    throw new Error("Name, email, and phone are required.");
+  }
+
+  await db.collection("leads").add({
+    name,
+    email,
+    phone,
+    message: message || "",
+    websiteUrl: websiteUrl || "",
+    status: "new",
+    createdAt: getNow(),
+    updatedAt: getNow(),
+  });
+
+  return { success: true };
+}
+
+export async function deleteLead(id: string) {
+  await db.collection("leads").doc(id).delete();
+  revalidatePath("/admin/leads");
+}
+
+export async function updateLeadStatus(id: string, formData: FormData) {
+  const status = formData.get("status") as string;
+
+  if (!status) {
+    throw new Error("Status is required.");
+  }
+
+  await db.collection("leads").doc(id).update({
+    status,
+    updatedAt: getNow(),
+  });
+
+  revalidatePath("/admin/leads");
+  redirect("/admin/leads");
 }
 

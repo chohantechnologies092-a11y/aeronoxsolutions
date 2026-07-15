@@ -37,6 +37,8 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
+import { ThemeProvider } from "@/components/providers/ThemeProvider";
+
 export default function RootLayout({
   children,
 }: {
@@ -48,7 +50,14 @@ export default function RootLayout({
         className={`${inter.variable} ${spaceGrotesk.variable} bg-background text-foreground font-sans`}
         suppressHydrationWarning
       >
-        <LayoutShell>{children}</LayoutShell>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem={false}
+          disableTransitionOnChange
+        >
+          <LayoutShell>{children}</LayoutShell>
+        </ThemeProvider>
       </body>
     </html>
   );

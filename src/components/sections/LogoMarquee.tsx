@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { Apple, Box, Hexagon, Triangle, Circle, Diamond, Sparkles, Star } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useMemo } from "react";
 
 type ClientType = {
   id: string;
@@ -27,115 +27,108 @@ const fallbackLogos = [
   { name: "Apple", icon: Apple },
 ];
 
-function MarqueeItemWrapper({ children, isClient }: { children: React.ReactNode, isClient: boolean }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [isCenter, setIsCenter] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        setIsCenter(entry.isIntersecting);
-      },
-      {
-        root: null,
-        // The root margin creates a narrow vertical band in the middle 20% of the viewport.
-        rootMargin: "0px -40% 0px -40%",
-        threshold: 0,
-      }
-    );
-
-    if (ref.current) {
-      observer.observe(ref.current);
-    }
-    return () => observer.disconnect();
-  }, []);
-
-  // We add conditional classes based on whether it is intersecting the center
-  return (
-    <div 
-      ref={ref} 
-      className={`transition-all duration-500 ${isCenter ? "opacity-100 scale-110 grayscale-0" : "opacity-40 grayscale"}`}
-    >
-      {children}
-    </div>
-  );
-}
-
 export function LogoMarquee({ clients = [] }: { clients?: ClientType[] }) {
   const hasClients = clients.length > 0;
-  
   const itemsToRender = hasClients ? clients : fallbackLogos;
-  const marqueeItems = [...itemsToRender, ...itemsToRender, ...itemsToRender, ...itemsToRender];
+  
+  // Duplicate items to ensure smooth infinite scrolling
+  const row1 = [...itemsToRender, ...itemsToRender, ...itemsToRender, ...itemsToRender];
+  // Reverse row for the second line
+  const row2 = [...itemsToRender].reverse();
+  const row2Items = [...row2, ...row2, ...row2, ...row2];
 
   return (
-    <section className="py-12 bg-[#020306] border-y border-white/5 overflow-hidden flex flex-col items-center relative">
-      <div className="absolute inset-0 bg-mesh opacity-20 pointer-events-none" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-px bg-gradient-to-r from-transparent via-[#ffbe00]/20 to-transparent pointer-events-none" />
+    <section className="py-20 bg-[#020306] border-y border-white/5 overflow-hidden flex flex-col items-center relative">
+      {/* Background glowing effects */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,190,0,0.03)_0%,transparent_70%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-mesh opacity-10 pointer-events-none" />
       
-      <p className="text-xs font-bold uppercase tracking-[0.3em] text-[#ffbe00] mb-8 text-center relative z-10">
-        Trusted by Innovative Brands Worldwide
-      </p>
+      <div className="relative z-10 w-full max-w-7xl px-4 flex flex-col items-center mb-12">
+        <span className="px-4 py-1.5 rounded-full border border-[#ffbe00]/20 bg-[#ffbe00]/5 text-[#ffbe00] text-xs font-bold uppercase tracking-widest mb-4">
+          Our Clients
+        </span>
+        <h2 className="text-3xl md:text-4xl font-bold text-center text-white/90 tracking-tight">
+          Trusted by <span className="text-[#ffbe00]">Innovative Brands</span> Worldwide
+        </h2>
+      </div>
       
+      {/* Marquee Container with Masking */}
       <div 
-        className="relative flex w-full max-w-[100vw] overflow-hidden z-10"
+        className="relative flex flex-col gap-6 w-full max-w-[100vw] overflow-hidden z-10"
         style={{
-          maskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)',
-          WebkitMaskImage: 'linear-gradient(to right, transparent, black 10%, black 90%, transparent)'
+          maskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)',
+          WebkitMaskImage: 'linear-gradient(to right, transparent, black 15%, black 85%, transparent)'
         }}
       >
+        {/* Row 1 - Left to Right */}
         <motion.div
           animate={{ x: ["0%", "-50%"] }}
           transition={{
-            duration: hasClients ? Math.max(20, clients.length * 5) : 30,
+            duration: 120,
             ease: "linear",
             repeat: Infinity,
           }}
-          className="flex items-center gap-16 pr-16 w-max"
+          className="flex items-center gap-6 pr-6 w-max"
         >
-          {marqueeItems.map((item, index) => {
-            if (hasClients) {
-              const client = item as ClientType;
-              const content = (
-                <div className="flex items-center gap-4 group cursor-pointer">
-                  <div className="relative w-12 h-12 rounded-lg bg-white/5 border border-white/10 p-2 flex items-center justify-center group-hover:bg-white/10 transition-colors">
-                    <Image 
-                      src={client.logo} 
-                      alt={client.name} 
-                      fill 
-                      className="object-contain p-1" 
-                    />
-                  </div>
-                  <span className="text-xl font-bold tracking-tight text-white/80 group-hover:text-white transition-colors">
-                    {client.name}
-                  </span>
-                </div>
-              );
+          {row1.map((item, index) => (
+            <MarqueeCard key={`r1-${index}`} item={item} hasClients={hasClients} />
+          ))}
+        </motion.div>
 
-              return (
-                <MarqueeItemWrapper isClient={true} key={`${client.id}-${index}`}>
-                  <Link href={`/portfolio/client/${client.id}`} className="block">
-                    {content}
-                  </Link>
-                </MarqueeItemWrapper>
-              );
-            }
-
-            // Fallback rendering
-            const fallback = item as typeof fallbackLogos[0];
-            const Icon = fallback.icon;
-            return (
-              <MarqueeItemWrapper key={`fallback-${index}`} isClient={false}>
-                <div className="flex items-center gap-3 text-white">
-                  <Icon size={28} strokeWidth={1.5} className="text-[#ffbe00]" />
-                  <span className="text-xl font-bold tracking-tighter">
-                    {fallback.name}
-                  </span>
-                </div>
-              </MarqueeItemWrapper>
-            );
-          })}
+        {/* Row 2 - Right to Left */}
+        <motion.div
+          animate={{ x: ["-50%", "0%"] }}
+          transition={{
+            duration: 135,
+            ease: "linear",
+            repeat: Infinity,
+          }}
+          className="flex items-center gap-6 pr-6 w-max"
+        >
+          {row2Items.map((item, index) => (
+            <MarqueeCard key={`r2-${index}`} item={item} hasClients={hasClients} />
+          ))}
         </motion.div>
       </div>
     </section>
   );
+}
+
+function MarqueeCard({ item, hasClients }: { item: any, hasClients: boolean }) {
+  const content = (
+    <div className="flex items-center gap-4 px-6 py-4 rounded-2xl bg-white/[0.02] border border-white/5 backdrop-blur-sm hover:bg-white/[0.06] hover:border-white/10 hover:-translate-y-1 transition-all duration-300 group cursor-pointer w-[280px]">
+      <div className="relative w-12 h-12 rounded-xl bg-black/40 border border-white/5 p-2 flex items-center justify-center group-hover:scale-110 group-hover:border-[#ffbe00]/30 transition-all duration-300 shadow-[0_0_15px_rgba(0,0,0,0.5)]">
+        {hasClients ? (
+          <Image 
+            src={item.logo} 
+            alt={item.name} 
+            fill 
+            className="object-contain p-1.5" 
+          />
+        ) : (
+          <item.icon size={24} strokeWidth={1.5} className="text-[#ffbe00]" />
+        )}
+      </div>
+      <div className="flex flex-col">
+        <span className="text-lg font-bold tracking-tight text-white/80 group-hover:text-white transition-colors">
+          {item.name}
+        </span>
+        {hasClients && item.servicesProvided && (
+          <span className="text-xs text-white/40 truncate max-w-[150px]">
+            {item.servicesProvided.split(',')[0]}
+          </span>
+        )}
+      </div>
+    </div>
+  );
+
+  if (hasClients) {
+    return (
+      <Link href={`/portfolio/client/${item.id}`} className="block">
+        {content}
+      </Link>
+    );
+  }
+
+  return <div>{content}</div>;
 }

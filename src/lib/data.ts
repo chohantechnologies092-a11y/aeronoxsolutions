@@ -56,7 +56,18 @@ export async function getMessages(): Promise<any[]> {
   return snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
 }
 
+export async function getLeads(): Promise<any[]> {
+  const snapshot = await db.collection("leads").orderBy("createdAt", "desc").get();
+  return snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
+}
+
 // Additional Helpers for Admin 
+export async function getLeadById(id: string): Promise<any> {
+  const doc = await db.collection("leads").doc(id).get();
+  if (!doc.exists) return null;
+  return { id: doc.id, ...doc.data() };
+}
+
 export async function getServiceById(id: string): Promise<any> {
   const doc = await db.collection("services").doc(id).get();
   if (!doc.exists) return null;

@@ -82,20 +82,20 @@ export default function EditClientForm({ client }: { client: Client }) {
     <div className="max-w-3xl">
       <Link 
         href="/admin/clients" 
-        className="inline-flex items-center gap-2 text-muted hover:text-white mb-8 transition-colors"
+        className="inline-flex items-center gap-2 text-muted hover:text-admin-text mb-8 transition-colors"
       >
         <ArrowLeft size={16} />
         Back to Clients
       </Link>
 
-      <h1 className="text-3xl font-bold text-white mb-8">Edit Client: {client.name}</h1>
+      <h1 className="text-3xl font-bold text-admin-text mb-8">Edit Client: {client.name}</h1>
 
-      <div className="bg-[#24182e] rounded-2xl border border-white/10 p-8">
+      <div className="bg-admin-card rounded-2xl border border-admin-border p-8">
         <form onSubmit={handleSubmit} className="space-y-6">
           
           <div>
-            <label htmlFor="name" className="block text-sm font-medium text-gray-300 mb-2">
-              Client Name <span className="text-red-400">*</span>
+            <label htmlFor="name" className="block text-sm font-medium text-admin-muted mb-2">
+              Client Name <span className="text-red-600 dark:text-red-400">*</span>
             </label>
             <input
               type="text"
@@ -103,13 +103,13 @@ export default function EditClientForm({ client }: { client: Client }) {
               name="name"
               defaultValue={client.name}
               required
-              className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent"
+              className="w-full bg-black/10 dark:bg-black/20 border border-admin-border rounded-lg px-4 py-3 text-admin-text focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent"
               placeholder="Company Name"
             />
           </div>
 
           <div>
-            <label htmlFor="link" className="block text-sm font-medium text-gray-300 mb-2">
+            <label htmlFor="link" className="block text-sm font-medium text-admin-muted mb-2">
               Website URL (Optional)
             </label>
             <input
@@ -117,17 +117,17 @@ export default function EditClientForm({ client }: { client: Client }) {
               id="link"
               name="link"
               defaultValue={client.link || ""}
-              className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent"
+              className="w-full bg-black/10 dark:bg-black/20 border border-admin-border rounded-lg px-4 py-3 text-admin-text focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent"
               placeholder="https://example.com"
             />
           </div>
 
-          <div className="pt-4 border-t border-white/10 mt-4">
+          <div className="pt-4 border-t border-admin-border mt-4">
             <h3 className="text-lg font-bold text-[#ffbe00] mb-4">Case Study Details</h3>
           </div>
 
           <div>
-            <label htmlFor="servicesProvided" className="block text-sm font-medium text-gray-300 mb-2">
+            <label htmlFor="servicesProvided" className="block text-sm font-medium text-admin-muted mb-2">
               Services Provided (comma separated)
             </label>
             <input
@@ -135,14 +135,14 @@ export default function EditClientForm({ client }: { client: Client }) {
               id="servicesProvided"
               name="servicesProvided"
               defaultValue={client.servicesProvided || ""}
-              className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent"
+              className="w-full bg-black/10 dark:bg-black/20 border border-admin-border rounded-lg px-4 py-3 text-admin-text focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent"
               placeholder="e.g. SEO, Web Development, Social Media"
             />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label htmlFor="beforeData" className="block text-sm font-medium text-gray-300 mb-2">
+              <label htmlFor="beforeData" className="block text-sm font-medium text-admin-muted mb-2">
                 Before (Challenges/Stats)
               </label>
               <textarea
@@ -150,12 +150,12 @@ export default function EditClientForm({ client }: { client: Client }) {
                 name="beforeData"
                 rows={4}
                 defaultValue={client.beforeData || ""}
-                className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent resize-none"
+                className="w-full bg-black/10 dark:bg-black/20 border border-admin-border rounded-lg px-4 py-3 text-admin-text focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent resize-none"
                 placeholder="e.g. 500 monthly visitors, slow load time..."
               ></textarea>
             </div>
             <div>
-              <label htmlFor="afterData" className="block text-sm font-medium text-gray-300 mb-2">
+              <label htmlFor="afterData" className="block text-sm font-medium text-admin-muted mb-2">
                 After (Results/Stats)
               </label>
               <textarea
@@ -163,33 +163,33 @@ export default function EditClientForm({ client }: { client: Client }) {
                 name="afterData"
                 rows={4}
                 defaultValue={client.afterData || ""}
-                className="w-full bg-black/20 border border-white/10 rounded-lg px-4 py-3 text-white focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent resize-none"
+                className="w-full bg-black/10 dark:bg-black/20 border border-admin-border rounded-lg px-4 py-3 text-admin-text focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent resize-none"
                 placeholder="e.g. 50,000 monthly visitors, 95+ performance..."
               ></textarea>
             </div>
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-300 mb-2">
-              Client Logo <span className="text-red-400">*</span>
+            <label className="block text-sm font-medium text-admin-muted mb-2">
+              Client Logo <span className="text-red-600 dark:text-red-400">*</span>
             </label>
             <div className="flex items-center gap-6">
               {logoPreview && (
-                <div className="w-24 h-24 relative rounded-lg overflow-hidden border border-white/10 bg-white">
+                <div className="w-24 h-24 relative rounded-lg overflow-hidden border border-admin-border bg-white">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={logoPreview} alt="Logo preview" className="w-full h-full object-contain p-2" />
                 </div>
               )}
               
               <div className="flex-1">
-                <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-white/20 rounded-lg cursor-pointer bg-black/20 hover:bg-black/40 transition-colors">
+                <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-white/20 rounded-lg cursor-pointer bg-black/10 dark:bg-black/20 hover:bg-black/40 transition-colors">
                   <div className="flex flex-col items-center justify-center pt-5 pb-6">
                     {uploading ? (
                       <Loader2 className="h-8 w-8 text-muted animate-spin mb-2" />
                     ) : (
                       <Upload className="w-8 h-8 text-muted mb-2" />
                     )}
-                    <p className="text-sm text-gray-400">
+                    <p className="text-sm text-admin-muted">
                       <span className="font-semibold">Click to upload</span> or drag and drop
                     </p>
                     <p className="text-xs text-muted mt-1">SVG, PNG, JPG (max 2MB)</p>
@@ -206,17 +206,17 @@ export default function EditClientForm({ client }: { client: Client }) {
             </div>
           </div>
 
-          <div className="pt-6 border-t border-white/10 flex justify-end gap-4">
+          <div className="pt-6 border-t border-admin-border flex justify-end gap-4">
             <Link 
               href="/admin/clients"
-              className="px-6 py-3 text-sm font-medium text-gray-300 hover:text-white transition-colors"
+              className="px-6 py-3 text-sm font-medium text-admin-muted hover:text-admin-text transition-colors"
             >
               Cancel
             </Link>
             <button
               type="submit"
               disabled={loading || !logoPreview}
-              className="px-8 py-3 bg-accent text-white rounded-lg hover:opacity-90 transition-opacity font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              className="px-8 py-3 bg-accent text-admin-text rounded-lg hover:opacity-90 transition-opacity font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
             >
               {loading && <Loader2 size={16} className="animate-spin" />}
               {loading ? "Saving..." : "Save Changes"}
