@@ -96,26 +96,28 @@ export function LogoMarquee({ clients = [] }: { clients?: ClientType[] }) {
 
 function MarqueeCard({ item, hasClients }: { item: any, hasClients: boolean }) {
   const content = (
-    <div className="flex items-center gap-4 px-6 py-4 rounded-2xl bg-white/[0.02] border border-white/5 backdrop-blur-sm hover:bg-white/[0.06] hover:border-white/10 hover:-translate-y-1 transition-all duration-300 group cursor-pointer w-[280px]">
-      <div className="relative w-14 h-14 rounded-xl bg-white p-2 flex items-center justify-center group-hover:scale-110 group-hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] transition-all duration-300">
+    <div className="flex flex-col items-center justify-center p-6 rounded-2xl bg-white shadow-sm hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group cursor-pointer w-[300px] h-[160px] border border-transparent hover:border-[#ffbe00]/30">
+      <div className="relative w-full h-20 flex items-center justify-center mb-3">
         {hasClients ? (
           <Image 
             src={item.logo} 
             alt={item.name} 
             fill 
-            className="object-contain p-1.5" 
+            className="object-contain" 
           />
         ) : (
-          <item.icon size={24} strokeWidth={1.5} className="text-black/70 group-hover:text-black transition-colors" />
+          <item.icon size={56} strokeWidth={1} className="text-gray-300 group-hover:text-[#ffbe00] transition-colors" />
         )}
       </div>
-      <div className="flex flex-col">
-        <span className="text-lg font-bold tracking-tight text-white/80 group-hover:text-white transition-colors">
-          {item.name}
-        </span>
+      <div className="flex flex-col items-center text-center">
         {hasClients && item.servicesProvided && (
-          <span className="text-xs text-white/40 truncate max-w-[150px]">
+          <span className="text-[11px] font-bold text-gray-400 uppercase tracking-widest group-hover:text-gray-600 transition-colors">
             {item.servicesProvided.split(',')[0]}
+          </span>
+        )}
+        {!hasClients && (
+          <span className="text-sm font-bold text-gray-500 group-hover:text-gray-900 transition-colors mt-2">
+            {item.name}
           </span>
         )}
       </div>
