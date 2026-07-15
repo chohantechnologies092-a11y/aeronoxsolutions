@@ -304,7 +304,7 @@ export async function fetchSettingsAction() {
   return doc.data();
 }
 
-export async function resetAnalyticsData() {
+export async function resetAnalyticsData(formData?: FormData) {
   // In a real application, you would delete tracking data or reset a counter in the database.
   // For now, since we're using mock analytics data, we can just pretend it succeeded or log it.
   console.log("Analytics data reset initiated by admin.");
@@ -313,7 +313,6 @@ export async function resetAnalyticsData() {
   
   revalidatePath("/admin/analytics");
   revalidatePath("/admin");
-  return { success: true };
 }
 
 // ────────────────────────────────────────────────────────────────────────────
