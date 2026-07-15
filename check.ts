@@ -1,0 +1,1 @@
+import { db } from './src/lib/firebase-admin'; async function check() { const snapshot = await db.collection('projects').get(); snapshot.docs.forEach(doc => { const d = doc.data(); if(d.title.toLowerCase().includes('perfumish') || d.title.toLowerCase().includes('ducting')) console.log(d.title, d.category, d.slug); }); } check();

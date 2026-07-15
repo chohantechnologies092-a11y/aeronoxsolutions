@@ -162,7 +162,7 @@ export function PortfolioContent({ project }: { project: Project }) {
                 [&_li::before]:content-['•'] [&_li::before]:absolute [&_li::before]:left-0 [&_li::before]:text-[#ffbe00] [&_li::before]:font-black [&_li::before]:text-xl
                 [&_a]:text-[#ffbe00] [&_a]:font-bold [&_a]:no-underline hover:[&_a]:underline 
                 break-words overflow-hidden"
-                dangerouslySetInnerHTML={{ __html: project.content.replace(/:-/g, '') }}
+                dangerouslySetInnerHTML={{ __html: (project.content || '').replace(/:-/g, '') }}
               />
             </div>
           </motion.div>
