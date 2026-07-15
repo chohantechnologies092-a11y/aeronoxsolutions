@@ -3,7 +3,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import * as LucideIcons from "lucide-react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 
@@ -94,16 +94,18 @@ const getServiceFAQs = (slug: string) => {
 
 // Dummy Process Data
 const processSteps = [
-  { id: "01", title: "Discovery & Audit", desc: "We dive deep into your business goals, target audience, and current infrastructure." },
-  { id: "02", title: "Strategy & Planning", desc: "Crafting a customized roadmap with clear milestones and deliverables." },
-  { id: "03", title: "Execution & Dev", desc: "Our experts build, design, and optimize your solution with precision." },
-  { id: "04", title: "Delivery & Scale", desc: "Smooth launch followed by iterative improvements for maximum growth." },
+  { id: "01", title: "Discovery & Audit", desc: "We dive deep into your business goals, target audience, and current infrastructure to build a solid foundation." },
+  { id: "02", title: "Strategy & Planning", desc: "Crafting a customized roadmap with clear milestones, deliverables, and exact technical specifications." },
+  { id: "03", title: "Execution & Dev", desc: "Our experts build, design, and optimize your solution with precision, adhering to modern best practices." },
+  { id: "04", title: "Delivery & Scale", desc: "Smooth launch followed by iterative improvements and data-driven adjustments for maximum growth." },
 ];
 
 export function ServiceDetailClient({ service }: { service: Service }) {
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
   const { scrollYProgress } = useScroll();
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, 200]);
+  const y1 = useTransform(scrollYProgress, [0, 1], [0, -100]);
+  const scaleHeroImage = useTransform(scrollYProgress, [0, 0.5], [1, 1.05]);
+  const opacityHeroText = useTransform(scrollYProgress, [0, 0.2], [1, 0]);
   
   // Resolve Icon
   const IconComponent = (LucideIcons as any)[
@@ -118,417 +120,343 @@ export function ServiceDetailClient({ service }: { service: Service }) {
 
   // Animation variants
   const fadeIn = {
-    initial: { opacity: 0, y: 20 },
+    initial: { opacity: 0, y: 30 },
     animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.6, ease: "easeOut" }
+    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
   };
 
   const staggerContainer = {
     animate: {
       transition: {
-        staggerChildren: 0.15
+        staggerChildren: 0.1
       }
     }
   };
 
   return (
-    <article className="min-h-screen bg-background font-sans relative overflow-hidden">
-      {/* Background Mesh/Glow */}
+    <article className="min-h-screen bg-background font-sans relative overflow-hidden selection:bg-foreground selection:text-background">
+      
+      {/* Immersive Ambient Glows */}
       <div 
-        className="fixed top-0 left-1/4 w-[800px] h-[800px] rounded-full blur-[120px] opacity-10 pointer-events-none -z-10"
+        className="absolute top-0 left-1/2 -translate-x-1/2 w-[80vw] max-w-[1200px] h-[600px] rounded-[100%] blur-[160px] opacity-[0.15] pointer-events-none -z-10"
         style={{ backgroundColor: service.color }}
       />
-      <div 
-        className="fixed bottom-0 right-1/4 w-[600px] h-[600px] rounded-full blur-[150px] opacity-10 pointer-events-none -z-10"
-        style={{ backgroundColor: service.color }}
-      />
-      <div className="absolute inset-0 bg-mesh opacity-30 pointer-events-none -z-10" />
-
-      {/* Hero Section */}
-      <section className="relative min-h-screen flex flex-col justify-center pt-24 pb-12 overflow-hidden border-b border-border/50">
-        <div className="max-w-7xl mx-auto px-6 relative z-10 w-full">
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }} 
-            animate={{ opacity: 1, x: 0 }} 
-            transition={{ duration: 0.5 }}
-          >
-            <Link 
-              href="/services" 
-              className="inline-flex items-center gap-2 text-muted-foreground uppercase tracking-[0.15em] text-xs font-bold group mb-6 hover:text-foreground transition-colors"
-            >
-              <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" />
-              Back to Services
-            </Link>
+      
+      {/* 1. Ultra-Modern Centered Hero Section */}
+      <section className="relative pt-32 pb-24 md:pt-48 md:pb-32 px-6 flex flex-col items-center justify-center text-center max-w-5xl mx-auto z-10">
+        <motion.div 
+          variants={staggerContainer}
+          initial="initial"
+          animate="animate"
+          style={{ opacity: opacityHeroText }}
+          className="flex flex-col items-center w-full"
+        >
+          {/* Top Badge */}
+          <motion.div variants={fadeIn} className="flex items-center gap-3 mb-8 bg-card/50 backdrop-blur-md border border-border/50 rounded-full px-5 py-2 shadow-lg">
+            <IconComponent size={16} style={{ color: service.color }} strokeWidth={2.5} />
+            <span className="text-xs font-black uppercase tracking-[0.25em] text-foreground">
+              Premium Service
+            </span>
           </motion.div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
-              {/* Hero Content */}
-            <motion.div 
-              variants={staggerContainer}
-              initial="initial"
-              animate="animate"
-              className="max-w-3xl"
+          <motion.h1 variants={fadeIn} className="text-5xl md:text-7xl lg:text-8xl font-black text-foreground tracking-tighter leading-[0.95] mb-8">
+            {service.title}
+          </motion.h1>
+          
+          <motion.p variants={fadeIn} className="text-xl md:text-2xl text-muted-foreground leading-relaxed font-medium mb-12 max-w-3xl">
+            {service.shortDescription}
+          </motion.p>
+          
+          <motion.div variants={fadeIn} className="flex flex-wrap items-center justify-center gap-4">
+            <Link 
+              href="/contact" 
+              className="inline-flex items-center justify-center px-10 py-5 text-background font-black uppercase tracking-widest rounded-full hover:scale-105 transition-all duration-300 shadow-2xl relative overflow-hidden group"
+              style={{ backgroundColor: service.color }}
             >
-              <motion.div variants={fadeIn} className="flex items-center gap-4 mb-6">
-                <div 
-                  className="w-14 h-14 rounded-2xl flex items-center justify-center shadow-lg relative group"
-                  style={{ backgroundColor: `${service.color}15`, border: `1px solid ${service.color}30` }}
-                >
-                  <IconComponent size={28} style={{ color: service.color }} strokeWidth={2} className="relative z-10" />
-                  <div 
-                    className="absolute inset-0 rounded-2xl blur-xl opacity-0 group-hover:opacity-50 transition-opacity duration-500"
-                    style={{ backgroundColor: service.color }}
-                  />
-                </div>
-                <span className="text-sm font-black uppercase tracking-[0.2em] text-muted-foreground">
-                  Our Expertise
-                </span>
-              </motion.div>
+              <span className="relative z-10">Start Project</span>
+              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
+            </Link>
+          </motion.div>
+        </motion.div>
 
-              <motion.h1 variants={fadeIn} className="text-4xl md:text-6xl font-black text-foreground tracking-tight leading-[1.05] mb-6">
-                {service.title}
-              </motion.h1>
-              
-              <motion.p variants={fadeIn} className="text-lg md:text-xl text-muted-foreground leading-relaxed font-medium mb-8 max-w-xl">
-                {service.shortDescription}
-              </motion.p>
-              
-              <motion.div variants={fadeIn}>
-                <Link 
-                  href="/contact" 
-                  className="inline-flex items-center justify-center px-8 py-4 text-background font-black uppercase tracking-widest rounded-full hover:scale-105 transition-all duration-300 shadow-xl relative overflow-hidden group"
-                  style={{ backgroundColor: service.color }}
-                >
-                  <span className="relative z-10">Get a Proposal</span>
-                  <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
-                </Link>
-              </motion.div>
-            </motion.div>
-
-            {/* Hero Visual */}
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="relative lg:h-[400px] w-full hidden lg:block"
-              style={{ y: y1 }}
-            >
+        {/* Hero Visual - Large Mockup Frame */}
+        <motion.div 
+          initial={{ opacity: 0, y: 100 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+          style={{ y: y1, scale: scaleHeroImage }}
+          className="w-full max-w-6xl mx-auto mt-20 relative z-20"
+        >
+          <div className="relative aspect-video rounded-t-3xl md:rounded-t-[3rem] overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.5)] border border-border/80 bg-card/30 backdrop-blur-2xl">
+            {/* Mac-style Window Header */}
+            <div className="absolute top-0 left-0 right-0 h-12 bg-black/40 backdrop-blur-md border-b border-white/5 flex items-center px-6 z-30">
+              <div className="flex gap-2">
+                <div className="w-3 h-3 rounded-full bg-red-500/80" />
+                <div className="w-3 h-3 rounded-full bg-yellow-500/80" />
+                <div className="w-3 h-3 rounded-full bg-green-500/80" />
+              </div>
+            </div>
+            
+            {/* Image Container */}
+            <div className="absolute top-12 left-0 right-0 bottom-0 bg-background/50">
               {service.image ? (
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] md:w-[400px] md:h-[400px] rounded-[3rem] overflow-hidden shadow-2xl group border border-border/50">
-                  <div className="absolute inset-0 bg-gradient-to-tr from-black/40 via-transparent to-transparent z-10 pointer-events-none" />
+                <>
+                  <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent z-20 pointer-events-none" />
                   <img 
                     src={service.image} 
                     alt={service.title}
-                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-105"
+                    className="w-full h-full object-cover opacity-90"
                   />
-                  {/* Decorative glowing orb behind the image */}
-                  <div 
-                    className="absolute -top-12 -right-12 w-32 h-32 blur-3xl opacity-60 z-20"
-                    style={{ backgroundColor: service.color }}
-                  />
-                  <div 
-                    className="absolute -bottom-12 -left-12 w-32 h-32 blur-3xl opacity-60 z-20"
-                    style={{ backgroundColor: service.color }}
-                  />
-                  
-                  {/* Small floating icon badge */}
-                  <motion.div 
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: [0, -10, 0], opacity: 1 }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-                    className="absolute bottom-8 right-8 w-16 h-16 rounded-2xl flex items-center justify-center shadow-2xl z-30 backdrop-blur-md border border-white/20"
-                    style={{ backgroundColor: `${service.color}dd` }}
-                  >
-                    <IconComponent size={28} color="#fff" strokeWidth={2.5} />
-                  </motion.div>
-                  
-                  {/* Extra floating element for premium feel */}
-                  <motion.div 
-                    initial={{ x: -20, opacity: 0 }}
-                    animate={{ x: [0, 10, 0], opacity: 1 }}
-                    transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-                    className="absolute top-8 left-8 p-3 rounded-xl shadow-xl z-30 backdrop-blur-md border border-white/10"
-                    style={{ backgroundColor: `rgba(0,0,0,0.4)` }}
-                  >
-                    <div className="flex gap-1 items-end h-4">
-                      <div className="w-1.5 h-2 bg-white/60 rounded-full" />
-                      <div className="w-1.5 h-3 bg-white/80 rounded-full" />
-                      <div className="w-1.5 h-4 bg-white rounded-full" style={{ backgroundColor: service.color }} />
-                    </div>
-                  </motion.div>
-                </div>
+                </>
               ) : (
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px]">
+                <div className="w-full h-full flex flex-col items-center justify-center">
                   <div 
-                    className="absolute inset-0 rounded-full border border-dashed animate-[spin_60s_linear_infinite]"
-                    style={{ borderColor: `${service.color}40` }}
+                    className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-current/10 to-transparent"
+                    style={{ color: service.color }}
                   />
-                  <div 
-                    className="absolute inset-4 rounded-full border border-dashed animate-[spin_40s_linear_infinite_reverse]"
-                    style={{ borderColor: `${service.color}40` }}
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div 
-                      className="w-48 h-48 rounded-full blur-3xl opacity-20 animate-pulse"
-                      style={{ backgroundColor: service.color }}
-                    />
-                    <IconComponent size={120} style={{ color: service.color }} strokeWidth={1} className="opacity-80 drop-shadow-2xl" />
-                  </div>
+                  <IconComponent size={120} style={{ color: service.color }} strokeWidth={1} className="opacity-40 animate-pulse" />
                 </div>
               )}
-            </motion.div>
+            </div>
           </div>
-        </div>
+          {/* Subtle reflection below */}
+          <div className="absolute -bottom-8 left-0 right-0 h-16 bg-gradient-to-b from-black/20 to-transparent blur-md -z-10" />
+        </motion.div>
       </section>
       
-      {/* Managed Content Section */}
-      <section className="py-24 relative z-10">
-        <div className="max-w-7xl mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
-            
-            {/* Main Content (Left) */}
-            <motion.div 
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.7 }}
-              className="lg:col-span-8 min-h-[400px] min-w-0 w-full"
-            >
-              <div className="bg-card/40 backdrop-blur-md p-8 md:p-12 rounded-[2rem] border border-border/60 shadow-sm relative overflow-hidden group">
-                {/* Subtle top highlight */}
-                <div 
-                  className="absolute top-0 left-0 right-0 h-1 opacity-50"
-                  style={{ background: `linear-gradient(90deg, transparent, ${service.color}, transparent)` }}
-                />
-                
-                <div 
-                  className="prose prose-lg md:prose-xl dark:prose-invert prose-headings:font-black prose-headings:tracking-tight max-w-none prose-a:font-bold prose-a:no-underline hover:prose-a:underline prose-p:leading-relaxed prose-p:text-muted-foreground break-words overflow-hidden
-                  prose-ul:space-y-3 prose-li:marker:text-current"
-                  style={{ 
-                    '--tw-prose-links': service.color,
-                    '--tw-prose-bullets': service.color,
-                  } as React.CSSProperties}
-                  dangerouslySetInnerHTML={{ __html: service.content }}
-                />
-              </div>
+      {/* 2. Central Focused Content Area */}
+      <section className="py-24 relative z-30 bg-background border-t border-border/50">
+        <div className="max-w-4xl mx-auto px-6">
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.7 }}
+          >
+            <div className="text-center mb-16">
+              <h2 className="text-3xl md:text-5xl font-black text-foreground tracking-tight mb-6">
+                Overview
+              </h2>
+              <div className="h-1 w-20 mx-auto rounded-full" style={{ backgroundColor: service.color }} />
+            </div>
 
-              {/* Technologies / Capabilities Section */}
-              <div className="mt-12">
-                <h3 className="text-xl font-black text-foreground mb-6 uppercase tracking-widest">
-                  Our Capabilities
-                </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {capabilities.map((cap, idx) => {
-                    const brandData = getBrandIcon(cap);
-                    const colorHex = service.color.replace('#', '');
-                    return (
-                      <motion.div 
-                        key={idx}
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.4, delay: idx * 0.1 }}
-                        className="flex items-center gap-4 bg-card/60 backdrop-blur-sm p-5 rounded-2xl border border-border shadow-sm hover:shadow-md transition-shadow group cursor-default"
-                      >
-                        <div 
-                          className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-110"
-                          style={{ backgroundColor: `${service.color}15`, color: service.color, border: `1px solid ${service.color}30` }}
-                        >
-                          {brandData ? (
-                            <img 
-                              src={brandData.type === 'simple' 
-                                ? `https://cdn.simpleicons.org/${brandData.id}/${colorHex}`
-                                : `https://www.google.com/s2/favicons?domain=${brandData.id}&sz=128`
-                              } 
-                              alt={`${brandData.id} icon`} 
-                              className="w-5 h-5 object-contain" 
-                              style={brandData.type === 'domain' ? { filter: 'grayscale(100%) opacity(80%)' } : {}}
-                            />
-                          ) : (
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                              <polyline points="20 6 9 17 4 12"></polyline>
-                            </svg>
-                          )}
-                        </div>
-                        <span className="font-bold text-sm tracking-wide text-foreground uppercase">{cap}</span>
-                      </motion.div>
-                    );
-                  })}
-                </div>
-              </div>
+            <div 
+              className="prose prose-lg md:prose-xl dark:prose-invert prose-headings:font-black prose-headings:tracking-tight max-w-none prose-a:font-bold prose-a:no-underline hover:prose-a:underline prose-p:leading-relaxed prose-p:text-muted-foreground prose-strong:text-foreground break-words
+              prose-ul:space-y-4 prose-li:marker:text-current bg-card/30 p-8 md:p-16 rounded-[3rem] border border-border/50 shadow-2xl backdrop-blur-md"
+              style={{ 
+                '--tw-prose-links': service.color,
+                '--tw-prose-bullets': service.color,
+              } as React.CSSProperties}
+              dangerouslySetInnerHTML={{ __html: service.content }}
+            />
+          </motion.div>
+        </div>
+      </section>
 
-              {/* Our Process Section */}
-              <div className="mt-20">
-                <h3 className="text-xl font-black text-foreground mb-8 uppercase tracking-widest flex items-center gap-4">
-                  Our Process
-                  <div className="h-px flex-1 bg-border/50" />
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                  {processSteps.map((step, idx) => (
-                    <motion.div
-                      key={step.id}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.5, delay: idx * 0.1 }}
-                      className="relative p-6 rounded-[2rem] bg-card/40 backdrop-blur-sm border border-border group overflow-hidden"
-                    >
-                      <div 
-                        className="absolute -top-10 -right-10 w-32 h-32 blur-3xl opacity-0 group-hover:opacity-20 transition-opacity duration-500"
-                        style={{ backgroundColor: service.color }}
-                      />
-                      <div 
-                        className="text-4xl font-black mb-4 opacity-20 group-hover:opacity-100 transition-opacity duration-300"
-                        style={{ color: service.color }}
-                      >
-                        {step.id}
-                      </div>
-                      <h4 className="text-lg font-bold text-foreground mb-2">{step.title}</h4>
-                      <p className="text-sm text-muted-foreground leading-relaxed">{step.desc}</p>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
+      {/* 3. Bento Grid Capabilities */}
+      <section className="py-32 relative z-20 overflow-hidden">
+        <div className="absolute inset-0 bg-muted/20" />
+        <div className="max-w-7xl mx-auto px-6 relative z-10">
+          <div className="text-center mb-20">
+            <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tight mb-6">
+              Our Capabilities
+            </h2>
+            <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
+              The technologies and methodologies we leverage to deliver exceptional results.
+            </p>
+          </div>
 
-              {/* FAQ Section */}
-              <div className="mt-20">
-                <h3 className="text-xl font-black text-foreground mb-8 uppercase tracking-widest flex items-center gap-4">
-                  Frequently Asked Questions
-                  <div className="h-px flex-1 bg-border/50" />
-                </h3>
-                <div className="flex flex-col gap-4">
-                  {faqs.map((faq, idx) => {
-                    const isActive = activeFaq === idx;
-                    return (
-                      <motion.div
-                        key={idx}
-                        initial={{ opacity: 0, y: 10 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.4, delay: idx * 0.1 }}
-                        className={`border rounded-2xl overflow-hidden transition-colors ${isActive ? 'bg-card/60 border-border shadow-sm' : 'bg-card/20 border-border/50 hover:bg-card/40'}`}
-                      >
-                        <button
-                          onClick={() => setActiveFaq(isActive ? null : idx)}
-                          className="w-full flex items-center justify-between p-5 text-left"
-                        >
-                          <span className={`font-bold transition-colors ${isActive ? 'text-foreground' : 'text-muted-foreground'}`}>
-                            {faq.question}
-                          </span>
-                          <div 
-                            className={`w-8 h-8 rounded-full flex items-center justify-center transition-transform duration-300 ${isActive ? 'rotate-180' : ''}`}
-                            style={{ backgroundColor: isActive ? `${service.color}20` : 'transparent', color: isActive ? service.color : 'inherit' }}
-                          >
-                            <LucideIcons.ChevronDown size={18} />
-                          </div>
-                        </button>
-                        <AnimatePresence>
-                          {isActive && (
-                            <motion.div
-                              initial={{ height: 0, opacity: 0 }}
-                              animate={{ height: "auto", opacity: 1 }}
-                              exit={{ height: 0, opacity: 0 }}
-                              transition={{ duration: 0.3, ease: "easeInOut" }}
-                            >
-                              <div className="p-5 pt-0 text-muted-foreground text-sm leading-relaxed">
-                                {faq.answer}
-                              </div>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </motion.div>
-                    );
-                  })}
-                </div>
-              </div>
-            </motion.div>
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 auto-rows-[200px]">
+            {capabilities.map((cap, idx) => {
+              const brandData = getBrandIcon(cap);
+              const colorHex = service.color.replace('#', '');
+              
+              // Asymmetric bento grid sizing logic
+              const isLarge = idx === 0 || idx === 3 || idx === capabilities.length - 1;
+              const spanClass = isLarge ? 'md:col-span-2' : 'md:col-span-1';
 
-            {/* Sidebar (Right) */}
-            <motion.div 
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              transition={{ duration: 0.7, delay: 0.2 }}
-              className="lg:col-span-4"
-            >
-              <div className="sticky top-32 space-y-8">
-                {/* Modern CTA Card */}
-                <div className="relative p-8 rounded-[2rem] overflow-hidden group bg-card shadow-xl border border-border">
-                  {/* Glowing background effect */}
+              return (
+                <motion.div 
+                  key={idx}
+                  initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                  whileInView={{ opacity: 1, scale: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.5, delay: idx * 0.05 }}
+                  className={`${spanClass} relative rounded-[2rem] bg-card/60 backdrop-blur-xl border border-border/60 p-8 flex flex-col justify-between group hover:border-white/20 transition-colors overflow-hidden`}
+                >
+                  {/* Hover Gradient Glow */}
                   <div 
-                    className="absolute -top-24 -right-24 w-64 h-64 rounded-full blur-3xl opacity-10 group-hover:opacity-20 transition-opacity duration-700 pointer-events-none"
-                    style={{ backgroundColor: service.color }}
+                    className="absolute inset-0 opacity-0 group-hover:opacity-10 transition-opacity duration-500"
+                    style={{ background: `radial-gradient(circle at 100% 100%, ${service.color}, transparent 70%)` }}
                   />
-                  
-                  <div className="relative z-10">
-                    <h3 className="text-2xl font-black text-foreground mb-4 leading-tight">
-                      Ready to transform your <span style={{ color: service.color }}>business?</span>
+
+                  <div 
+                    className="w-14 h-14 rounded-2xl flex items-center justify-center relative z-10 bg-background border border-border shadow-sm group-hover:scale-110 transition-transform duration-300"
+                  >
+                    {brandData ? (
+                      <img 
+                        src={brandData.type === 'simple' 
+                          ? `https://cdn.simpleicons.org/${brandData.id}/${colorHex}`
+                          : `https://www.google.com/s2/favicons?domain=${brandData.id}&sz=128`
+                        } 
+                        alt={`${brandData.id} icon`} 
+                        className="w-6 h-6 object-contain" 
+                        style={brandData.type === 'domain' ? { filter: 'grayscale(100%) opacity(80%)' } : {}}
+                      />
+                    ) : (
+                      <IconComponent size={24} style={{ color: service.color }} />
+                    )}
+                  </div>
+
+                  <div className="relative z-10 mt-auto">
+                    <h3 className="font-black text-xl text-foreground tracking-tight leading-tight uppercase">
+                      {cap}
                     </h3>
-                    <p className="text-muted-foreground mb-8 leading-relaxed font-medium">
-                      Connect with our experts to discuss your goals and get a custom roadmap tailored specifically for your needs.
-                    </p>
-                    <Link 
-                      href="/contact" 
-                      className="w-full flex items-center justify-between p-4 bg-foreground text-background font-black uppercase tracking-widest rounded-xl hover:opacity-90 transition-all group/btn"
-                    >
-                      <span>Let&apos;s Talk</span>
-                      <div className="w-8 h-8 rounded-full bg-background/20 flex items-center justify-center group-hover/btn:translate-x-1 transition-transform">
-                        <ArrowRight size={16} />
-                      </div>
-                    </Link>
                   </div>
-                </div>
-
-                {/* Features List */}
-                <div className="bg-muted/30 border border-border/50 p-8 rounded-[2rem]">
-                  <h4 className="font-bold uppercase tracking-[0.2em] text-xs text-muted-foreground mb-6">
-                    Why Partner With Us?
-                  </h4>
-                  <ul className="space-y-5">
-                    {[
-                      "Data-Driven Strategies",
-                      "Dedicated Account Managers",
-                      "Transparent Reporting",
-                      "Proven Track Record"
-                    ].map((feature, i) => (
-                      <li key={i} className="flex items-start gap-4 text-foreground font-medium">
-                        <div 
-                          className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
-                          style={{ backgroundColor: `${service.color}20`, color: service.color }}
-                        >
-                          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                          </svg>
-                        </div>
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                {/* Trust / Expert Badge */}
-                <div className="bg-card p-6 rounded-[2rem] border border-border/50 shadow-sm flex items-center gap-4 group cursor-pointer hover:shadow-md transition-all">
-                  <div className="relative">
-                    <img 
-                      src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=100" 
-                      alt="Expert"
-                      className="w-14 h-14 rounded-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300 border-2 border-transparent group-hover:border-current"
-                      style={{ color: service.color }}
-                    />
-                    <div className="absolute bottom-0 right-0 w-4 h-4 rounded-full bg-green-500 border-2 border-card" />
-                  </div>
-                  <div>
-                    <h5 className="text-sm font-bold text-foreground">Speak to an Expert</h5>
-                    <p className="text-xs text-muted-foreground mt-0.5">Available for consultation</p>
-                  </div>
-                </div>
-
-              </div>
-            </motion.div>
-            
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>
+
+      {/* 4. Horizontal/Grid Process Section */}
+      <section className="py-32 relative z-20 bg-background border-t border-border/50">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="mb-20">
+            <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tight mb-6">
+              Our Proven Process
+            </h2>
+            <div className="h-1 w-20 rounded-full" style={{ backgroundColor: service.color }} />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {processSteps.map((step, idx) => (
+              <motion.div
+                key={step.id}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-100px" }}
+                transition={{ duration: 0.6, delay: idx * 0.15 }}
+                className="relative group"
+              >
+                {/* Connecting Line (Desktop) */}
+                {idx !== processSteps.length - 1 && (
+                  <div className="hidden lg:block absolute top-10 left-full w-full h-px bg-border -translate-x-4 z-0" />
+                )}
+                
+                <div className="relative z-10">
+                  <div 
+                    className="text-6xl md:text-8xl font-black mb-6 opacity-10 group-hover:opacity-30 transition-opacity duration-500 leading-none -ml-1"
+                    style={{ color: service.color }}
+                  >
+                    {step.id}
+                  </div>
+                  <h4 className="text-2xl font-bold text-foreground mb-4 leading-tight">{step.title}</h4>
+                  <p className="text-base text-muted-foreground leading-relaxed font-medium">{step.desc}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 5. FAQs Section */}
+      <section className="py-32 relative z-20 bg-muted/10 border-t border-border/50">
+        <div className="max-w-4xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl md:text-6xl font-black text-foreground tracking-tight mb-6">
+              Common Questions
+            </h2>
+          </div>
+
+          <div className="flex flex-col gap-4">
+            {faqs.map((faq, idx) => {
+              const isActive = activeFaq === idx;
+              return (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.4, delay: idx * 0.1 }}
+                  className={`border rounded-3xl overflow-hidden transition-all duration-300 ${isActive ? 'bg-card border-border shadow-xl' : 'bg-transparent border-border/50 hover:bg-card/30 hover:border-border/80'}`}
+                >
+                  <button
+                    onClick={() => setActiveFaq(isActive ? null : idx)}
+                    className="w-full flex items-center justify-between p-6 md:p-8 text-left group"
+                  >
+                    <span className={`text-lg md:text-xl font-bold transition-colors ${isActive ? 'text-foreground' : 'text-muted-foreground group-hover:text-foreground'}`}>
+                      {faq.question}
+                    </span>
+                    <div 
+                      className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 transition-transform duration-500 ${isActive ? 'rotate-180' : ''}`}
+                      style={{ backgroundColor: isActive ? `${service.color}20` : 'rgba(255,255,255,0.05)', color: isActive ? service.color : 'inherit' }}
+                    >
+                      <LucideIcons.Plus size={20} className={isActive ? 'hidden' : 'block'} />
+                      <LucideIcons.Minus size={20} className={isActive ? 'block' : 'hidden'} />
+                    </div>
+                  </button>
+                  <AnimatePresence>
+                    {isActive && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                      >
+                        <div className="p-6 md:p-8 pt-0 text-muted-foreground text-lg leading-relaxed max-w-3xl">
+                          {faq.answer}
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* 6. Massive Bottom CTA */}
+      <section className="py-40 relative z-20 border-t border-border overflow-hidden">
+        <div className="absolute inset-0 bg-background" />
+        
+        {/* Intense background glow for CTA */}
+        <div 
+          className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[100vw] h-[500px] rounded-[100%] blur-[200px] opacity-[0.25] pointer-events-none"
+          style={{ backgroundColor: service.color }}
+        />
+
+        <div className="max-w-5xl mx-auto px-6 relative z-10 text-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          >
+            <h2 className="text-5xl md:text-8xl font-black text-foreground tracking-tighter mb-8 leading-[0.95]">
+              Ready to <br className="hidden md:block" />
+              scale <span style={{ color: service.color }}>faster?</span>
+            </h2>
+            <p className="text-xl md:text-3xl text-muted-foreground font-medium mb-12 max-w-2xl mx-auto leading-tight">
+              Connect with our experts and get a custom roadmap for your business.
+            </p>
+            <Link 
+              href="/contact" 
+              className="inline-flex items-center justify-center px-12 py-6 text-xl text-background font-black uppercase tracking-[0.2em] rounded-full hover:scale-105 transition-all duration-300 shadow-[0_0_40px_rgba(0,0,0,0.3)] relative overflow-hidden group"
+              style={{ backgroundColor: service.color }}
+            >
+              <span className="relative z-10 flex items-center gap-4">
+                Let&apos;s Talk 
+                <ArrowRight size={24} className="group-hover:translate-x-2 transition-transform" />
+              </span>
+              <div className="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out" />
+            </Link>
+          </motion.div>
+        </div>
+      </section>
+
     </article>
   );
 }
