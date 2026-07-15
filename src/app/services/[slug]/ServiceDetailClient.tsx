@@ -175,13 +175,13 @@ export function ServiceDetailClient({ service }: { service: Service }) {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
           
           {/* Main Content Area */}
-          <div className="lg:col-span-8 flex flex-col gap-16">
+          <div className="lg:col-span-8 flex flex-col gap-16 min-w-0 break-words">
             
             {/* Overview (Rich Text) */}
             <div>
               <h2 className="text-3xl font-bold text-foreground mb-6">Overview</h2>
               <div 
-                className="prose prose-lg dark:prose-invert max-w-none text-muted-foreground leading-relaxed prose-headings:text-foreground prose-a:text-primary hover:prose-a:underline"
+                className="prose prose-lg dark:prose-invert max-w-none text-muted-foreground leading-relaxed prose-headings:text-foreground prose-a:text-primary hover:prose-a:underline break-words"
                 dangerouslySetInnerHTML={{ __html: service.content }}
               />
             </div>
@@ -336,7 +336,7 @@ export function ServiceDetailClient({ service }: { service: Service }) {
                   </Link>
                   <a 
                     href="mailto:contact@aeronoxsolutions.com" 
-                    className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-muted border border-border text-foreground font-semibold rounded-lg hover:bg-muted/80 transition-colors"
+                    className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-transparent border-2 border-border text-foreground font-semibold rounded-lg hover:bg-muted transition-colors"
                   >
                     <Mail size={18} className="text-muted-foreground" />
                     Send an Email
