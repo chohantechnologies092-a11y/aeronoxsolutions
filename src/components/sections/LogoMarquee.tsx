@@ -97,16 +97,16 @@ export function LogoMarquee({ clients = [] }: { clients?: ClientType[] }) {
 function MarqueeCard({ item, hasClients }: { item: any, hasClients: boolean }) {
   const content = (
     <div className="flex items-center gap-4 px-6 py-4 rounded-2xl bg-white/[0.02] border border-white/5 backdrop-blur-sm hover:bg-white/[0.06] hover:border-white/10 hover:-translate-y-1 transition-all duration-300 group cursor-pointer w-[280px]">
-      <div className="relative w-14 h-14 rounded-xl bg-white/95 border border-white/20 p-2 flex items-center justify-center group-hover:scale-110 group-hover:border-[#ffbe00]/50 transition-all duration-300 shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)]">
+      <div className="relative w-14 h-14 rounded-xl bg-white p-2 flex items-center justify-center group-hover:scale-110 group-hover:shadow-[0_0_15px_rgba(255,255,255,0.2)] transition-all duration-300">
         {hasClients ? (
           <Image 
             src={item.logo} 
             alt={item.name} 
             fill 
-            className="object-contain p-1.5 drop-shadow-[0_0_3px_rgba(0,0,0,0.6)]" 
+            className="object-contain p-1.5" 
           />
         ) : (
-          <item.icon size={24} strokeWidth={1.5} className="text-black/70 group-hover:text-[#ffbe00] transition-colors" />
+          <item.icon size={24} strokeWidth={1.5} className="text-black/70 group-hover:text-black transition-colors" />
         )}
       </div>
       <div className="flex flex-col">
