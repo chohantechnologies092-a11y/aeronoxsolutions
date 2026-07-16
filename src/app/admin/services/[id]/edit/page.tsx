@@ -116,6 +116,17 @@ export default async function EditServicePage({
               placeholder="e.g. React, Node.js, Next.js, Figma"
             />
           </div>
+
+          <div className="flex items-center gap-2">
+            <input 
+              type="checkbox" 
+              id="showOnHome" 
+              name="showOnHome" 
+              defaultChecked={service.showOnHome}
+              className="w-4 h-4 accent-accent"
+            />
+            <label htmlFor="showOnHome" className="text-sm font-medium text-admin-text">Show on Home Page</label>
+          </div>
           
           <div className="flex flex-col gap-2">
             <label className="text-sm font-medium text-admin-text">Detailed Content</label>

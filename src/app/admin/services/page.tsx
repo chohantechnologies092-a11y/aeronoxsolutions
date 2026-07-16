@@ -1,7 +1,7 @@
 import { getServices } from "@/lib/data";
 import Link from "next/link";
-import { Plus, Trash2, Edit } from "lucide-react";
-import { deleteService } from "@/lib/actions";
+import { Plus } from "lucide-react";
+import { ServicesManager } from "@/components/admin/ServicesManager";
 
 export default async function ServicesAdminPage() {
   const services = await getServices();
@@ -37,71 +37,7 @@ export default async function ServicesAdminPage() {
         </div>
       </div>
 
-      <div className="bg-admin-card rounded-2xl border border-admin-border overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="border-b border-admin-border bg-black/10 dark:bg-black/20">
-                <th className="py-4 px-6 text-sm font-semibold text-muted">Service Title</th>
-                <th className="py-4 px-6 text-sm font-semibold text-muted">Slug</th>
-                <th className="py-4 px-6 text-sm font-semibold text-muted">Bento Class</th>
-                <th className="py-4 px-6 text-sm font-semibold text-muted text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {services.map((service) => (
-                <tr key={service.id} className="border-b border-admin-border hover:bg-black/5 dark:bg-white/5 transition-colors">
-                  <td className="py-4 px-6">
-                    <p className="font-medium text-admin-text">{service.title}</p>
-                    <p className="text-xs text-muted mt-1 truncate max-w-xs">{service.shortDescription}</p>
-                  </td>
-                  <td className="py-4 px-6">
-                    <span className="text-sm text-admin-muted">{service.slug}</span>
-                  </td>
-                  <td className="py-4 px-6">
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-black/10 dark:bg-white/10 text-admin-text">
-                      {service.bentoClass}
-                    </span>
-                  </td>
-                  <td className="py-4 px-6">
-                    <div className="flex items-center justify-end gap-3">
-                      <Link 
-                        href={`/services/${service.slug}`}
-                        target="_blank"
-                        className="text-muted hover:text-admin-text transition-colors text-sm"
-                      >
-                        View
-                      </Link>
-                      <Link 
-                        href={`/admin/services/${service.id}/edit`}
-                        className="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors p-1" 
-                        title="Edit"
-                      >
-                        <Edit size={18} />
-                      </Link>
-                      <form action={async () => {
-                        "use server";
-                        await deleteService(service.id);
-                      }}>
-                        <button type="submit" className="text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors p-1" title="Delete">
-                          <Trash2 size={18} />
-                        </button>
-                      </form>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-              {services.length === 0 && (
-                <tr>
-                  <td colSpan={4} className="py-8 text-center text-muted">
-                    No services found. Create one to get started.
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
-      </div>
+      <ServicesManager initialServices={services} />
     </div>
   );
 }

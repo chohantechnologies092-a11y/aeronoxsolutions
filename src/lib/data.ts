@@ -2,8 +2,17 @@
 import { db } from "@/lib/firebase-admin";
 
 export async function getServices(): Promise<any[]> {
-  const snapshot = await db.collection("services").orderBy("createdAt", "desc").get();
-  return snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
+  const snapshot = await db.collection("services").get();
+  const docs = snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
+  
+  // Sort by order ascending, then by createdAt descending
+  return docs.sort((a, b) => {
+    const orderA = typeof a.order === 'number' ? a.order : 9999;
+    const orderB = typeof b.order === 'number' ? b.order : 9999;
+    
+    if (orderA !== orderB) return orderA - orderB;
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
 }
 
 export async function getServiceBySlug(slug: string): Promise<any> {
@@ -13,8 +22,17 @@ export async function getServiceBySlug(slug: string): Promise<any> {
 }
 
 export async function getProjects(): Promise<any[]> {
-  const snapshot = await db.collection("projects").orderBy("createdAt", "desc").get();
-  return snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
+  const snapshot = await db.collection("projects").get();
+  const docs = snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
+
+  // Sort by order ascending, then by createdAt descending
+  return docs.sort((a, b) => {
+    const orderA = typeof a.order === 'number' ? a.order : 9999;
+    const orderB = typeof b.order === 'number' ? b.order : 9999;
+    
+    if (orderA !== orderB) return orderA - orderB;
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
 }
 
 export async function getProjectBySlug(slug: string): Promise<any> {

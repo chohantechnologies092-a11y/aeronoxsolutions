@@ -80,6 +80,28 @@ export async function updateProject(id: string, formData: FormData) {
   redirect("/admin/projects");
 }
 
+export async function updateProjectOrder(orderedIds: string[]) {
+  const batch = db.batch();
+  orderedIds.forEach((id, index) => {
+    const ref = db.collection("projects").doc(id);
+    batch.update(ref, { order: index, updatedAt: getNow() });
+  });
+  await batch.commit();
+  revalidatePath("/portfolio");
+  revalidatePath("/admin/projects");
+  revalidatePath("/");
+}
+
+export async function toggleProjectHomeStatus(id: string, showOnHome: boolean) {
+  await db.collection("projects").doc(id).update({
+    showOnHome,
+    updatedAt: getNow(),
+  });
+  revalidatePath("/portfolio");
+  revalidatePath("/admin/projects");
+  revalidatePath("/");
+}
+
 // ────────────────────────────────────────────────────────────────────────────
 // Services
 // ────────────────────────────────────────────────────────────────────────────
@@ -94,6 +116,7 @@ export async function createService(formData: FormData) {
   const rawSlug = formData.get("slug") as string;
   const image = formData.get("image") as string | null;
   const capabilities = formData.get("capabilities") as string | null;
+  const showOnHome = formData.get("showOnHome") === "on";
 
   if (!title || !shortDescription) {
     throw new Error("Title and short description are required.");
@@ -111,6 +134,7 @@ export async function createService(formData: FormData) {
     color: color || "#ffbe00",
     bentoClass: bentoClass || "md:col-span-1",
     capabilities: capabilities || "",
+    showOnHome,
     createdAt: getNow(),
     updatedAt: getNow(),
   });
@@ -131,6 +155,7 @@ export async function updateService(id: string, formData: FormData) {
   const rawSlug = formData.get("slug") as string;
   const image = formData.get("image") as string | null;
   const capabilities = formData.get("capabilities") as string | null;
+  const showOnHome = formData.get("showOnHome") === "on";
 
   if (!title || !shortDescription) {
     throw new Error("Title and short description are required.");
@@ -148,6 +173,7 @@ export async function updateService(id: string, formData: FormData) {
     color: color || "#ffbe00",
     bentoClass: bentoClass || "md:col-span-1",
     capabilities: capabilities || "",
+    showOnHome,
     updatedAt: getNow(),
   });
 
@@ -159,6 +185,28 @@ export async function updateService(id: string, formData: FormData) {
 
 export async function deleteService(id: string) {
   await db.collection("services").doc(id).delete();
+  revalidatePath("/services");
+  revalidatePath("/admin/services");
+  revalidatePath("/");
+}
+
+export async function updateServiceOrder(orderedIds: string[]) {
+  const batch = db.batch();
+  orderedIds.forEach((id, index) => {
+    const ref = db.collection("services").doc(id);
+    batch.update(ref, { order: index, updatedAt: getNow() });
+  });
+  await batch.commit();
+  revalidatePath("/services");
+  revalidatePath("/admin/services");
+  revalidatePath("/");
+}
+
+export async function toggleServiceHomeStatus(id: string, showOnHome: boolean) {
+  await db.collection("services").doc(id).update({
+    showOnHome,
+    updatedAt: getNow(),
+  });
   revalidatePath("/services");
   revalidatePath("/admin/services");
   revalidatePath("/");

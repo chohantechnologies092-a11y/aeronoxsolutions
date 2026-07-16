@@ -123,6 +123,13 @@ function MarqueeCard({ item, hasClients }: { item: any, hasClients: boolean }) {
   );
 
   if (hasClients) {
+    if (item.link) {
+      return (
+        <a href={item.link} target="_blank" rel="noopener noreferrer" className="block">
+          {content}
+        </a>
+      );
+    }
     return (
       <Link href={`/portfolio/client/${item.id}`} className="block">
         {content}

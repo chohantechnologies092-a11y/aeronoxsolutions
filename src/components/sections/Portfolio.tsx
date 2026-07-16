@@ -9,8 +9,16 @@ import { ArrowRight } from "lucide-react";
 export function Portfolio({ projects }: { projects: any[] }) {
   if (!projects || projects.length === 0) return null;
 
+  // Filter projects that have showOnHome checked
+  let displayProjects = projects.filter(project => project.showOnHome);
+  
+  // If none are checked, fallback to the first 3
+  if (displayProjects.length === 0) {
+    displayProjects = projects;
+  }
+  
   // Take only the first 3 for the home page sections
-  const displayProjects = projects.slice(0, 3);
+  displayProjects = displayProjects.slice(0, 3);
 
   return (
     <section id="portfolio" className="py-24 md:py-32 bg-white relative overflow-hidden transition-colors duration-300 dark:bg-background">
