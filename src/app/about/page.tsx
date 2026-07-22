@@ -20,6 +20,54 @@ export default async function AboutPage() {
       <div className="pt-12 pb-24 text-foreground relative">
         <div className="max-w-6xl mx-auto px-6">
           
+          {/* Official Registration Section */}
+          <section className="mb-24 relative">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#ffbe00]/10 rounded-full blur-[100px]"></div>
+            
+            <div className="bento-card bg-card/40 backdrop-blur-md border border-card-border rounded-3xl p-8 md:p-12 relative overflow-hidden flex flex-col md:flex-row gap-10 items-center shadow-xl">
+              <div className="flex-1 relative z-10">
+                <span className="inline-flex items-center rounded-full px-4 py-1 text-sm font-medium bg-[#ffbe00]/10 text-[#24182e] ring-1 ring-inset ring-[#ffbe00]/30 mb-6 shadow-[0_0_15px_rgba(255,190,0,0.2)]">
+                  Registered Entity
+                </span>
+                <h2 className="text-3xl md:text-4xl font-black tracking-tight mb-6 text-foreground">
+                  Aeronox Solutions LTD
+                </h2>
+                <div className="prose max-w-none">
+                  <p className="text-muted leading-relaxed text-lg mb-4">
+                    We are officially incorporated under the Companies Act 2006 as a private company in England and Wales. Our commitment to transparency, legal compliance, and operational excellence begins at the foundational level.
+                  </p>
+                  <ul className="text-muted space-y-2 font-medium">
+                    <li className="flex items-center gap-2">
+                      <span className="text-[#ffbe00]">✔</span>
+                      Company Number: <strong>16277420</strong>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="text-[#ffbe00]">✔</span>
+                      Jurisdiction: <strong>England and Wales</strong>
+                    </li>
+                    <li className="flex items-center gap-2">
+                      <span className="text-[#ffbe00]">✔</span>
+                      Incorporation Date: <strong>26th February 2025</strong>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+
+              <div className="w-full md:w-5/12 shrink-0 relative z-10 group">
+                <div className="absolute inset-0 bg-gradient-to-tr from-[#ffbe00]/20 to-transparent rounded-2xl blur-xl transform group-hover:scale-110 transition-transform duration-500"></div>
+                <div className="relative rounded-2xl overflow-hidden border border-card-border shadow-2xl bg-white p-2">
+                  <Image
+                    src="/certificate.png"
+                    alt="Certificate of Incorporation"
+                    width={600}
+                    height={800}
+                    className="w-full h-auto object-contain rounded-xl"
+                  />
+                </div>
+              </div>
+            </div>
+          </section>
+
           {/* CEO Message Section */}
           {(profile?.ceoMessage || profile?.ceoImage) && (
             <section className="mb-24 relative">
