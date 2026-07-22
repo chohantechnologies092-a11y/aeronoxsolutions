@@ -43,8 +43,6 @@ const targetDir = path.resolve("public", "images", "services");
 if (!fs.existsSync(targetDir)) {
   fs.mkdirSync(targetDir, { recursive: true });
 }
-
-// Map service titles to their generated image prefixes
 const imageMap = {
   "amazon a to z": "amazon_a_to_z",
   "video editing": "video_editing",

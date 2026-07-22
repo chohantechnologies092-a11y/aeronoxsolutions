@@ -423,10 +423,12 @@ export async function updateLeadStatus(id: string, formData: FormData) {
 
 export async function upsertCompanyProfile(formData: FormData) {
   const ceoMessage = formData.get("ceoMessage") as string;
+  const ceoImage = formData.get("ceoImage") as string;
 
   const profileRef = db.collection("company").doc("profile");
   await profileRef.set({
     ceoMessage: ceoMessage || "",
+    ceoImage: ceoImage || "",
     updatedAt: getNow(),
   }, { merge: true });
 

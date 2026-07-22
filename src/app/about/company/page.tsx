@@ -16,21 +16,36 @@ export default async function CompanyPage() {
       <div className="max-w-6xl mx-auto px-6">
         
         {/* CEO Message Section */}
-        {profile?.ceoMessage && (
+        {(profile?.ceoMessage || profile?.ceoImage) && (
           <section className="mb-24 relative">
             <div className="absolute -top-12 -left-12 w-32 h-32 bg-[#ffbe00]/10 rounded-full blur-3xl"></div>
             
-            <div className="bg-white/5 border border-white/10 rounded-3xl p-8 md:p-12 relative overflow-hidden">
+            <div className="bg-white/5 border border-white/10 rounded-3xl p-8 md:p-12 relative overflow-hidden flex flex-col md:flex-row gap-10 items-center">
               <Quote className="absolute top-8 right-8 text-white/5 w-24 h-24 rotate-180" />
               
-              <h1 className="text-3xl md:text-5xl font-black tracking-tight mb-8">
-                Message from our <span className="text-[#ffbe00]">CEO</span>
-              </h1>
+              {profile.ceoImage && (
+                <div className="w-48 h-48 md:w-64 md:h-64 shrink-0 rounded-3xl overflow-hidden border border-white/10 shadow-2xl relative z-10">
+                  <Image
+                    src={profile.ceoImage}
+                    alt="CEO"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              )}
               
-              <div className="prose prose-invert max-w-none prose-lg">
-                <p className="text-gray-300 leading-relaxed whitespace-pre-wrap relative z-10">
-                  {profile.ceoMessage}
-                </p>
+              <div className="flex-1 relative z-10">
+                <h1 className="text-3xl md:text-5xl font-black tracking-tight mb-8">
+                  Message from our <span className="text-[#ffbe00]">CEO</span>
+                </h1>
+                
+                {profile.ceoMessage && (
+                  <div className="prose prose-invert max-w-none md:prose-lg">
+                    <p className="text-gray-300 leading-relaxed whitespace-pre-wrap">
+                      {profile.ceoMessage}
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
           </section>

@@ -4,9 +4,11 @@ import React, { useState, useTransition } from "react";
 import Image from "next/image";
 import { Edit, Trash2, CheckCircle2, User, Save, Plus } from "lucide-react";
 import { upsertCompanyProfile, createTeamMember, updateTeamMember, deleteTeamMember } from "@/lib/actions";
+import { ImageUpload } from "@/components/ui/ImageUpload";
 
 export function CompanyManager({ initialProfile, initialTeam }: { initialProfile: any, initialTeam: any[] }) {
   const [ceoMessage, setCeoMessage] = useState(initialProfile?.ceoMessage || "");
+  const [ceoImage, setCeoImage] = useState(initialProfile?.ceoImage || "");
   const [isPending, startTransition] = useTransition();
 
   // Team Form State
@@ -20,13 +22,16 @@ export function CompanyManager({ initialProfile, initialTeam }: { initialProfile
     image: ""
   });
 
-  const handleCeoMessageSubmit = (e: React.FormEvent) => {
+  const handleCeoMessageSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData();
     formData.append("ceoMessage", ceoMessage);
+    const formElements = e.currentTarget.elements as any;
+    formData.append("ceoImage", formElements.ceoImage?.value || "");
+    
     startTransition(async () => {
       await upsertCompanyProfile(formData);
-      alert("CEO Message updated successfully!");
+      alert("CEO Section updated successfully!");
     });
   };
 
@@ -36,17 +41,22 @@ export function CompanyManager({ initialProfile, initialTeam }: { initialProfile
     setIsEditingTeam(false);
   };
 
-  const handleTeamSubmit = (e: React.FormEvent) => {
+  const handleTeamSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    const formElements = e.currentTarget.elements as any;
+    const imageVal = formElements.image?.value || "";
+    
     const formData = new FormData();
     formData.append("name", teamForm.name);
     formData.append("role", teamForm.role);
-    formData.append("image", teamForm.image);
+    formData.append("image", imageVal);
+
+    const updatedTeamForm = { ...teamForm, image: imageVal };
 
     startTransition(async () => {
       if (editingId) {
         await updateTeamMember(editingId, formData);
-        setTeam(team.map(t => t.id === editingId ? { ...t, ...teamForm } : t));
+        setTeam(team.map(t => t.id === editingId ? { ...t, ...updatedTeamForm } : t));
       } else {
         // Optimistic UI for create isn't perfect without ID, but it will refresh via Server Action
         await createTeamMember(formData);
@@ -82,6 +92,12 @@ export function CompanyManager({ initialProfile, initialTeam }: { initialProfile
               className="w-full px-4 py-3 bg-black/5 dark:bg-white/5 border border-admin-border rounded-xl text-admin-text focus:outline-none focus:ring-2 focus:ring-[#ffbe00]/50 focus:border-[#ffbe00] transition-all"
               placeholder="Enter the message from the CEO..."
             />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-admin-muted mb-1.5">
+              CEO Image
+            </label>
+            <ImageUpload name="ceoImage" defaultValue={ceoImage} />
           </div>
           <div className="flex justify-end">
             <button
@@ -138,14 +154,8 @@ export function CompanyManager({ initialProfile, initialTeam }: { initialProfile
                 />
               </div>
               <div className="md:col-span-2">
-                <label className="block text-sm font-medium text-admin-muted mb-1.5">Image URL</label>
-                <input
-                  type="url"
-                  value={teamForm.image}
-                  onChange={(e) => setTeamForm({ ...teamForm, image: e.target.value })}
-                  className="w-full px-4 py-2.5 bg-admin-card border border-admin-border rounded-xl text-admin-text focus:outline-none focus:ring-2 focus:ring-[#ffbe00]/50"
-                  placeholder="https://example.com/image.jpg (Optional)"
-                />
+                <label className="block text-sm font-medium text-admin-muted mb-1.5">Image</label>
+                <ImageUpload key={editingId || 'new'} name="image" defaultValue={teamForm.image} />
                 <p className="text-xs text-admin-muted mt-1.5">Leave blank to use an avatar placeholder with initials.</p>
               </div>
             </div>
