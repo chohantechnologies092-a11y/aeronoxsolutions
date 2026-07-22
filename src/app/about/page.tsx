@@ -17,7 +17,7 @@ export default async function AboutPage() {
         
         {/* CEO Message Section */}
         {(profile?.ceoMessage || profile?.ceoImage) && (
-          <section className="mb-24 relative">
+          <section id="ceo" className="mb-24 relative pt-12">
             <div className="absolute -top-12 -left-12 w-32 h-32 bg-[#ffbe00]/10 rounded-full blur-3xl"></div>
             
             <div className="bg-white/5 border border-white/10 rounded-3xl p-8 md:p-12 relative overflow-hidden flex flex-col md:flex-row gap-10 items-center">
@@ -52,7 +52,7 @@ export default async function AboutPage() {
         )}
 
         {/* Meet Our Team Section */}
-        <section>
+        <section id="team" className="pt-12">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-5xl font-black tracking-tight mb-4">
               Meet Our <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ffbe00] to-orange-500">Team</span>
