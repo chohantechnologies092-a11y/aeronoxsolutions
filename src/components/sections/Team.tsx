@@ -2,9 +2,8 @@
 
 import { motion } from "framer-motion";
 import { FaLinkedin } from "react-icons/fa6";
-import { team } from "@/lib/constants";
 
-export function Team() {
+export function Team({ team }: { team: any[] }) {
   return (
     <section className="relative py-24 lg:py-32 bg-[#04050a]">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
@@ -21,7 +20,7 @@ export function Team() {
         </div>
 
         <div className="mt-16 grid gap-6 sm:grid-cols-2 lg:grid-cols-5">
-          {team.map((member, i) => (
+          {team.map((member: any, i: number) => (
             <motion.div
               key={member.name}
               initial={{ opacity: 0, y: 20 }}

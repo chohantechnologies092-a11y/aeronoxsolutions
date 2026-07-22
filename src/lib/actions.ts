@@ -417,3 +417,81 @@ export async function updateLeadStatus(id: string, formData: FormData) {
   redirect("/admin/leads");
 }
 
+// ────────────────────────────────────────────────────────────────────────────
+// Company Profile & Team
+// ────────────────────────────────────────────────────────────────────────────
+
+export async function upsertCompanyProfile(formData: FormData) {
+  const ceoMessage = formData.get("ceoMessage") as string;
+
+  const profileRef = db.collection("company").doc("profile");
+  await profileRef.set({
+    ceoMessage: ceoMessage || "",
+    updatedAt: getNow(),
+  }, { merge: true });
+
+  revalidatePath("/about/company");
+  revalidatePath("/admin/company");
+  redirect("/admin/company");
+}
+
+export async function createTeamMember(formData: FormData) {
+  const name = formData.get("name") as string;
+  const role = formData.get("role") as string;
+  const image = formData.get("image") as string | null;
+
+  if (!name || !role) {
+    throw new Error("Name and role are required.");
+  }
+
+  await db.collection("team").add({
+    name,
+    role,
+    image: image || null,
+    createdAt: getNow(),
+    updatedAt: getNow(),
+  });
+
+  revalidatePath("/about/company");
+  revalidatePath("/admin/company");
+  redirect("/admin/company");
+}
+
+export async function updateTeamMember(id: string, formData: FormData) {
+  const name = formData.get("name") as string;
+  const role = formData.get("role") as string;
+  const image = formData.get("image") as string | null;
+
+  if (!name || !role) {
+    throw new Error("Name and role are required.");
+  }
+
+  await db.collection("team").doc(id).update({
+    name,
+    role,
+    image: image || null,
+    updatedAt: getNow(),
+  });
+
+  revalidatePath("/about/company");
+  revalidatePath("/admin/company");
+  redirect("/admin/company");
+}
+
+export async function deleteTeamMember(id: string) {
+  await db.collection("team").doc(id).delete();
+  revalidatePath("/about/company");
+  revalidatePath("/admin/company");
+}
+
+export async function updateTeamMemberOrder(orderedIds: string[]) {
+  const batch = db.batch();
+  orderedIds.forEach((id, index) => {
+    const ref = db.collection("team").doc(id);
+    batch.update(ref, { order: index, updatedAt: getNow() });
+  });
+  await batch.commit();
+  revalidatePath("/about/company");
+  revalidatePath("/admin/company");
+}
+

@@ -193,7 +193,7 @@ export function ServicesManager({ initialServices }: { initialServices: any[] })
       setServices(newOrder);
       
       startTransition(async () => {
-        await updateServiceOrder(newOrder.map(s => s.id));
+        await updateServiceOrder(newOrder.map((s: any) => s.id));
       });
     }
   }

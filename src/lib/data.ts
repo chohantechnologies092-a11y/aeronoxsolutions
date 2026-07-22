@@ -108,3 +108,23 @@ export async function getCount(collection: string) {
   const snapshot = await db.collection(collection).count().get();
   return snapshot.data().count;
 }
+
+export async function getCompanyProfile(): Promise<any> {
+  const doc = await db.collection("company").doc("profile").get();
+  if (!doc.exists) return null;
+  return { id: doc.id, ...doc.data() };
+}
+
+export async function getTeamMembers(): Promise<any[]> {
+  const snapshot = await db.collection("team").get();
+  const docs = snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
+
+  // Sort by order ascending, then by createdAt descending
+  return docs.sort((a, b) => {
+    const orderA = typeof a.order === 'number' ? a.order : 9999;
+    const orderB = typeof b.order === 'number' ? b.order : 9999;
+    
+    if (orderA !== orderB) return orderA - orderB;
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
+}

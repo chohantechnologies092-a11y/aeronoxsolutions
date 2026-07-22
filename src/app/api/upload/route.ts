@@ -31,7 +31,7 @@ export async function POST(request: Request) {
     const publicUrl = await new Promise<string>((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         { folder: "aeronox_uploads" },
-        (error, result) => {
+        (error: any, result: any) => {
           if (error) reject(error);
           else resolve(result?.secure_url as string);
         }

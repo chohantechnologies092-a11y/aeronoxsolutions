@@ -4,12 +4,13 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Rocket } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import { navLinks } from "@/lib/constants";
 
 export function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -51,13 +52,46 @@ export function Header() {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
             {headerLinks.map((link) => (
-              <Link 
-                key={link.href}
-                href={link.href} 
-                className="text-[13px] font-bold text-gray-400 hover:text-white transition-colors"
+              <div 
+                key={link.href} 
+                className="relative group"
+                onMouseEnter={() => setActiveDropdown(link.label)}
+                onMouseLeave={() => setActiveDropdown(null)}
               >
-                {link.label}
-              </Link>
+                <Link 
+                  href={link.href} 
+                  className="flex items-center gap-1 text-[13px] font-bold text-gray-400 hover:text-white transition-colors py-2"
+                >
+                  {link.label}
+                  {link.subLinks && <ChevronDown size={14} className={`transition-transform duration-200 ${activeDropdown === link.label ? "rotate-180 text-[#ffbe00]" : ""}`} />}
+                </Link>
+                
+                {/* Dropdown Menu */}
+                {link.subLinks && (
+                  <AnimatePresence>
+                    {activeDropdown === link.label && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        transition={{ duration: 0.2 }}
+                        className="absolute top-full left-1/2 -translate-x-1/2 mt-1 w-48 bg-[#24182e] border border-gray-800 rounded-2xl shadow-xl overflow-hidden z-50 py-2"
+                      >
+                        {link.subLinks.map((subLink) => (
+                          <Link
+                            key={subLink.href}
+                            href={subLink.href}
+                            className="block px-4 py-2.5 text-sm font-bold text-gray-400 hover:text-white hover:bg-white/5 transition-colors text-center"
+                            onClick={() => setActiveDropdown(null)}
+                          >
+                            {subLink.label}
+                          </Link>
+                        ))}
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                )}
+              </div>
             ))}
           </nav>
 
@@ -89,17 +123,35 @@ export function Header() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             className="fixed top-24 left-4 right-4 z-40 md:hidden bg-[#24182e] border border-gray-800 rounded-3xl shadow-2xl overflow-hidden"
+            style={{ maxHeight: "calc(100vh - 120px)", overflowY: "auto" }}
           >
             <div className="px-6 py-8 flex flex-col gap-6">
               {headerLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="text-lg font-black text-white text-center"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {link.label}
-                </Link>
+                <div key={link.href} className="flex flex-col">
+                  {link.subLinks ? (
+                    <div className="flex flex-col gap-4 bg-white/5 p-4 rounded-2xl">
+                      <div className="text-sm font-black text-[#ffbe00] text-center uppercase tracking-widest">{link.label}</div>
+                      {link.subLinks.map((subLink) => (
+                        <Link
+                          key={subLink.href}
+                          href={subLink.href}
+                          className="text-lg font-bold text-white text-center"
+                          onClick={() => setIsMobileMenuOpen(false)}
+                        >
+                          {subLink.label}
+                        </Link>
+                      ))}
+                    </div>
+                  ) : (
+                    <Link
+                      href={link.href}
+                      className="text-lg font-black text-white text-center"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                      {link.label}
+                    </Link>
+                  )}
+                </div>
               ))}
               <Link
                 href="/contact"
@@ -115,4 +167,3 @@ export function Header() {
     </>
   );
 }
-

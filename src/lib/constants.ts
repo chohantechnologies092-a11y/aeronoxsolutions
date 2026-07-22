@@ -17,7 +17,14 @@ export const siteConfig = {
 
 export const navLinks = [
   { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
+  { 
+    label: "About", 
+    href: "/about",
+    subLinks: [
+      { label: "About Us", href: "/about" },
+      { label: "Company Profile", href: "/about/company" }
+    ]
+  },
   { label: "Services", href: "/services" },
   { label: "Portfolio", href: "/portfolio" },
   { label: "Blog", href: "/blog" },
@@ -188,13 +195,7 @@ export const processSteps = [
   },
 ];
 
-export const team = [
-  { name: "Muhammad Dawood", role: "Chief Executive Officer", initials: "MD" },
-  { name: "Azka Hassan", role: "Web Development Manager", initials: "AH" },
-  { name: "Iqra Awan", role: "SEO Executive", initials: "IA" },
-  { name: "Zarmina Nazly", role: "SEO Expert", initials: "ZN" },
-  { name: "Mishal Bint Khalid", role: "Social Media Manager", initials: "MK" },
-];
+// Team data is now fetched from the database dynamically.
 
 export const testimonials = [
   {

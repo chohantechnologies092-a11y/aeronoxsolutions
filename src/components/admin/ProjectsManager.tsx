@@ -206,7 +206,7 @@ export function ProjectsManager({ initialProjects }: { initialProjects: any[] })
       setProjects(newOrder);
       
       startTransition(async () => {
-        await updateProjectOrder(newOrder.map(p => p.id));
+        await updateProjectOrder(newOrder.map((p: any) => p.id));
       });
     }
   }
