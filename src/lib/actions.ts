@@ -432,7 +432,7 @@ export async function upsertCompanyProfile(formData: FormData) {
     updatedAt: getNow(),
   }, { merge: true });
 
-  revalidatePath("/about/company");
+  revalidatePath("/about");
   revalidatePath("/admin/company");
   redirect("/admin/company");
 }
@@ -454,7 +454,7 @@ export async function createTeamMember(formData: FormData) {
     updatedAt: getNow(),
   });
 
-  revalidatePath("/about/company");
+  revalidatePath("/about");
   revalidatePath("/admin/company");
   redirect("/admin/company");
 }
@@ -475,14 +475,14 @@ export async function updateTeamMember(id: string, formData: FormData) {
     updatedAt: getNow(),
   });
 
-  revalidatePath("/about/company");
+  revalidatePath("/about");
   revalidatePath("/admin/company");
   redirect("/admin/company");
 }
 
 export async function deleteTeamMember(id: string) {
   await db.collection("team").doc(id).delete();
-  revalidatePath("/about/company");
+  revalidatePath("/about");
   revalidatePath("/admin/company");
 }
 
@@ -493,7 +493,7 @@ export async function updateTeamMemberOrder(orderedIds: string[]) {
     batch.update(ref, { order: index, updatedAt: getNow() });
   });
   await batch.commit();
-  revalidatePath("/about/company");
+  revalidatePath("/about");
   revalidatePath("/admin/company");
 }
 
