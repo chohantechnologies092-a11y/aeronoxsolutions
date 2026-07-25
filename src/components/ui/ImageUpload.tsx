@@ -5,17 +5,25 @@ import Image from "next/image";
 import { UploadCloud, X, Loader2, Link } from "lucide-react";
 
 interface ImageUploadProps {
-  name: string;
+  name?: string;
   defaultValue?: string;
+  onChange?: (url: string) => void;
 }
 
-export function ImageUpload({ name, defaultValue = "" }: ImageUploadProps) {
-  const [previewUrl, setPreviewUrl] = useState<string>(defaultValue);
+export function ImageUpload({ name = "image", defaultValue = "", onChange }: ImageUploadProps) {
+  const [previewUrl, setPreviewUrlState] = useState<string>(defaultValue);
   const [isUploading, setIsUploading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isDragOver, setIsDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [urlInput, setUrlInput] = useState("");
+
+  const updatePreviewUrl = (url: string) => {
+    setPreviewUrlState(url);
+    if (onChange) {
+      onChange(url);
+    }
+  };
 
   const processFile = async (file: File) => {
     // Validate type and size (e.g. max 5MB)
@@ -50,7 +58,7 @@ export function ImageUpload({ name, defaultValue = "" }: ImageUploadProps) {
       }
 
       const data = await res.json();
-      setPreviewUrl(data.url);
+      updatePreviewUrl(data.url);
     } catch (err: any) {
       console.error(err);
       setError(err.message || "Failed to upload image. Please try again.");
@@ -92,14 +100,14 @@ export function ImageUpload({ name, defaultValue = "" }: ImageUploadProps) {
   };
 
   const handleRemove = () => {
-    setPreviewUrl("");
+    updatePreviewUrl("");
     setError(null);
     setUrlInput("");
   };
 
   const handleUrlSubmit = () => {
     if (urlInput.trim()) {
-      setPreviewUrl(urlInput.trim());
+      updatePreviewUrl(urlInput.trim());
       setError(null);
     }
   };

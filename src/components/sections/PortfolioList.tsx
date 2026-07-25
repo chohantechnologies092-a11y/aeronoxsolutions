@@ -14,10 +14,14 @@ import {
   PhoneCall, 
   Cpu, 
   Sparkles,
+  Palette,
   ExternalLink,
   Building2,
   CheckCircle2,
-  ChevronDown
+  ChevronDown,
+  Maximize2,
+  X,
+  Layers
 } from "lucide-react";
 
 // Service Metadata & Overview Cards
@@ -31,11 +35,19 @@ const SERVICE_OVERVIEWS: Record<string, {
 }> = {
   "all": {
     title: "Proven Results Across All Capabilities",
-    subtitle: "Explore our client case studies across SEO, Web Development, Growth Marketing, AI, and Telemarketing.",
+    subtitle: "Explore our client case studies across Graphic Design, SEO, Web Engineering, AI, and Marketing.",
     description: "We partner with ambitious enterprises and startups to transform digital presence, scale acquisition channels, and drive measurable revenue growth.",
     icon: Sparkles,
-    capabilities: ["Organic SEO", "Headless Next.js Systems", "Funnel Optimization", "AI Workflow Automation", "B2B Outbound Lead Gen"],
+    capabilities: ["Graphic & Logo Design", "Organic SEO", "Headless Next.js Systems", "Funnel Optimization", "AI Workflow Automation", "B2B Outbound Lead Gen"],
     gradient: "from-[#24182e] via-[#1a1122] to-[#120b18]"
+  },
+  "graphic-design": {
+    title: "Graphic & Logo Design Gallery",
+    subtitle: "High-impact brand logos, vector emblems, product packaging, and visual identity assets.",
+    description: "We design memorable brand identities, modern enterprise logos, vector graphics, and visual design assets engineered to stand out in competitive global markets.",
+    icon: Palette,
+    capabilities: ["Enterprise Logo Design", "Brand Identity Systems", "Vector Emblem & Icons", "Social Media Visual Assets", "Packaging & Print Design"],
+    gradient: "from-[#2e182b] via-[#241122] to-[#180b18]"
   },
   "seo": {
     title: "Search Engine Optimization & Organic Growth",
@@ -102,6 +114,14 @@ function matchesCategory(project: any, catId: string): boolean {
   }
 
   // 2. Category specific keyword fallbacks
+  if (catId === "graphic-design" && (
+    pCat.includes("graphic") || pCat.includes("logo") || pCat.includes("design") || pCat.includes("brand") ||
+    pTags.includes("logo") || pTags.includes("graphic") || pTags.includes("design") || pTags.includes("branding") ||
+    pTitle.includes("logo") || pTitle.includes("graphic") || pTitle.includes("design") || pTitle.includes("brand")
+  )) {
+    return true;
+  }
+
   if (catId === "seo" && (pCat.includes("seo") || pTags.includes("seo") || pTitle.includes("seo") || pDesc.includes("seo"))) {
     return true;
   }
@@ -148,6 +168,7 @@ function matchesCategory(project: any, catId: string): boolean {
 
 export function PortfolioList({ projects }: { projects: any[] }) {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [activeLightboxImage, setActiveLightboxImage] = useState<string | null>(null);
 
   const serviceBoxes = [
     { 
@@ -156,6 +177,13 @@ export function PortfolioList({ projects }: { projects: any[] }) {
       subtitle: "Explore complete client case studies", 
       icon: Sparkles, 
       color: "#ffbe00" 
+    },
+    { 
+      id: "graphic-design", 
+      title: "Graphic & Logo Design Gallery", 
+      subtitle: "Brand logos & visual identity assets", 
+      icon: Palette, 
+      color: "#ff007a" 
     },
     { 
       id: "seo", 
@@ -204,6 +232,32 @@ export function PortfolioList({ projects }: { projects: any[] }) {
   // Filter projects by smart matching
   const filteredProjects = projects ? projects.filter(p => matchesCategory(p, selectedCategory)) : [];
 
+  // Extract all gallery images for Graphic Design category
+  const graphicGalleryItems: { id: string; title: string; client: string; imageUrl: string }[] = [];
+  if (projects) {
+    projects.forEach(p => {
+      if (matchesCategory(p, "graphic-design") || (p.galleryImages && p.galleryImages.length > 0)) {
+        if (p.galleryImages && p.galleryImages.length > 0) {
+          p.galleryImages.forEach((gImg: string) => {
+            graphicGalleryItems.push({
+              id: p.id,
+              title: p.title,
+              client: p.client || "Brand Showcase",
+              imageUrl: gImg
+            });
+          });
+        } else if (p.image) {
+          graphicGalleryItems.push({
+            id: p.id,
+            title: p.title,
+            client: p.client || "Brand Showcase",
+            imageUrl: p.image
+          });
+        }
+      }
+    });
+  }
+
   const activeOverview = SERVICE_OVERVIEWS[selectedCategory] || SERVICE_OVERVIEWS["all"];
   const OverviewIcon = activeOverview.icon;
 
@@ -222,18 +276,18 @@ export function PortfolioList({ projects }: { projects: any[] }) {
         {/* Section Title */}
         <div className="text-center mb-12">
           <p className="text-[#ffbe00] font-bold text-xs uppercase tracking-[0.4em] mb-3">
-            Select A Service To Explore Company Case Studies
+            Select A Service To Explore Company Case Studies & Galleries
           </p>
           <h2 className="text-3xl md:text-5xl font-black text-foreground tracking-tight">
             Our Capability Hub
           </h2>
           <p className="text-sm md:text-base text-muted max-w-2xl mx-auto mt-3 font-medium">
-            Click any service box below to view our engineering overview and client "Before vs After" results.
+            Click any service box below to view our engineering overview, logo design galleries, and client "Before vs After" results.
           </p>
         </div>
 
         {/* VISUAL SERVICE BOXES GRID */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-20 relative z-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-20 relative z-20">
           {serviceBoxes.map((box) => {
             const isActive = selectedCategory === box.id;
             const BoxIcon = box.icon;
@@ -269,13 +323,13 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                       ? "bg-[#ffbe00] text-[#24182e]" 
                       : "bg-white/10 text-white/80 border border-white/10"
                   }`}>
-                    {box.id === "all" ? `${projects?.length || 0} Total` : `${matchCount} Case Studies`}
+                    {box.id === "all" ? `${projects?.length || 0} Total` : box.id === "graphic-design" ? `${graphicGalleryItems.length} Logos` : `${matchCount} Case Studies`}
                   </span>
                 </div>
 
                 {/* Card Middle: Title & Subtitle */}
                 <div className="z-10 mt-4">
-                  <h3 className={`text-lg font-black leading-tight mb-1 transition-colors ${
+                  <h3 className={`text-base font-black leading-tight mb-1 transition-colors ${
                     isActive ? "text-[#ffbe00]" : "text-white group-hover:text-[#ffbe00]"
                   }`}>
                     {box.title}
@@ -287,7 +341,7 @@ export function PortfolioList({ projects }: { projects: any[] }) {
 
                 {/* Card Bottom: Click Action Indicator */}
                 <div className="z-10 pt-3 border-t border-white/10 flex items-center justify-between text-[11px] font-bold uppercase tracking-wider text-[#dcd7e3]/80 group-hover:text-white">
-                  <span>{isActive ? "Currently Opened" : "Click To Open Service"}</span>
+                  <span>{isActive ? "Currently Opened" : "Click To Open"}</span>
                   <ArrowRight size={14} className={`transition-transform duration-300 ${
                     isActive ? "rotate-90 text-[#ffbe00]" : "group-hover:translate-x-1"
                   }`} />
@@ -339,12 +393,12 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                 {/* Service Visual Highlight Box */}
                 <div className="lg:col-span-4 flex justify-center">
                   <div className="w-full max-w-sm p-6 rounded-3xl bg-black/40 border border-white/15 backdrop-blur-md shadow-2xl flex flex-col items-center text-center">
-                    <div className="w-16 h-16 rounded-2xl bg-[#ffbe00]/20 flex items-center justify-center text-[#ffbe00] mb-4">
+                    <div className="w-16 h-16 rounded-2xl bg-[#ff007a]/20 flex items-center justify-center text-[#ff007a] mb-4">
                       <OverviewIcon size={32} />
                     </div>
                     <h4 className="font-bold text-white text-base mb-1">{activeOverview.subtitle}</h4>
                     <p className="text-xs text-white/60 mt-2 flex items-center justify-center gap-1">
-                      <span>Companies worked for shown below</span>
+                      <span>Explore gallery & company work below</span>
                       <ChevronDown size={14} className="text-[#ffbe00] animate-bounce" />
                     </p>
                   </div>
@@ -353,174 +407,293 @@ export function PortfolioList({ projects }: { projects: any[] }) {
             </motion.div>
           </AnimatePresence>
 
-          {/* Section Header */}
-          <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-gray-200 dark:border-white/10 pb-6">
-            <div>
-              <h3 className="text-2xl md:text-3xl font-black text-foreground tracking-tight">
-                Companies Worked For & Delivered Results
-              </h3>
-              <p className="text-sm text-muted mt-1 font-medium">
-                Verified client projects under {activeOverview.title}.
-              </p>
-            </div>
-            <span className="text-xs font-bold uppercase tracking-wider text-[#ffbe00] bg-[#24182e] px-4 py-2 rounded-full border border-white/10">
-              {filteredProjects.length} {filteredProjects.length === 1 ? "Company" : "Companies"} Displayed
-            </span>
-          </div>
-
-          {/* Projects / Companies Grid */}
-          {filteredProjects.length === 0 ? (
-            <div className="p-16 rounded-3xl bg-[#24182e]/40 border border-white/10 text-center">
-              <div className="w-16 h-16 rounded-full bg-[#ffbe00]/10 text-[#ffbe00] flex items-center justify-center mx-auto mb-4">
-                <Sparkles size={28} />
+          {/* DEDICATED GRAPHIC & LOGO DESIGN GALLERY SHOWCASE */}
+          {selectedCategory === "graphic-design" ? (
+            <div className="space-y-8">
+              <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-gray-200 dark:border-white/10 pb-6">
+                <div>
+                  <h3 className="text-2xl md:text-3xl font-black text-foreground tracking-tight flex items-center gap-2">
+                    <Palette className="text-[#ff007a]" /> Logo & Brand Identity Gallery
+                  </h3>
+                  <p className="text-sm text-muted mt-1 font-medium">
+                    Click any logo or graphic image below to expand in high resolution.
+                  </p>
+                </div>
+                <span className="text-xs font-bold uppercase tracking-wider text-[#ff007a] bg-[#24182e] px-4 py-2 rounded-full border border-white/10">
+                  {graphicGalleryItems.length} Logo Design Showcase Items
+                </span>
               </div>
-              <h4 className="text-xl font-bold text-white mb-2">No Companies Listed Under This Service Yet</h4>
-              <p className="text-sm text-[#dcd7e3]/60 max-w-md mx-auto mb-6">
-                New company case studies are being added regularly. Select another service box above to explore more client work!
-              </p>
-              <button
-                type="button"
-                onClick={() => handleServiceSelect("all")}
-                className="px-6 py-2.5 bg-[#ffbe00] text-[#24182e] font-bold rounded-xl text-xs uppercase tracking-wider shadow-lg"
-              >
-                View All Companies & Work
-              </button>
+
+              {graphicGalleryItems.length === 0 ? (
+                <div className="p-16 rounded-3xl bg-[#24182e]/40 border border-white/10 text-center">
+                  <Palette size={40} className="text-[#ff007a] mx-auto mb-3" />
+                  <h4 className="text-xl font-bold text-white mb-2">No Logo Designs Uploaded Yet</h4>
+                  <p className="text-sm text-[#dcd7e3]/60 max-w-md mx-auto mb-6">
+                    Go to Admin Dashboard &gt; Projects &gt; Logo & Graphics Gallery tab to upload brand logos and design assets!
+                  </p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                  {graphicGalleryItems.map((item, idx) => (
+                    <motion.div
+                      key={idx}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      whileInView={{ opacity: 1, scale: 1 }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 0.4, delay: (idx % 4) * 0.05 }}
+                      onClick={() => setActiveLightboxImage(item.imageUrl)}
+                      className="group relative rounded-3xl bg-[#1d1326] border border-white/15 p-6 flex flex-col items-center justify-center cursor-pointer overflow-hidden shadow-2xl hover:border-[#ff007a] hover:shadow-[0_0_30px_rgba(255,0,122,0.3)] transition-all duration-500 h-64"
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 flex flex-col justify-end p-5">
+                        <span className="text-xs font-bold text-[#ff007a] uppercase tracking-wider">{item.client}</span>
+                        <h4 className="text-sm font-black text-white line-clamp-1">{item.title}</h4>
+                        <span className="mt-2 text-[10px] text-white/70 flex items-center gap-1 font-bold">
+                          <Maximize2 size={12} className="text-[#ff007a]" /> Click for Lightbox Preview
+                        </span>
+                      </div>
+
+                      <div className="relative w-full h-full flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={item.imageUrl} alt={item.title} className="object-contain max-h-full max-w-full rounded-xl" />
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              )}
             </div>
           ) : (
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-              {filteredProjects.map((project, i) => {
-                const beforeLines = (project.beforeStats || "").split("\n").filter(Boolean);
-                const afterLines = (project.afterStats || "").split("\n").filter(Boolean);
+            /* STANDARD COMPANY CASE STUDY LIST FOR OTHER CATEGORIES */
+            <div>
+              <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-gray-200 dark:border-white/10 pb-6">
+                <div>
+                  <h3 className="text-2xl md:text-3xl font-black text-foreground tracking-tight">
+                    Companies Worked For & Delivered Results
+                  </h3>
+                  <p className="text-sm text-muted mt-1 font-medium">
+                    Verified client projects under {activeOverview.title}.
+                  </p>
+                </div>
+                <span className="text-xs font-bold uppercase tracking-wider text-[#ffbe00] bg-[#24182e] px-4 py-2 rounded-full border border-white/10">
+                  {filteredProjects.length} {filteredProjects.length === 1 ? "Company" : "Companies"} Displayed
+                </span>
+              </div>
 
-                return (
-                  <motion.div
-                    key={project.id || i}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.6, delay: (i % 2) * 0.1 }}
-                    className="rounded-[2.5rem] bg-[#24182e] border border-white/15 text-white shadow-2xl overflow-hidden flex flex-col group hover:border-[#ffbe00]/50 transition-all duration-500"
+              {filteredProjects.length === 0 ? (
+                <div className="p-16 rounded-3xl bg-[#24182e]/40 border border-white/10 text-center">
+                  <div className="w-16 h-16 rounded-full bg-[#ffbe00]/10 text-[#ffbe00] flex items-center justify-center mx-auto mb-4">
+                    <Sparkles size={28} />
+                  </div>
+                  <h4 className="text-xl font-bold text-white mb-2">No Companies Listed Under This Service Yet</h4>
+                  <p className="text-sm text-[#dcd7e3]/60 max-w-md mx-auto mb-6">
+                    New company case studies are being added regularly. Select another service box above to explore more client work!
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => handleServiceSelect("all")}
+                    className="px-6 py-2.5 bg-[#ffbe00] text-[#24182e] font-bold rounded-xl text-xs uppercase tracking-wider shadow-lg"
                   >
-                    {/* Cover Image & Header Badges */}
-                    <div className="relative h-64 sm:h-72 w-full overflow-hidden border-b border-white/10">
-                      <Image
-                        src={project.image}
-                        alt={project.title}
-                        fill
-                        className="object-cover transition-transform duration-1000 group-hover:scale-105"
-                      />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#24182e] via-[#24182e]/40 to-transparent" />
+                    View All Companies & Work
+                  </button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                  {filteredProjects.map((project, i) => {
+                    const beforeLines = (project.beforeStats || "").split("\n").filter(Boolean);
+                    const afterLines = (project.afterStats || "").split("\n").filter(Boolean);
 
-                      {/* Top Badges */}
-                      <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-20">
-                        <span className="px-3.5 py-1.5 rounded-full bg-[#24182e]/90 backdrop-blur-md border border-white/20 text-[#ffbe00] text-[10px] font-extrabold uppercase tracking-widest flex items-center gap-1.5">
-                          <Building2 size={12} /> {project.client || "Client Case Study"}
-                        </span>
+                    return (
+                      <motion.div
+                        key={project.id || i}
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: (i % 2) * 0.1 }}
+                        className="rounded-[2.5rem] bg-[#24182e] border border-white/15 text-white shadow-2xl overflow-hidden flex flex-col group hover:border-[#ffbe00]/50 transition-all duration-500"
+                      >
+                        {/* Cover Image & Header Badges */}
+                        <div className="relative h-64 sm:h-72 w-full overflow-hidden border-b border-white/10">
+                          <Image
+                            src={project.image}
+                            alt={project.title}
+                            fill
+                            className="object-cover transition-transform duration-1000 group-hover:scale-105"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-[#24182e] via-[#24182e]/40 to-transparent" />
 
-                        {project.growthBadge && (
-                          <span className="px-3.5 py-1.5 rounded-full bg-emerald-500 text-[#090512] font-black text-xs uppercase tracking-wider shadow-lg flex items-center gap-1">
-                            <TrendingUp size={14} /> {project.growthBadge}
-                          </span>
-                        )}
-                      </div>
+                          {/* Top Badges */}
+                          <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-20">
+                            <span className="px-3.5 py-1.5 rounded-full bg-[#24182e]/90 backdrop-blur-md border border-white/20 text-[#ffbe00] text-[10px] font-extrabold uppercase tracking-widest flex items-center gap-1.5">
+                              <Building2 size={12} /> {project.client || "Client Case Study"}
+                            </span>
 
-                      {/* Project Title Overlay */}
-                      <div className="absolute bottom-4 left-6 right-6 z-20">
-                        <h3 className="text-2xl md:text-3xl font-black text-white leading-tight tracking-tight group-hover:text-[#ffbe00] transition-colors">
-                          {project.title}
-                        </h3>
-                      </div>
-                    </div>
-
-                    {/* Body Content */}
-                    <div className="p-6 md:p-8 flex-1 flex flex-col justify-between space-y-6">
-                      {/* Short Description */}
-                      <p className="text-[#dcd7e3]/90 text-sm leading-relaxed font-medium line-clamp-2">
-                        {project.description}
-                      </p>
-
-                      {/* BEFORE VS AFTER DATA & IMAGES COMPARISON BOX */}
-                      {(project.beforeStats || project.afterStats || project.beforeImage || project.afterImage) && (
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-black/40 p-5 rounded-2xl border border-white/10">
-                          {/* BEFORE */}
-                          <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-xl flex flex-col justify-between">
-                            <div>
-                              <div className="flex items-center gap-1.5 text-red-400 font-extrabold uppercase text-[10px] tracking-wider mb-2">
-                                <span className="w-2 h-2 rounded-full bg-red-500" /> BEFORE AERONOX
-                              </div>
-                              {beforeLines.length > 0 && (
-                                <ul className="space-y-1 text-xs text-gray-300 font-medium mb-3">
-                                  {beforeLines.map((line: string, idx: number) => (
-                                    <li key={idx} className="line-clamp-1">{line}</li>
-                                  ))}
-                                </ul>
-                              )}
-                            </div>
-                            {project.beforeImage && (
-                              <div className="relative h-28 w-full rounded-lg overflow-hidden border border-red-500/30 mt-2">
-                                <Image src={project.beforeImage} alt="Before State" fill className="object-cover" />
-                                <span className="absolute bottom-1 right-1 bg-black/80 text-red-400 text-[9px] px-1.5 py-0.5 rounded font-extrabold">Initial</span>
-                              </div>
+                            {project.growthBadge && (
+                              <span className="px-3.5 py-1.5 rounded-full bg-emerald-500 text-[#090512] font-black text-xs uppercase tracking-wider shadow-lg flex items-center gap-1">
+                                <TrendingUp size={14} /> {project.growthBadge}
+                              </span>
                             )}
                           </div>
 
-                          {/* AFTER */}
-                          <div className="bg-emerald-500/10 border border-emerald-500/20 p-4 rounded-xl flex flex-col justify-between">
-                            <div>
-                              <div className="flex items-center gap-1.5 text-emerald-400 font-extrabold uppercase text-[10px] tracking-wider mb-2">
-                                <span className="w-2 h-2 rounded-full bg-emerald-500" /> AFTER AERONOX (RESULTS)
-                              </div>
-                              {afterLines.length > 0 && (
-                                <ul className="space-y-1 text-xs text-emerald-200 font-bold mb-3">
-                                  {afterLines.map((line: string, idx: number) => (
-                                    <li key={idx} className="line-clamp-1">{line}</li>
-                                  ))}
-                                </ul>
-                              )}
-                            </div>
-                            {project.afterImage && (
-                              <div className="relative h-28 w-full rounded-lg overflow-hidden border border-emerald-500/30 mt-2">
-                                <Image src={project.afterImage} alt="After State" fill className="object-cover" />
-                                <span className="absolute bottom-1 right-1 bg-emerald-500 text-black text-[9px] px-1.5 py-0.5 rounded font-extrabold">Result</span>
-                              </div>
-                            )}
+                          {/* Project Title Overlay */}
+                          <div className="absolute bottom-4 left-6 right-6 z-20">
+                            <h3 className="text-2xl md:text-3xl font-black text-white leading-tight tracking-tight group-hover:text-[#ffbe00] transition-colors">
+                              {project.title}
+                            </h3>
                           </div>
                         </div>
-                      )}
 
-                      {/* Action Bar */}
-                      <div className="pt-4 border-t border-white/10 flex items-center justify-between">
-                        {project.liveUrl ? (
-                          <a
-                            href={project.liveUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 text-xs font-bold text-[#ffbe00] hover:underline"
-                          >
-                            <ExternalLink size={14} /> Visit Live Site
-                          </a>
-                        ) : (
-                          <span className="text-xs text-white/40 font-medium">Verified Case Study</span>
-                        )}
+                        {/* Body Content */}
+                        <div className="p-6 md:p-8 flex-1 flex flex-col justify-between space-y-6">
+                          {/* Short Description */}
+                          <p className="text-[#dcd7e3]/90 text-sm leading-relaxed font-medium line-clamp-2">
+                            {project.description}
+                          </p>
 
-                        <Link
-                          href={`/portfolio/${project.slug}`}
-                          className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#ffbe00] text-[#24182e] font-black text-xs uppercase tracking-wider rounded-xl hover:bg-white transition-colors shadow-md"
-                        >
-                          <span>View Case Study</span>
-                          <ArrowRight size={14} />
-                        </Link>
-                      </div>
+                          {/* GALLERY IMAGES MINI SHOWCASE IF PRESENT */}
+                          {project.galleryImages && project.galleryImages.length > 0 && (
+                            <div className="space-y-2 pt-1">
+                              <span className="text-[10px] font-extrabold text-[#ff007a] uppercase tracking-wider flex items-center gap-1">
+                                <Palette size={12} /> Logo & Graphic Assets Showcase ({project.galleryImages.length})
+                              </span>
+                              <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-thin">
+                                {project.galleryImages.map((gImg: string, gIdx: number) => (
+                                  <div 
+                                    key={gIdx} 
+                                    onClick={() => setActiveLightboxImage(gImg)}
+                                    className="relative w-16 h-16 rounded-xl bg-black/60 border border-white/20 p-1 flex items-center justify-center shrink-0 cursor-pointer hover:border-[#ff007a] hover:scale-105 transition-all"
+                                  >
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <img src={gImg} alt="Logo" className="object-contain max-h-full max-w-full rounded-md" />
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
 
-                    </div>
-                  </motion.div>
-                );
-              })}
+                          {/* BEFORE VS AFTER DATA & IMAGES COMPARISON BOX */}
+                          {(project.beforeStats || project.afterStats || project.beforeImage || project.afterImage) && (
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-black/40 p-5 rounded-2xl border border-white/10">
+                              {/* BEFORE */}
+                              <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-xl flex flex-col justify-between">
+                                <div>
+                                  <div className="flex items-center gap-1.5 text-red-400 font-extrabold uppercase text-[10px] tracking-wider mb-2">
+                                    <span className="w-2 h-2 rounded-full bg-red-500" /> BEFORE AERONOX
+                                  </div>
+                                  {beforeLines.length > 0 && (
+                                    <ul className="space-y-1 text-xs text-gray-300 font-medium mb-3">
+                                      {beforeLines.map((line: string, idx: number) => (
+                                        <li key={idx} className="line-clamp-1">{line}</li>
+                                      ))}
+                                    </ul>
+                                  )}
+                                </div>
+                                {project.beforeImage && (
+                                  <div 
+                                    onClick={() => setActiveLightboxImage(project.beforeImage)}
+                                    className="relative h-28 w-full rounded-lg overflow-hidden border border-red-500/30 mt-2 cursor-pointer group/img"
+                                  >
+                                    <Image src={project.beforeImage} alt="Before State" fill className="object-cover" />
+                                    <span className="absolute bottom-1 right-1 bg-black/80 text-red-400 text-[9px] px-1.5 py-0.5 rounded font-extrabold">Initial</span>
+                                  </div>
+                                )}
+                              </div>
+
+                              {/* AFTER */}
+                              <div className="bg-emerald-500/10 border border-emerald-500/20 p-4 rounded-xl flex flex-col justify-between">
+                                <div>
+                                  <div className="flex items-center gap-1.5 text-emerald-400 font-extrabold uppercase text-[10px] tracking-wider mb-2">
+                                    <span className="w-2 h-2 rounded-full bg-emerald-500" /> AFTER AERONOX (RESULTS)
+                                  </div>
+                                  {afterLines.length > 0 && (
+                                    <ul className="space-y-1 text-xs text-emerald-200 font-bold mb-3">
+                                      {afterLines.map((line: string, idx: number) => (
+                                        <li key={idx} className="line-clamp-1">{line}</li>
+                                      ))}
+                                    </ul>
+                                  )}
+                                </div>
+                                {project.afterImage && (
+                                  <div 
+                                    onClick={() => setActiveLightboxImage(project.afterImage)}
+                                    className="relative h-28 w-full rounded-lg overflow-hidden border border-emerald-500/30 mt-2 cursor-pointer group/img"
+                                  >
+                                    <Image src={project.afterImage} alt="After State" fill className="object-cover" />
+                                    <span className="absolute bottom-1 right-1 bg-emerald-500 text-black text-[9px] px-1.5 py-0.5 rounded font-extrabold">Result</span>
+                                  </div>
+                                )}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* Action Bar */}
+                          <div className="pt-4 border-t border-white/10 flex items-center justify-between">
+                            {project.liveUrl ? (
+                              <a
+                                href={project.liveUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#ffbe00] hover:underline"
+                              >
+                                <ExternalLink size={14} /> Visit Live Site
+                              </a>
+                            ) : (
+                              <span className="text-xs text-white/40 font-medium">Verified Case Study</span>
+                            )}
+
+                            <Link
+                              href={`/portfolio/${project.slug}`}
+                              className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#ffbe00] text-[#24182e] font-black text-xs uppercase tracking-wider rounded-xl hover:bg-white transition-colors shadow-md"
+                            >
+                              <span>View Case Study</span>
+                              <ArrowRight size={14} />
+                            </Link>
+                          </div>
+
+                        </div>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
           )}
         </div>
 
       </div>
+
+      {/* FULLSCREEN LIGHTBOX MODAL */}
+      <AnimatePresence>
+        {activeLightboxImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setActiveLightboxImage(null)}
+            className="fixed inset-0 bg-black/95 backdrop-blur-xl z-[100] flex items-center justify-center p-4 md:p-10 cursor-zoom-out"
+          >
+            <button
+              onClick={() => setActiveLightboxImage(null)}
+              className="absolute top-6 right-6 p-3 rounded-full bg-white/10 text-white hover:bg-red-600 transition-colors shadow-2xl z-10"
+              title="Close Preview"
+            >
+              <X size={24} />
+            </button>
+
+            <motion.div
+              initial={{ scale: 0.9 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.9 }}
+              className="relative max-w-5xl max-h-[85vh] w-full h-full flex items-center justify-center"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={activeLightboxImage}
+                alt="Logo High Res Preview"
+                className="object-contain max-w-full max-h-full rounded-2xl border border-white/20 shadow-2xl"
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }

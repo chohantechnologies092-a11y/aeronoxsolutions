@@ -10,12 +10,16 @@ import {
   TrendingUp, 
   FileText, 
   Settings, 
-  ExternalLink, 
+  Palette, 
   Building2, 
   Globe, 
   Sparkles,
   Layers,
-  ArrowRight
+  ArrowRight,
+  Plus,
+  X,
+  ImageIcon,
+  ExternalLink
 } from "lucide-react";
 
 interface ProjectFormProps {
@@ -24,7 +28,20 @@ interface ProjectFormProps {
 }
 
 export function ProjectForm({ project, action }: ProjectFormProps) {
-  const [activeTab, setActiveTab] = useState<"overview" | "metrics" | "content" | "settings">("overview");
+  const [activeTab, setActiveTab] = useState<"overview" | "metrics" | "gallery" | "content" | "settings">("overview");
+  const [galleryList, setGalleryList] = useState<string[]>(project?.galleryImages || []);
+  const [tempImage, setTempImage] = useState<string>("");
+
+  const addImageToGallery = () => {
+    if (tempImage && !galleryList.includes(tempImage)) {
+      setGalleryList([...galleryList, tempImage]);
+      setTempImage("");
+    }
+  };
+
+  const removeImageFromGallery = (idx: number) => {
+    setGalleryList(galleryList.filter((_, i) => i !== idx));
+  };
 
   return (
     <div className="w-full">
@@ -40,6 +57,18 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
           }`}
         >
           <Briefcase size={16} /> Service & Client Info
+        </button>
+
+        <button
+          type="button"
+          onClick={() => setActiveTab("gallery")}
+          className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm transition-all ${
+            activeTab === "gallery"
+              ? "bg-[#ffbe00] text-[#24182e] shadow-lg shadow-[#ffbe00]/20"
+              : "text-[#dcd7e3]/70 hover:text-white hover:bg-white/5"
+          }`}
+        >
+          <Palette size={16} /> Logo & Graphics Gallery ({galleryList.length})
         </button>
 
         <button
@@ -75,12 +104,13 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
               : "text-[#dcd7e3]/70 hover:text-white hover:bg-white/5"
           }`}
         >
-          <Settings size={16} /> Visibility & Options
+          <Settings size={16} /> Publishing
         </button>
       </div>
 
       {/* Main Form Wrapper */}
       <form action={action} className="bg-admin-card p-6 md:p-8 rounded-3xl border border-admin-border shadow-2xl">
+        <input type="hidden" name="galleryImages" value={JSON.stringify(galleryList)} />
         
         {/* TAB 1: Service Category & Client Overview */}
         {activeTab === "overview" && (
@@ -106,6 +136,7 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
                   defaultValue={project?.serviceCategory || "web-dev"}
                   className="bg-black/20 border border-admin-border rounded-xl px-4 py-3 text-admin-text focus:outline-none focus:border-[#ffbe00] transition-colors"
                 >
+                  <option value="graphic-design">🎨 Graphic & Logo Design</option>
                   <option value="seo">SEO & Organic Growth</option>
                   <option value="web-dev">Web & E-Commerce Development</option>
                   <option value="marketing">Growth & Performance Marketing</option>
@@ -220,6 +251,93 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
             </div>
 
             <div className="flex justify-end pt-4">
+              <button
+                type="button"
+                onClick={() => setActiveTab("gallery")}
+                className="px-6 py-3 bg-[#ffbe00] text-[#24182e] font-bold rounded-xl hover:bg-white transition-colors flex items-center gap-2 shadow-md"
+              >
+                Next: Logo & Graphics Gallery <ArrowRight size={16} />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* TAB: Logo & Graphics Gallery */}
+        {activeTab === "gallery" && (
+          <div className="space-y-6 animate-in fade-in duration-300">
+            <div className="border-b border-white/10 pb-4 mb-4">
+              <h2 className="text-xl font-bold text-admin-text flex items-center gap-2">
+                <Palette size={20} className="text-[#ffbe00]" /> Logo & Graphic Design Gallery Showcase
+              </h2>
+              <p className="text-xs text-admin-muted mt-1">
+                Upload logos, brand identity assets, and graphics to display in the dedicated public portfolio gallery.
+              </p>
+            </div>
+
+            {/* Single Image Upload to add to gallery */}
+            <div className="p-6 rounded-2xl bg-black/30 border border-white/10 space-y-4">
+              <label className="text-sm font-bold text-[#ffbe00] flex items-center gap-2 uppercase tracking-wider">
+                <ImageIcon size={16} /> Upload Logo / Graphic Image
+              </label>
+              
+              <ImageUpload onChange={(url) => setTempImage(url)} defaultValue="" />
+              
+              {tempImage && (
+                <div className="flex items-center gap-3 pt-2">
+                  <span className="text-xs text-emerald-400 font-bold">Image Uploaded Ready to Add!</span>
+                  <button
+                    type="button"
+                    onClick={addImageToGallery}
+                    className="px-4 py-2 bg-emerald-500 text-black font-bold text-xs rounded-xl uppercase flex items-center gap-1.5 shadow-md"
+                  >
+                    <Plus size={14} /> Add Logo To Gallery
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Uploaded Gallery Thumbnails Grid */}
+            <div className="space-y-3">
+              <h3 className="text-sm font-bold text-white uppercase tracking-wider flex items-center justify-between">
+                <span>Gallery Images Showcase ({galleryList.length})</span>
+                {galleryList.length > 0 && (
+                  <span className="text-xs text-[#ffbe00] font-normal">Click X to remove logo</span>
+                )}
+              </h3>
+
+              {galleryList.length === 0 ? (
+                <div className="p-8 rounded-2xl bg-black/20 border border-white/10 text-center">
+                  <Palette size={32} className="text-gray-500 mx-auto mb-2" />
+                  <p className="text-xs text-gray-400 font-medium">No gallery logos uploaded yet. Upload images above to add to this case study showcase!</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                  {galleryList.map((imgUrl, idx) => (
+                    <div key={idx} className="relative group rounded-2xl overflow-hidden bg-black/50 border border-white/15 aspect-square flex items-center justify-center p-2">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={imgUrl} alt={`Gallery ${idx}`} className="object-contain max-h-full max-w-full rounded-lg" />
+                      <button
+                        type="button"
+                        onClick={() => removeImageFromGallery(idx)}
+                        className="absolute top-1.5 right-1.5 p-1.5 rounded-full bg-red-600 text-white opacity-90 hover:opacity-100 hover:scale-110 transition-all shadow-lg"
+                        title="Remove Logo"
+                      >
+                        <X size={14} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div className="flex justify-between pt-4">
+              <button
+                type="button"
+                onClick={() => setActiveTab("overview")}
+                className="px-6 py-3 bg-white/10 text-white font-bold rounded-xl hover:bg-white/20 transition-colors"
+              >
+                Back
+              </button>
               <button
                 type="button"
                 onClick={() => setActiveTab("metrics")}

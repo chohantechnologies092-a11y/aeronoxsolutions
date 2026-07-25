@@ -27,6 +27,16 @@ export async function createProject(formData: FormData) {
   const afterStats = formData.get("afterStats") as string | null;
   const beforeImage = formData.get("beforeImage") as string | null;
   const afterImage = formData.get("afterImage") as string | null;
+  const galleryImagesRaw = formData.get("galleryImages") as string | null;
+  let galleryImages: string[] = [];
+  try {
+    if (galleryImagesRaw) {
+      galleryImages = JSON.parse(galleryImagesRaw);
+    }
+  } catch {
+    galleryImages = galleryImagesRaw ? galleryImagesRaw.split(",").map(s => s.trim()).filter(Boolean) : [];
+  }
+
   const growthBadge = formData.get("growthBadge") as string | null;
   const challenge = formData.get("challenge") as string | null;
   const solution = formData.get("solution") as string | null;
@@ -53,6 +63,7 @@ export async function createProject(formData: FormData) {
     afterStats: afterStats || null,
     beforeImage: beforeImage || null,
     afterImage: afterImage || null,
+    galleryImages: galleryImages || [],
     growthBadge: growthBadge || null,
     challenge: challenge || null,
     solution: solution || null,
@@ -91,6 +102,16 @@ export async function updateProject(id: string, formData: FormData) {
   const afterStats = formData.get("afterStats") as string | null;
   const beforeImage = formData.get("beforeImage") as string | null;
   const afterImage = formData.get("afterImage") as string | null;
+  const galleryImagesRaw = formData.get("galleryImages") as string | null;
+  let galleryImages: string[] = [];
+  try {
+    if (galleryImagesRaw) {
+      galleryImages = JSON.parse(galleryImagesRaw);
+    }
+  } catch {
+    galleryImages = galleryImagesRaw ? galleryImagesRaw.split(",").map(s => s.trim()).filter(Boolean) : [];
+  }
+
   const growthBadge = formData.get("growthBadge") as string | null;
   const challenge = formData.get("challenge") as string | null;
   const solution = formData.get("solution") as string | null;
@@ -117,6 +138,7 @@ export async function updateProject(id: string, formData: FormData) {
     afterStats: afterStats || null,
     beforeImage: beforeImage || null,
     afterImage: afterImage || null,
+    galleryImages: galleryImages || [],
     growthBadge: growthBadge || null,
     challenge: challenge || null,
     solution: solution || null,
