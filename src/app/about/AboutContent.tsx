@@ -74,7 +74,7 @@ export function AboutContent() {
               <div className="relative rounded-3xl overflow-hidden border border-card-border shadow-2xl bento-card">
                 <div className="aspect-[4/3] w-full relative">
                   <img 
-                    src="https://images.unsplash.com/photo-1531482615713-2afd69097998?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
+                    src="/images/team_workspace.png" 
                     alt="Aeronox Solutions Team Collaboration" 
                     className="object-cover w-full h-full"
                   />

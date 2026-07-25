@@ -68,7 +68,7 @@ export function AboutAgency() {
                 className="col-span-1 row-span-2 relative rounded-3xl overflow-hidden h-[300px] md:h-[450px] shadow-[0_20px_50px_rgba(0,0,0,0.1)] group"
               >
                 <Image 
-                  src="https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=2000&auto=format&fit=crop" 
+                  src="/images/team_workspace.png" 
                   alt="Team Collaborating"
                   fill
                   className="object-cover transition-transform duration-700 group-hover:scale-105"
