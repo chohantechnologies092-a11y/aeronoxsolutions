@@ -29,6 +29,7 @@ interface ProjectFormProps {
 
 export function ProjectForm({ project, action }: ProjectFormProps) {
   const [activeTab, setActiveTab] = useState<"overview" | "metrics" | "gallery" | "content" | "settings">("overview");
+  const [selectedServiceCategory, setSelectedServiceCategory] = useState<string>(project?.serviceCategory || "web-dev");
   const [galleryList, setGalleryList] = useState<string[]>(project?.galleryImages || []);
   const [tempImage, setTempImage] = useState<string>("");
 
@@ -63,8 +64,8 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
           type="button"
           onClick={() => setActiveTab("gallery")}
           className={`flex items-center gap-2 px-5 py-3 rounded-xl font-bold text-sm transition-all ${
-            activeTab === "gallery"
-              ? "bg-[#ffbe00] text-[#24182e] shadow-lg shadow-[#ffbe00]/20"
+            activeTab === "gallery" || selectedServiceCategory === "graphic-design"
+              ? "bg-[#ff007a] text-white shadow-lg shadow-[#ff007a]/30"
               : "text-[#dcd7e3]/70 hover:text-white hover:bg-white/5"
           }`}
         >
@@ -133,7 +134,8 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
                 <select
                   id="serviceCategory"
                   name="serviceCategory"
-                  defaultValue={project?.serviceCategory || "web-dev"}
+                  value={selectedServiceCategory}
+                  onChange={(e) => setSelectedServiceCategory(e.target.value)}
                   className="bg-black/20 border border-admin-border rounded-xl px-4 py-3 text-admin-text focus:outline-none focus:border-[#ffbe00] transition-colors"
                 >
                   <option value="graphic-design">🎨 Graphic & Logo Design</option>
