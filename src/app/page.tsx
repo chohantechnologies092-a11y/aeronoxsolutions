@@ -19,7 +19,7 @@ export default async function HomePage() {
     <>
       <Hero />
       <LogoMarquee clients={clients} />
-      <Services services={services} />
+      <Services services={services} limit={3} />
       <Portfolio projects={projects} />
       <AboutAgency />
       <FAQ />

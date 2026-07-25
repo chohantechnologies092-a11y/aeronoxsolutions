@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
 import React from "react";
@@ -7,22 +8,21 @@ import { ArrowRight } from "lucide-react";
 import * as LucideIcons from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
+interface ServicesProps {
+  services: any[];
+  limit?: number;
+}
 
-import { Button } from "@/components/ui/Button";
-
-export function Services({ services }: { services: any[] }) {
+export function Services({ services, limit }: ServicesProps) {
   if (!services || services.length === 0) return null;
 
-  // Filter services that have showOnHome checked
-  let displayServices = services.filter(service => service.showOnHome);
-  
-  // If none are checked, fallback to the first 3
-  if (displayServices.length === 0) {
-    displayServices = services;
+  // If a limit is specified (e.g. Homepage), filter by showOnHome and slice
+  let displayServices = services;
+
+  if (limit) {
+    const homeOnly = services.filter(service => service.showOnHome);
+    displayServices = homeOnly.length > 0 ? homeOnly.slice(0, limit) : services.slice(0, limit);
   }
-  
-  // Limit to exactly 3 cards
-  displayServices = displayServices.slice(0, 3);
 
   return (
     <section id="services" className="py-24 md:py-32 bg-background font-sans relative overflow-hidden">
@@ -56,9 +56,11 @@ export function Services({ services }: { services: any[] }) {
         <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <AnimatePresence mode="popLayout">
             {displayServices.map((service) => {
-              const Icon = (LucideIcons as any)[
-                service.icon.charAt(0).toUpperCase() + service.icon.slice(1)
-              ] || LucideIcons.Search;
+              const iconName = service.icon 
+                ? service.icon.charAt(0).toUpperCase() + service.icon.slice(1)
+                : "Search";
+
+              const Icon = (LucideIcons as any)[iconName] || LucideIcons.Search;
               
               return (
                 <motion.div
@@ -68,7 +70,7 @@ export function Services({ services }: { services: any[] }) {
                   exit={{ opacity: 0, scale: 0.9, y: 20 }}
                   transition={{ duration: 0.4, type: "spring", bounce: 0.3 }}
                   key={service.id}
-                  className="p-8 flex flex-col h-full relative group overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl"
+                  className="p-8 flex flex-col h-full relative group overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl bg-[#1a1122]"
                 >
                   {/* Background Image */}
                   {service.image && (
@@ -79,7 +81,7 @@ export function Services({ services }: { services: any[] }) {
                         fill
                         className="object-cover transition-transform duration-1000 group-hover:scale-110 z-0"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#1a1122] via-[#1a1122]/80 to-[#1a1122]/20 z-0" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#1a1122] via-[#1a1122]/85 to-[#1a1122]/30 z-0" />
                     </>
                   )}
 
@@ -123,16 +125,25 @@ export function Services({ services }: { services: any[] }) {
           </AnimatePresence>
         </motion.div>
 
-        {/* View All Services Button */}
+        {/* Action Button */}
         <div className="mt-16 flex justify-center">
-          <Link 
-            href="/services" 
-            className="group relative inline-flex items-center gap-3 px-8 py-4 rounded-full bg-[#24182e] text-white font-black uppercase tracking-widest text-sm transition-all duration-300 hover:scale-105 hover:-translate-y-1 shadow-[0_0_20px_rgba(36,24,46,0.5)] hover:shadow-[0_10_30px_rgba(36,24,46,0.8)] border border-white/10 overflow-hidden"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:animate-shimmer" />
-            <span className="relative z-10">Explore More Services</span>
-            <ArrowRight size={18} className="relative z-10 transition-transform duration-300 group-hover:translate-x-1" />
-          </Link>
+          {limit ? (
+            <Link 
+              href="/services" 
+              className="group relative inline-flex items-center gap-3 px-8 py-4 rounded-full bg-[#24182e] text-white font-black uppercase tracking-widest text-sm transition-all duration-300 hover:scale-105 hover:-translate-y-1 shadow-[0_0_20px_rgba(36,24,46,0.5)] border border-white/10 overflow-hidden"
+            >
+              <span className="relative z-10">Explore All Services</span>
+              <ArrowRight size={18} className="relative z-10 transition-transform duration-300 group-hover:translate-x-1" />
+            </Link>
+          ) : (
+            <Link 
+              href="/contact" 
+              className="group relative inline-flex items-center gap-3 px-8 py-4 rounded-full bg-[#ffbe00] text-[#24182e] font-black uppercase tracking-widest text-sm transition-all duration-300 hover:scale-105 hover:-translate-y-1 shadow-[0_0_25px_rgba(255,190,0,0.3)] hover:bg-white"
+            >
+              <span>Schedule a Custom Service Consultation</span>
+              <ArrowRight size={18} className="transition-transform duration-300 group-hover:translate-x-1" />
+            </Link>
+          )}
         </div>
 
       </div>
