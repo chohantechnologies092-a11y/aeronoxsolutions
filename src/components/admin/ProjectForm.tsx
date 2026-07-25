@@ -22,7 +22,9 @@ import {
   Code2,
   Cpu,
   CheckCircle2,
-  Search
+  Search,
+  AlertTriangle,
+  Lightbulb
 } from "lucide-react";
 
 interface ProjectFormProps {
@@ -92,9 +94,9 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
           <span className="px-3.5 py-1 rounded-full bg-[#ffbe00]/10 border border-[#ffbe00]/30 text-[#ffbe00] text-xs font-bold uppercase tracking-wider">
             Step 1: Select Service Category
           </span>
-          <h2 className="text-2xl font-black text-white mt-2">What service are you adding this project for?</h2>
+          <h2 className="text-2xl font-black text-white mt-2">What service are you adding/editing this project for?</h2>
           <p className="text-xs text-[#dcd7e3]/70 mt-1">
-            The form fields below will automatically adapt to show only what's required for this service!
+            The form below will automatically adapt to show only what's required for this service!
           </p>
         </div>
 
@@ -138,7 +140,7 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
         </div>
       </div>
 
-      {/* STEP 2: DYNAMICALLY ADAPTED FORM */}
+      {/* STEP 2: DYNAMICALLY ADAPTED FORM WITH EXACT SITE HEADINGS */}
       <form action={action} className="bg-[#1a1122] p-6 md:p-8 rounded-3xl border border-white/15 shadow-2xl space-y-8">
         <input type="hidden" name="serviceCategory" value={selectedServiceCategory} />
         <input type="hidden" name="galleryImages" value={JSON.stringify(galleryList)} />
@@ -155,21 +157,21 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
             </div>
             <div>
               <h3 className="text-base font-bold text-white uppercase tracking-wider">
-                {selectedServiceCategory === "web-dev" && "Web Development Form Mode"}
-                {selectedServiceCategory === "seo" && "SEO & Marketing Form Mode"}
-                {selectedServiceCategory === "graphic-design" && "Graphics & Logo Design Form Mode"}
-                {selectedServiceCategory === "videography" && "Videography & Motion Form Mode"}
-                {selectedServiceCategory === "custom-software" && "Custom Software Form Mode"}
+                {selectedServiceCategory === "web-dev" && "Web Development Mode"}
+                {selectedServiceCategory === "seo" && "SEO & Marketing Mode"}
+                {selectedServiceCategory === "graphic-design" && "Graphics & Logo Design Mode"}
+                {selectedServiceCategory === "videography" && "Videography Mode"}
+                {selectedServiceCategory === "custom-software" && "Custom Software Mode"}
               </h3>
               <p className="text-xs text-[#dcd7e3]/70 font-medium">
-                Fill in the tailored fields below.
+                Headings below match exact public site sections.
               </p>
             </div>
           </div>
         </div>
 
         {/* ---------------------------------------------------- */}
-        {/* MODE 1: WEB DEVELOPMENT (SIMPLE DETAILS + LIVE LINK) */}
+        {/* MODE 1: WEB DEVELOPMENT */}
         {/* ---------------------------------------------------- */}
         {selectedServiceCategory === "web-dev" && (
           <div className="space-y-6 animate-in fade-in duration-300">
@@ -187,7 +189,9 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold text-white">Company / Client Name</label>
+                <label className="text-sm font-semibold text-white flex items-center gap-1.5">
+                  <Building2 size={16} className="text-[#ffbe00]" /> Company / Client Name
+                </label>
                 <input 
                   type="text" 
                   name="client" 
@@ -213,11 +217,11 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold text-white">Tech Stack / Tags</label>
+                <label className="text-sm font-semibold text-white">Tech Stack / Capabilities Badges</label>
                 <input 
                   type="text" 
                   name="tags" 
-                  defaultValue={project?.tags || "Next.js, Tailwind CSS, React"}
+                  defaultValue={project?.tags || "Next.js 16, Tailwind CSS, React 19, Stripe"}
                   className="bg-black/30 border border-white/15 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#ffbe00]"
                   placeholder="e.g. Next.js, React, Tailwind, Stripe"
                 />
@@ -225,7 +229,7 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
             </div>
 
             <div className="flex flex-col gap-2">
-              <label className="text-sm font-semibold text-white">Short Description <span className="text-[#ffbe00]">*</span></label>
+              <label className="text-sm font-semibold text-white">Short Description / Overview <span className="text-[#ffbe00]">*</span></label>
               <textarea 
                 name="description" 
                 rows={3}
@@ -236,21 +240,50 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
               />
             </div>
 
+            {/* Optional Challenge & Solution */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-white/10">
+              <div className="flex flex-col gap-2 bg-[#24182e] p-5 rounded-2xl border border-amber-500/30">
+                <label className="text-xs font-bold text-amber-400 uppercase flex items-center gap-1.5">
+                  <AlertTriangle size={14} /> ⚠️ The Challenge (Optional)
+                </label>
+                <textarea 
+                  name="challenge" 
+                  rows={3}
+                  defaultValue={project?.challenge || ""}
+                  className="bg-black/30 border border-white/15 rounded-xl px-4 py-2.5 text-white text-xs resize-none"
+                  placeholder="Describe the initial technical or business challenge..."
+                />
+              </div>
+
+              <div className="flex flex-col gap-2 bg-[#24182e] p-5 rounded-2xl border border-[#ffbe00]/30">
+                <label className="text-xs font-bold text-[#ffbe00] uppercase flex items-center gap-1.5">
+                  <Lightbulb size={14} /> 💡 The Strategy & Solution (Optional)
+                </label>
+                <textarea 
+                  name="solution" 
+                  rows={3}
+                  defaultValue={project?.solution || ""}
+                  className="bg-black/30 border border-white/15 rounded-xl px-4 py-2.5 text-white text-xs resize-none"
+                  placeholder="Describe the Next.js / React strategy implemented..."
+                />
+              </div>
+            </div>
+
             <div className="flex flex-col gap-2">
-              <label className="text-sm font-semibold text-white">Cover Image <span className="text-[#ffbe00]">*</span></label>
+              <label className="text-sm font-semibold text-white">Main Cover Image <span className="text-[#ffbe00]">*</span></label>
               <ImageUpload name="image" defaultValue={project?.image || ""} />
             </div>
           </div>
         )}
 
         {/* ---------------------------------------------------- */}
-        {/* MODE 2: SEO & MARKETING (BEFORE vs AFTER + STATS) */}
+        {/* MODE 2: SEO & MARKETING */}
         {/* ---------------------------------------------------- */}
         {(selectedServiceCategory === "seo" || selectedServiceCategory === "marketing" || selectedServiceCategory === "telemarketing") && (
           <div className="space-y-6 animate-in fade-in duration-300">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold text-white">Campaign Title <span className="text-[#ffbe00]">*</span></label>
+                <label className="text-sm font-semibold text-white">Campaign / Project Title <span className="text-[#ffbe00]">*</span></label>
                 <input 
                   type="text" 
                   name="title" 
@@ -262,7 +295,9 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold text-white">Company / Client Name</label>
+                <label className="text-sm font-semibold text-white flex items-center gap-1.5">
+                  <Building2 size={16} className="text-[#ffbe00]" /> Company / Client Name
+                </label>
                 <input 
                   type="text" 
                   name="client" 
@@ -273,6 +308,7 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
               </div>
             </div>
 
+            {/* GROWTH BADGE */}
             <div className="flex flex-col gap-2 bg-[#ffbe00]/10 border border-[#ffbe00]/30 p-5 rounded-2xl">
               <label className="text-sm font-bold text-[#ffbe00] flex items-center gap-1.5 uppercase tracking-wider">
                 <Sparkles size={16} /> Growth Highlight Badge
@@ -286,9 +322,12 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
               />
             </div>
 
+            {/* BEFORE VS AFTER HEADINGS */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="flex flex-col gap-3 bg-red-500/10 border border-red-500/20 p-5 rounded-2xl">
-                <label className="text-xs font-bold text-red-400 uppercase">🛑 BEFORE AERONOX (Initial State)</label>
+                <label className="text-xs font-bold text-red-400 uppercase flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse" /> 🛑 BEFORE AERONOX (Initial State)
+                </label>
                 <textarea 
                   name="beforeStats" 
                   rows={4}
@@ -296,12 +335,14 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
                   className="bg-black/30 border border-red-500/30 rounded-xl px-4 py-3 text-white text-sm resize-none"
                   placeholder="e.g.&#10;• 1,200 Monthly Organic Visitors&#10;• Rank #45 for core keywords"
                 />
-                <label className="text-xs text-red-300 font-semibold mt-2">Before Image (Optional)</label>
+                <label className="text-xs text-red-300 font-semibold mt-2">Before Image / Screenshot (Optional)</label>
                 <ImageUpload name="beforeImage" defaultValue={project?.beforeImage || ""} />
               </div>
 
               <div className="flex flex-col gap-3 bg-emerald-500/10 border border-emerald-500/20 p-5 rounded-2xl">
-                <label className="text-xs font-bold text-emerald-400 uppercase">🚀 AFTER AERONOX (Results Delivered)</label>
+                <label className="text-xs font-bold text-emerald-400 uppercase flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" /> 🚀 AFTER AERONOX (Results Delivered)
+                </label>
                 <textarea 
                   name="afterStats" 
                   rows={4}
@@ -309,8 +350,37 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
                   className="bg-black/30 border border-emerald-500/30 rounded-xl px-4 py-3 text-white text-sm resize-none"
                   placeholder="e.g.&#10;• 48,500 Monthly Organic Visitors&#10;• Rank #1 for commercial keywords"
                 />
-                <label className="text-xs text-emerald-300 font-semibold mt-2">After Image (Optional)</label>
+                <label className="text-xs text-emerald-300 font-semibold mt-2">After Image / Screenshot (Optional)</label>
                 <ImageUpload name="afterImage" defaultValue={project?.afterImage || ""} />
+              </div>
+            </div>
+
+            {/* THE CHALLENGE & THE STRATEGY */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-white/10">
+              <div className="flex flex-col gap-2 bg-[#24182e] p-5 rounded-2xl border border-amber-500/30">
+                <label className="text-xs font-bold text-amber-400 uppercase flex items-center gap-1.5">
+                  <AlertTriangle size={14} /> ⚠️ The Challenge
+                </label>
+                <textarea 
+                  name="challenge" 
+                  rows={3}
+                  defaultValue={project?.challenge || ""}
+                  className="bg-black/30 border border-white/15 rounded-xl px-4 py-2.5 text-white text-xs resize-none"
+                  placeholder="What traffic or revenue bottleneck did the client face before?"
+                />
+              </div>
+
+              <div className="flex flex-col gap-2 bg-[#24182e] p-5 rounded-2xl border border-[#ffbe00]/30">
+                <label className="text-xs font-bold text-[#ffbe00] uppercase flex items-center gap-1.5">
+                  <Lightbulb size={14} /> 💡 The Strategy & Solution
+                </label>
+                <textarea 
+                  name="solution" 
+                  rows={3}
+                  defaultValue={project?.solution || ""}
+                  className="bg-black/30 border border-white/15 rounded-xl px-4 py-2.5 text-white text-xs resize-none"
+                  placeholder="What SEO / Paid marketing strategy executed the results?"
+                />
               </div>
             </div>
 
@@ -334,7 +404,7 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
         )}
 
         {/* ---------------------------------------------------- */}
-        {/* MODE 3: GRAPHICS & LOGO DESIGN (PURE IMAGE GALLERY)  */}
+        {/* MODE 3: GRAPHICS & LOGO DESIGN */}
         {/* ---------------------------------------------------- */}
         {selectedServiceCategory === "graphic-design" && (
           <div className="space-y-6 animate-in fade-in duration-300">
@@ -351,7 +421,9 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold text-white">Client / Company Name</label>
+                <label className="text-sm font-semibold text-white flex items-center gap-1.5">
+                  <Building2 size={16} className="text-[#ff007a]" /> Company / Client Name
+                </label>
                 <input 
                   type="text" 
                   name="client" 
@@ -416,7 +488,7 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
         )}
 
         {/* ---------------------------------------------------- */}
-        {/* MODE 4: VIDEOGRAPHY & MOTION (VIDEO LINK + THUMBNAIL) */}
+        {/* MODE 4: VIDEOGRAPHY & MOTION */}
         {/* ---------------------------------------------------- */}
         {selectedServiceCategory === "videography" && (
           <div className="space-y-6 animate-in fade-in duration-300">
@@ -434,7 +506,9 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold text-white">Client / Company Name</label>
+                <label className="text-sm font-semibold text-white flex items-center gap-1.5">
+                  <Building2 size={16} className="text-[#ff3b30]" /> Company / Client Name
+                </label>
                 <input 
                   type="text" 
                   name="client" 
@@ -479,7 +553,7 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
         )}
 
         {/* ---------------------------------------------------- */}
-        {/* MODE 5: CUSTOM SOFTWARE (SCREENSHOTS + DETAILS)       */}
+        {/* MODE 5: CUSTOM SOFTWARE */}
         {/* ---------------------------------------------------- */}
         {selectedServiceCategory === "custom-software" && (
           <div className="space-y-6 animate-in fade-in duration-300">
@@ -497,7 +571,9 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
               </div>
 
               <div className="flex flex-col gap-2">
-                <label className="text-sm font-semibold text-white">Client / Company Name</label>
+                <label className="text-sm font-semibold text-white flex items-center gap-1.5">
+                  <Building2 size={16} className="text-[#af52de]" /> Company / Client Name
+                </label>
                 <input 
                   type="text" 
                   name="client" 
@@ -585,6 +661,35 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
               )}
             </div>
 
+            {/* THE CHALLENGE & THE STRATEGY */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-4 border-t border-white/10">
+              <div className="flex flex-col gap-2 bg-[#24182e] p-5 rounded-2xl border border-amber-500/30">
+                <label className="text-xs font-bold text-amber-400 uppercase flex items-center gap-1.5">
+                  <AlertTriangle size={14} /> ⚠️ The Challenge
+                </label>
+                <textarea 
+                  name="challenge" 
+                  rows={3}
+                  defaultValue={project?.challenge || ""}
+                  className="bg-black/30 border border-white/15 rounded-xl px-4 py-2.5 text-white text-xs resize-none"
+                  placeholder="Describe the SaaS database or architectural bottleneck..."
+                />
+              </div>
+
+              <div className="flex flex-col gap-2 bg-[#24182e] p-5 rounded-2xl border border-[#ffbe00]/30">
+                <label className="text-xs font-bold text-[#ffbe00] uppercase flex items-center gap-1.5">
+                  <Lightbulb size={14} /> 💡 The Strategy & Solution
+                </label>
+                <textarea 
+                  name="solution" 
+                  rows={3}
+                  defaultValue={project?.solution || ""}
+                  className="bg-black/30 border border-white/15 rounded-xl px-4 py-2.5 text-white text-xs resize-none"
+                  placeholder="Describe the microservice or cloud solution..."
+                />
+              </div>
+            </div>
+
             <div className="flex flex-col gap-2">
               <label className="text-sm font-semibold text-white">System Description <span className="text-[#ffbe00]">*</span></label>
               <textarea 
@@ -604,18 +709,31 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
           </div>
         )}
 
-        {/* SUBMIT ACTION BAR */}
-        <div className="pt-6 border-t border-white/10 flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs text-[#dcd7e3]/60 font-medium">
-            <CheckCircle2 size={14} className="text-emerald-400" />
-            <span>Form configured for {selectedServiceCategory} mode</span>
-          </div>
+        {/* RICH TEXT CASE STUDY STORY (EXPANDABLE) */}
+        <div className="pt-6 border-t border-white/10 space-y-4">
+          <label className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+            <FileText size={16} className="text-[#ffbe00]" /> Full Case Study Story & Detailed Content (Optional)
+          </label>
+          <RichTextEditor name="content" defaultValue={project?.content || ""} />
+        </div>
+
+        {/* HOME PAGE FEATURE CHECKBOX & SUBMIT ACTION BAR */}
+        <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <label className="flex items-center gap-2 cursor-pointer text-white font-medium text-xs">
+            <input 
+              type="checkbox" 
+              name="showOnHome" 
+              defaultChecked={project?.showOnHome || false}
+              className="w-4 h-4 rounded border-white/20 bg-black/40 text-[#ffbe00] focus:ring-[#ffbe00]" 
+            />
+            <span>Feature this case study on the Home Page</span>
+          </label>
 
           <button
             type="submit"
             className="px-8 py-4 bg-[#ffbe00] text-[#24182e] font-black text-xs uppercase tracking-widest rounded-xl hover:bg-white transition-all shadow-[0_0_25px_rgba(255,190,0,0.3)] hover:scale-105"
           >
-            {project ? "Update Project" : "Publish Project Live"}
+            {project ? "Save & Update Project" : "Publish Project Live"}
           </button>
         </div>
 
