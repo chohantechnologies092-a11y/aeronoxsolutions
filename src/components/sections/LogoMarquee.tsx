@@ -131,7 +131,7 @@ function MarqueeCard({ item, hasClients }: { item: any, hasClients: boolean }) {
       );
     }
     return (
-      <Link href={`/portfolio/client/${item.id}`} className="block">
+      <Link href="/portfolio" className="block">
         {content}
       </Link>
     );
