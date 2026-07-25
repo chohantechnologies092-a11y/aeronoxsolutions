@@ -15,13 +15,14 @@ import {
   Cpu, 
   Sparkles,
   Palette,
+  Video,
   ExternalLink,
   Building2,
   CheckCircle2,
   ChevronDown,
   Maximize2,
   X,
-  Layers
+  Play
 } from "lucide-react";
 
 // Service Metadata & Overview Cards
@@ -35,19 +36,19 @@ const SERVICE_OVERVIEWS: Record<string, {
 }> = {
   "all": {
     title: "Proven Results Across All Capabilities",
-    subtitle: "Explore our client case studies across Graphic Design, SEO, Web Engineering, AI, and Marketing.",
+    subtitle: "Explore our client case studies across Web Engineering, SEO, Graphic Design, Videography, and Custom Software.",
     description: "We partner with ambitious enterprises and startups to transform digital presence, scale acquisition channels, and drive measurable revenue growth.",
     icon: Sparkles,
-    capabilities: ["Graphic & Logo Design", "Organic SEO", "Headless Next.js Systems", "Funnel Optimization", "AI Workflow Automation", "B2B Outbound Lead Gen"],
+    capabilities: ["Web Development", "Organic SEO", "Graphic & Logo Design", "Videography & Motion", "Custom Software", "AI Automation"],
     gradient: "from-[#24182e] via-[#1a1122] to-[#120b18]"
   },
-  "graphic-design": {
-    title: "Graphic & Logo Design Gallery",
-    subtitle: "High-impact brand logos, vector emblems, product packaging, and visual identity assets.",
-    description: "We design memorable brand identities, modern enterprise logos, vector graphics, and visual design assets engineered to stand out in competitive global markets.",
-    icon: Palette,
-    capabilities: ["Enterprise Logo Design", "Brand Identity Systems", "Vector Emblem & Icons", "Social Media Visual Assets", "Packaging & Print Design"],
-    gradient: "from-[#2e182b] via-[#241122] to-[#180b18]"
+  "web-dev": {
+    title: "Web & E-Commerce Engineering",
+    subtitle: "Blazing fast Next.js & React web applications designed for maximum conversion.",
+    description: "We engineer enterprise-grade headless platforms, high-converting e-commerce web applications, and custom API integrations built to perform at global scale.",
+    icon: Code2,
+    capabilities: ["Next.js 16 App Router & React 19", "Headless E-Commerce Solutions", "Custom REST & GraphQL APIs", "Sub-Second Page Load Optimization"],
+    gradient: "from-[#1a1122] via-[#24182e] to-[#0f0a16]"
   },
   "seo": {
     title: "Search Engine Optimization & Organic Growth",
@@ -57,13 +58,21 @@ const SERVICE_OVERVIEWS: Record<string, {
     capabilities: ["Technical & Core Web Vitals Audits", "Commercial Keyword Strategy", "Programmatic SEO Architecture", "High-Authority Digital PR & Backlinks"],
     gradient: "from-[#24182e] via-[#1f142b] to-[#140c1e]"
   },
-  "web-dev": {
-    title: "Web & E-Commerce Engineering",
-    subtitle: "Blazing fast Next.js & React web applications designed for maximum conversion.",
-    description: "We engineer enterprise-grade headless platforms, high-converting e-commerce web applications, and custom API integrations built to perform at global scale.",
-    icon: Code2,
-    capabilities: ["Next.js 16 App Router & React 19", "Headless E-Commerce Solutions", "Custom REST & GraphQL APIs", "Sub-Second Page Load Optimization"],
-    gradient: "from-[#1a1122] via-[#24182e] to-[#0f0a16]"
+  "graphic-design": {
+    title: "Graphic & Logo Design Gallery",
+    subtitle: "High-impact brand logos, vector emblems, product packaging, and visual identity assets.",
+    description: "We design memorable brand identities, modern enterprise logos, vector graphics, and visual design assets engineered to stand out in competitive global markets.",
+    icon: Palette,
+    capabilities: ["Enterprise Logo Design", "Brand Identity Systems", "Vector Emblem & Icons", "Social Media Visual Assets", "Packaging & Print Design"],
+    gradient: "from-[#2e182b] via-[#241122] to-[#180b18]"
+  },
+  "videography": {
+    title: "Videography & Motion Graphics Showcase",
+    subtitle: "Commercial brand videos, motion design ads, product teasers, and 4K video productions.",
+    description: "High-converting commercial videos, motion design advertisements, and corporate video stories engineered to captivate audiences and boost ad ROAS.",
+    icon: Video,
+    capabilities: ["Brand Commercial Videos", "Motion Graphics & 2D/3D Ads", "Product Showcase Teasers", "Corporate Storytelling Video"],
+    gradient: "from-[#2e1818] via-[#241111] to-[#180b0b]"
   },
   "marketing": {
     title: "Growth & Performance Marketing",
@@ -114,10 +123,10 @@ function matchesCategory(project: any, catId: string): boolean {
   }
 
   // 2. Category specific keyword fallbacks
-  if (catId === "graphic-design" && (
-    pCat.includes("graphic") || pCat.includes("logo") || pCat.includes("design") || pCat.includes("brand") ||
-    pTags.includes("logo") || pTags.includes("graphic") || pTags.includes("design") || pTags.includes("branding") ||
-    pTitle.includes("logo") || pTitle.includes("graphic") || pTitle.includes("design") || pTitle.includes("brand")
+  if (catId === "web-dev" && (
+    pCat.includes("web") || pCat.includes("dev") || pCat.includes("e-commerce") || 
+    pTags.includes("next.js") || pTags.includes("react") || pTags.includes("web") || pTags.includes("tailwind") ||
+    pTitle.includes("web") || pTitle.includes("site") || pTitle.includes("replatforming") || pTitle.includes("commerce")
   )) {
     return true;
   }
@@ -126,10 +135,17 @@ function matchesCategory(project: any, catId: string): boolean {
     return true;
   }
 
-  if (catId === "web-dev" && (
-    pCat.includes("web") || pCat.includes("dev") || pCat.includes("e-commerce") || 
-    pTags.includes("next.js") || pTags.includes("react") || pTags.includes("web") || pTags.includes("tailwind") ||
-    pTitle.includes("web") || pTitle.includes("site") || pTitle.includes("replatforming") || pTitle.includes("commerce")
+  if (catId === "graphic-design" && (
+    pCat.includes("graphic") || pCat.includes("logo") || pCat.includes("design") || pCat.includes("brand") ||
+    pTags.includes("logo") || pTags.includes("graphic") || pTags.includes("design") || pTags.includes("branding") ||
+    pTitle.includes("logo") || pTitle.includes("graphic") || pTitle.includes("design") || pTitle.includes("brand")
+  )) {
+    return true;
+  }
+
+  if (catId === "videography" && (
+    pCat.includes("video") || pCat.includes("motion") || pCat.includes("commercial") ||
+    pTags.includes("video") || pTags.includes("motion") || pTitle.includes("video") || project.videoUrl
   )) {
     return true;
   }
@@ -169,61 +185,48 @@ function matchesCategory(project: any, catId: string): boolean {
 export function PortfolioList({ projects }: { projects: any[] }) {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [activeLightboxImage, setActiveLightboxImage] = useState<string | null>(null);
+  const [activeVideoUrl, setActiveVideoUrl] = useState<string | null>(null);
 
   const serviceBoxes = [
     { 
       id: "all", 
-      title: "All Services & Portfolio", 
-      subtitle: "Explore complete client case studies", 
+      title: "All Work", 
+      subtitle: "Complete agency client portfolio", 
       icon: Sparkles, 
       color: "#ffbe00" 
     },
     { 
-      id: "graphic-design", 
-      title: "Graphic & Logo Design Gallery", 
-      subtitle: "Brand logos & visual identity assets", 
-      icon: Palette, 
-      color: "#ff007a" 
-    },
-    { 
-      id: "seo", 
-      title: "SEO & Search Engine Growth", 
-      subtitle: "Top search rankings & organic traffic", 
-      icon: Search, 
-      color: "#00c2ff" 
-    },
-    { 
       id: "web-dev", 
-      title: "Web & E-Commerce Engineering", 
-      subtitle: "Headless Next.js & React web applications", 
+      title: "Web Development", 
+      subtitle: "Simple details, live links & Next.js sites", 
       icon: Code2, 
       color: "#6a35ff" 
     },
     { 
-      id: "marketing", 
-      title: "Growth & Performance Marketing", 
-      subtitle: "High-converting paid ads & funnels", 
-      icon: TrendingUp, 
+      id: "seo", 
+      title: "SEO & Growth Marketing", 
+      subtitle: "Before vs After metrics & ROI stats", 
+      icon: Search, 
+      color: "#00c2ff" 
+    },
+    { 
+      id: "graphic-design", 
+      title: "Graphics & Logo Design", 
+      subtitle: "Pure brand logo & design image gallery", 
+      icon: Palette, 
+      color: "#ff007a" 
+    },
+    { 
+      id: "videography", 
+      title: "Videography & Motion", 
+      subtitle: "Commercial videos & motion ads", 
+      icon: Video, 
       color: "#ff3b30" 
     },
     { 
-      id: "ai-automation", 
-      title: "AI Systems & Workflow Automation", 
-      subtitle: "Custom AI subagents & automated pipelines", 
-      icon: Bot, 
-      color: "#34c759" 
-    },
-    { 
-      id: "telemarketing", 
-      title: "Outbound Lead Gen & Telemarketing", 
-      subtitle: "B2B cold calling & appointment setting", 
-      icon: PhoneCall, 
-      color: "#ff9500" 
-    },
-    { 
       id: "custom-software", 
-      title: "Custom Software Engineering", 
-      subtitle: "Scalable SaaS platforms & microservices", 
+      title: "Custom Software", 
+      subtitle: "SaaS platforms & system screenshots", 
       icon: Cpu, 
       color: "#af52de" 
     },
@@ -269,6 +272,22 @@ export function PortfolioList({ projects }: { projects: any[] }) {
     }
   };
 
+  // Helper to format video embed URLs
+  const getEmbedVideoUrl = (url: string) => {
+    if (!url) return null;
+    if (url.includes("youtube.com/watch?v=")) {
+      return url.replace("watch?v=", "embed/");
+    }
+    if (url.includes("youtu.be/")) {
+      return url.replace("youtu.be/", "youtube.com/embed/");
+    }
+    if (url.includes("vimeo.com/")) {
+      const vimeoId = url.split("vimeo.com/")[1];
+      return `https://player.vimeo.com/video/${vimeoId}`;
+    }
+    return url;
+  };
+
   return (
     <section id="portfolio-list" className="py-16 md:py-24 bg-mesh relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6">
@@ -276,18 +295,18 @@ export function PortfolioList({ projects }: { projects: any[] }) {
         {/* Section Title */}
         <div className="text-center mb-12">
           <p className="text-[#ffbe00] font-bold text-xs uppercase tracking-[0.4em] mb-3">
-            Select A Service To Explore Company Case Studies & Galleries
+            Select A Service To Explore Work
           </p>
           <h2 className="text-3xl md:text-5xl font-black text-foreground tracking-tight">
             Our Capability Hub
           </h2>
           <p className="text-sm md:text-base text-muted max-w-2xl mx-auto mt-3 font-medium">
-            Click any service box below to view our engineering overview, logo design galleries, and client "Before vs After" results.
+            Click any service box below to view tailored portfolios for Web Dev, SEO, Logo Design, Videography & Custom Software.
           </p>
         </div>
 
         {/* VISUAL SERVICE BOXES GRID */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-20 relative z-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-20 relative z-20">
           {serviceBoxes.map((box) => {
             const isActive = selectedCategory === box.id;
             const BoxIcon = box.icon;
@@ -298,51 +317,47 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                 key={box.id}
                 type="button"
                 onClick={() => handleServiceSelect(box.id)}
-                className={`p-6 rounded-[2rem] text-left transition-all duration-500 relative overflow-hidden group flex flex-col justify-between h-56 border ${
+                className={`p-5 rounded-[2rem] text-left transition-all duration-500 relative overflow-hidden group flex flex-col justify-between h-56 border ${
                   isActive
                     ? "bg-[#24182e] border-[#ffbe00] shadow-[0_0_30px_rgba(255,190,0,0.3)] scale-[1.03] ring-2 ring-[#ffbe00]/50"
                     : "bg-[#24182e]/80 border-white/10 hover:border-white/30 hover:bg-[#24182e] hover:scale-[1.02] shadow-xl"
                 }`}
               >
-                {/* Background Ambient Glow */}
                 <div 
                   className="absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl opacity-20 group-hover:opacity-40 transition-opacity pointer-events-none"
                   style={{ backgroundColor: box.color }}
                 />
 
-                {/* Card Top: Icon & Count Badge */}
                 <div className="flex items-center justify-between z-10">
                   <div 
-                    className="w-12 h-12 rounded-2xl flex items-center justify-center border border-white/15 bg-white/10 backdrop-blur-md shadow-lg transition-transform group-hover:scale-110"
+                    className="w-11 h-11 rounded-2xl flex items-center justify-center border border-white/15 bg-white/10 backdrop-blur-md shadow-lg transition-transform group-hover:scale-110"
                   >
-                    <BoxIcon size={24} style={{ color: box.color }} strokeWidth={2.5} />
+                    <BoxIcon size={22} style={{ color: box.color }} strokeWidth={2.5} />
                   </div>
 
-                  <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                  <span className={`px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider ${
                     isActive 
                       ? "bg-[#ffbe00] text-[#24182e]" 
                       : "bg-white/10 text-white/80 border border-white/10"
                   }`}>
-                    {box.id === "all" ? `${projects?.length || 0} Total` : box.id === "graphic-design" ? `${graphicGalleryItems.length} Logos` : `${matchCount} Case Studies`}
+                    {box.id === "all" ? `${projects?.length || 0}` : box.id === "graphic-design" ? `${graphicGalleryItems.length}` : `${matchCount}`}
                   </span>
                 </div>
 
-                {/* Card Middle: Title & Subtitle */}
-                <div className="z-10 mt-4">
-                  <h3 className={`text-base font-black leading-tight mb-1 transition-colors ${
+                <div className="z-10 mt-3">
+                  <h3 className={`text-sm font-black leading-tight mb-1 transition-colors ${
                     isActive ? "text-[#ffbe00]" : "text-white group-hover:text-[#ffbe00]"
                   }`}>
                     {box.title}
                   </h3>
-                  <p className="text-xs text-[#dcd7e3]/70 font-medium line-clamp-2">
+                  <p className="text-[11px] text-[#dcd7e3]/70 font-medium line-clamp-2 leading-tight">
                     {box.subtitle}
                   </p>
                 </div>
 
-                {/* Card Bottom: Click Action Indicator */}
-                <div className="z-10 pt-3 border-t border-white/10 flex items-center justify-between text-[11px] font-bold uppercase tracking-wider text-[#dcd7e3]/80 group-hover:text-white">
-                  <span>{isActive ? "Currently Opened" : "Click To Open"}</span>
-                  <ArrowRight size={14} className={`transition-transform duration-300 ${
+                <div className="z-10 pt-2 border-t border-white/10 flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-[#dcd7e3]/80 group-hover:text-white">
+                  <span>{isActive ? "Opened" : "Open Service"}</span>
+                  <ArrowRight size={12} className={`transition-transform duration-300 ${
                     isActive ? "rotate-90 text-[#ffbe00]" : "group-hover:translate-x-1"
                   }`} />
                 </div>
@@ -351,7 +366,7 @@ export function PortfolioList({ projects }: { projects: any[] }) {
           })}
         </div>
 
-        {/* Dynamic Service Overview Banner & Company List Section */}
+        {/* Dynamic Service Overview Banner & Content Grid Section */}
         <div id="service-detail-section" className="scroll-mt-28">
           <AnimatePresence mode="wait">
             <motion.div
@@ -377,7 +392,6 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                     {activeOverview.description}
                   </p>
 
-                  {/* Capability Badges */}
                   <div className="flex flex-wrap gap-2 pt-2">
                     {activeOverview.capabilities.map((cap, idx) => (
                       <span 
@@ -390,15 +404,14 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                   </div>
                 </div>
 
-                {/* Service Visual Highlight Box */}
                 <div className="lg:col-span-4 flex justify-center">
                   <div className="w-full max-w-sm p-6 rounded-3xl bg-black/40 border border-white/15 backdrop-blur-md shadow-2xl flex flex-col items-center text-center">
-                    <div className="w-16 h-16 rounded-2xl bg-[#ff007a]/20 flex items-center justify-center text-[#ff007a] mb-4">
+                    <div className="w-16 h-16 rounded-2xl bg-[#ffbe00]/20 flex items-center justify-center text-[#ffbe00] mb-4">
                       <OverviewIcon size={32} />
                     </div>
                     <h4 className="font-bold text-white text-base mb-1">{activeOverview.subtitle}</h4>
                     <p className="text-xs text-white/60 mt-2 flex items-center justify-center gap-1">
-                      <span>Explore gallery & company work below</span>
+                      <span>Explore showcase below</span>
                       <ChevronDown size={14} className="text-[#ffbe00] animate-bounce" />
                     </p>
                   </div>
@@ -407,29 +420,29 @@ export function PortfolioList({ projects }: { projects: any[] }) {
             </motion.div>
           </AnimatePresence>
 
-          {/* DEDICATED GRAPHIC & LOGO DESIGN GALLERY SHOWCASE */}
+          {/* DISPLAY MODE 1: PURE LOGO GALLERY SHOWCASE */}
           {selectedCategory === "graphic-design" ? (
             <div className="space-y-8">
               <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-gray-200 dark:border-white/10 pb-6">
                 <div>
                   <h3 className="text-2xl md:text-3xl font-black text-foreground tracking-tight flex items-center gap-2">
-                    <Palette className="text-[#ff007a]" /> Logo & Brand Identity Gallery
+                    <Palette className="text-[#ff007a]" /> Brand Logo & Graphic Design Gallery
                   </h3>
                   <p className="text-sm text-muted mt-1 font-medium">
-                    Click any logo or graphic image below to expand in high resolution.
+                    Click any logo image below to view in full screen Lightbox preview.
                   </p>
                 </div>
                 <span className="text-xs font-bold uppercase tracking-wider text-[#ff007a] bg-[#24182e] px-4 py-2 rounded-full border border-white/10">
-                  {graphicGalleryItems.length} Logo Design Showcase Items
+                  {graphicGalleryItems.length} Logo Design Assets
                 </span>
               </div>
 
               {graphicGalleryItems.length === 0 ? (
                 <div className="p-16 rounded-3xl bg-[#24182e]/40 border border-white/10 text-center">
                   <Palette size={40} className="text-[#ff007a] mx-auto mb-3" />
-                  <h4 className="text-xl font-bold text-white mb-2">No Logo Designs Uploaded Yet</h4>
+                  <h4 className="text-xl font-bold text-white mb-2">No Logos Uploaded Yet</h4>
                   <p className="text-sm text-[#dcd7e3]/60 max-w-md mx-auto mb-6">
-                    Go to Admin Dashboard &gt; Projects &gt; Logo & Graphics Gallery tab to upload brand logos and design assets!
+                    Add Graphic Design logos from Admin Dashboard &gt; Projects &gt; Graphics & Logo Design!
                   </p>
                 </div>
               ) : (
@@ -462,19 +475,19 @@ export function PortfolioList({ projects }: { projects: any[] }) {
               )}
             </div>
           ) : (
-            /* STANDARD COMPANY CASE STUDY LIST FOR OTHER CATEGORIES */
+            /* DISPLAY MODE FOR WEB DEV, SEO, VIDEOGRAPHY & CUSTOM SOFTWARE */
             <div>
               <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-gray-200 dark:border-white/10 pb-6">
                 <div>
                   <h3 className="text-2xl md:text-3xl font-black text-foreground tracking-tight">
-                    Companies Worked For & Delivered Results
+                    Projects Showcase ({filteredProjects.length})
                   </h3>
                   <p className="text-sm text-muted mt-1 font-medium">
-                    Verified client projects under {activeOverview.title}.
+                    Delivered work under {activeOverview.title}.
                   </p>
                 </div>
                 <span className="text-xs font-bold uppercase tracking-wider text-[#ffbe00] bg-[#24182e] px-4 py-2 rounded-full border border-white/10">
-                  {filteredProjects.length} {filteredProjects.length === 1 ? "Company" : "Companies"} Displayed
+                  {filteredProjects.length} Projects
                 </span>
               </div>
 
@@ -483,16 +496,16 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                   <div className="w-16 h-16 rounded-full bg-[#ffbe00]/10 text-[#ffbe00] flex items-center justify-center mx-auto mb-4">
                     <Sparkles size={28} />
                   </div>
-                  <h4 className="text-xl font-bold text-white mb-2">No Companies Listed Under This Service Yet</h4>
+                  <h4 className="text-xl font-bold text-white mb-2">No Projects Under This Category Yet</h4>
                   <p className="text-sm text-[#dcd7e3]/60 max-w-md mx-auto mb-6">
-                    New company case studies are being added regularly. Select another service box above to explore more client work!
+                    Select another service box above to explore client work!
                   </p>
                   <button
                     type="button"
                     onClick={() => handleServiceSelect("all")}
                     className="px-6 py-2.5 bg-[#ffbe00] text-[#24182e] font-bold rounded-xl text-xs uppercase tracking-wider shadow-lg"
                   >
-                    View All Companies & Work
+                    View All Work
                   </button>
                 </div>
               ) : (
@@ -500,6 +513,7 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                   {filteredProjects.map((project, i) => {
                     const beforeLines = (project.beforeStats || "").split("\n").filter(Boolean);
                     const afterLines = (project.afterStats || "").split("\n").filter(Boolean);
+                    const isVideo = project.videoUrl || project.serviceCategory === "videography";
 
                     return (
                       <motion.div
@@ -510,7 +524,7 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                         transition={{ duration: 0.6, delay: (i % 2) * 0.1 }}
                         className="rounded-[2.5rem] bg-[#24182e] border border-white/15 text-white shadow-2xl overflow-hidden flex flex-col group hover:border-[#ffbe00]/50 transition-all duration-500"
                       >
-                        {/* Cover Image & Header Badges */}
+                        {/* Cover Image / Video Thumbnail */}
                         <div className="relative h-64 sm:h-72 w-full overflow-hidden border-b border-white/10">
                           <Image
                             src={project.image}
@@ -523,7 +537,7 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                           {/* Top Badges */}
                           <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-20">
                             <span className="px-3.5 py-1.5 rounded-full bg-[#24182e]/90 backdrop-blur-md border border-white/20 text-[#ffbe00] text-[10px] font-extrabold uppercase tracking-widest flex items-center gap-1.5">
-                              <Building2 size={12} /> {project.client || "Client Case Study"}
+                              <Building2 size={12} /> {project.client || "Client Showcase"}
                             </span>
 
                             {project.growthBadge && (
@@ -532,6 +546,18 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                               </span>
                             )}
                           </div>
+
+                          {/* Play Button Overlay for Videography */}
+                          {isVideo && project.videoUrl && (
+                            <button
+                              onClick={() => setActiveVideoUrl(project.videoUrl)}
+                              className="absolute inset-0 flex items-center justify-center z-30 group/play"
+                            >
+                              <div className="w-16 h-16 rounded-full bg-[#ff3b30] text-white flex items-center justify-center shadow-[0_0_30px_rgba(255,59,48,0.6)] group-hover/play:scale-110 transition-transform">
+                                <Play size={28} className="fill-white translate-x-0.5" />
+                              </div>
+                            </button>
+                          )}
 
                           {/* Project Title Overlay */}
                           <div className="absolute bottom-4 left-6 right-6 z-20">
@@ -543,82 +569,57 @@ export function PortfolioList({ projects }: { projects: any[] }) {
 
                         {/* Body Content */}
                         <div className="p-6 md:p-8 flex-1 flex flex-col justify-between space-y-6">
-                          {/* Short Description */}
                           <p className="text-[#dcd7e3]/90 text-sm leading-relaxed font-medium line-clamp-2">
                             {project.description}
                           </p>
 
-                          {/* GALLERY IMAGES MINI SHOWCASE IF PRESENT */}
+                          {/* SYSTEM SCREENSHOTS / GALLERY IMAGES IF PRESENT (CUSTOM SOFTWARE / WEB DEV) */}
                           {project.galleryImages && project.galleryImages.length > 0 && (
                             <div className="space-y-2 pt-1">
-                              <span className="text-[10px] font-extrabold text-[#ff007a] uppercase tracking-wider flex items-center gap-1">
-                                <Palette size={12} /> Logo & Graphic Assets Showcase ({project.galleryImages.length})
+                              <span className="text-[10px] font-extrabold text-[#af52de] uppercase tracking-wider flex items-center gap-1">
+                                <Cpu size={12} /> System Screenshots Gallery ({project.galleryImages.length})
                               </span>
                               <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-thin">
                                 {project.galleryImages.map((gImg: string, gIdx: number) => (
                                   <div 
                                     key={gIdx} 
                                     onClick={() => setActiveLightboxImage(gImg)}
-                                    className="relative w-16 h-16 rounded-xl bg-black/60 border border-white/20 p-1 flex items-center justify-center shrink-0 cursor-pointer hover:border-[#ff007a] hover:scale-105 transition-all"
+                                    className="relative w-20 h-14 rounded-xl bg-black/60 border border-white/20 p-1 flex items-center justify-center shrink-0 cursor-pointer hover:border-[#af52de] hover:scale-105 transition-all overflow-hidden"
                                   >
                                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                                    <img src={gImg} alt="Logo" className="object-contain max-h-full max-w-full rounded-md" />
+                                    <img src={gImg} alt="Screenshot" className="object-cover w-full h-full rounded-md" />
                                   </div>
                                 ))}
                               </div>
                             </div>
                           )}
 
-                          {/* BEFORE VS AFTER DATA & IMAGES COMPARISON BOX */}
-                          {(project.beforeStats || project.afterStats || project.beforeImage || project.afterImage) && (
+                          {/* BEFORE VS AFTER METRICS (SEO & MARKETING) */}
+                          {(project.beforeStats || project.afterStats) && (
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-black/40 p-5 rounded-2xl border border-white/10">
-                              {/* BEFORE */}
-                              <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-xl flex flex-col justify-between">
-                                <div>
-                                  <div className="flex items-center gap-1.5 text-red-400 font-extrabold uppercase text-[10px] tracking-wider mb-2">
-                                    <span className="w-2 h-2 rounded-full bg-red-500" /> BEFORE AERONOX
-                                  </div>
-                                  {beforeLines.length > 0 && (
-                                    <ul className="space-y-1 text-xs text-gray-300 font-medium mb-3">
-                                      {beforeLines.map((line: string, idx: number) => (
-                                        <li key={idx} className="line-clamp-1">{line}</li>
-                                      ))}
-                                    </ul>
-                                  )}
+                              <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-xl">
+                                <div className="flex items-center gap-1.5 text-red-400 font-extrabold uppercase text-[10px] tracking-wider mb-2">
+                                  <span className="w-2 h-2 rounded-full bg-red-500" /> BEFORE AERONOX
                                 </div>
-                                {project.beforeImage && (
-                                  <div 
-                                    onClick={() => setActiveLightboxImage(project.beforeImage)}
-                                    className="relative h-28 w-full rounded-lg overflow-hidden border border-red-500/30 mt-2 cursor-pointer group/img"
-                                  >
-                                    <Image src={project.beforeImage} alt="Before State" fill className="object-cover" />
-                                    <span className="absolute bottom-1 right-1 bg-black/80 text-red-400 text-[9px] px-1.5 py-0.5 rounded font-extrabold">Initial</span>
-                                  </div>
+                                {beforeLines.length > 0 && (
+                                  <ul className="space-y-1 text-xs text-gray-300 font-medium">
+                                    {beforeLines.map((line: string, idx: number) => (
+                                      <li key={idx} className="line-clamp-1">{line}</li>
+                                    ))}
+                                  </ul>
                                 )}
                               </div>
 
-                              {/* AFTER */}
-                              <div className="bg-emerald-500/10 border border-emerald-500/20 p-4 rounded-xl flex flex-col justify-between">
-                                <div>
-                                  <div className="flex items-center gap-1.5 text-emerald-400 font-extrabold uppercase text-[10px] tracking-wider mb-2">
-                                    <span className="w-2 h-2 rounded-full bg-emerald-500" /> AFTER AERONOX (RESULTS)
-                                  </div>
-                                  {afterLines.length > 0 && (
-                                    <ul className="space-y-1 text-xs text-emerald-200 font-bold mb-3">
-                                      {afterLines.map((line: string, idx: number) => (
-                                        <li key={idx} className="line-clamp-1">{line}</li>
-                                      ))}
-                                    </ul>
-                                  )}
+                              <div className="bg-emerald-500/10 border border-emerald-500/20 p-4 rounded-xl">
+                                <div className="flex items-center gap-1.5 text-emerald-400 font-extrabold uppercase text-[10px] tracking-wider mb-2">
+                                  <span className="w-2 h-2 rounded-full bg-emerald-500" /> AFTER AERONOX (RESULTS)
                                 </div>
-                                {project.afterImage && (
-                                  <div 
-                                    onClick={() => setActiveLightboxImage(project.afterImage)}
-                                    className="relative h-28 w-full rounded-lg overflow-hidden border border-emerald-500/30 mt-2 cursor-pointer group/img"
-                                  >
-                                    <Image src={project.afterImage} alt="After State" fill className="object-cover" />
-                                    <span className="absolute bottom-1 right-1 bg-emerald-500 text-black text-[9px] px-1.5 py-0.5 rounded font-extrabold">Result</span>
-                                  </div>
+                                {afterLines.length > 0 && (
+                                  <ul className="space-y-1 text-xs text-emerald-200 font-bold">
+                                    {afterLines.map((line: string, idx: number) => (
+                                      <li key={idx} className="line-clamp-1">{line}</li>
+                                    ))}
+                                  </ul>
                                 )}
                               </div>
                             </div>
@@ -635,15 +636,22 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                               >
                                 <ExternalLink size={14} /> Visit Live Site
                               </a>
+                            ) : isVideo && project.videoUrl ? (
+                              <button
+                                onClick={() => setActiveVideoUrl(project.videoUrl)}
+                                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#ff3b30] hover:underline"
+                              >
+                                <Play size={14} /> Watch Commercial
+                              </button>
                             ) : (
-                              <span className="text-xs text-white/40 font-medium">Verified Case Study</span>
+                              <span className="text-xs text-white/40 font-medium">Verified Project</span>
                             )}
 
                             <Link
                               href={`/portfolio/${project.slug}`}
                               className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#ffbe00] text-[#24182e] font-black text-xs uppercase tracking-wider rounded-xl hover:bg-white transition-colors shadow-md"
                             >
-                              <span>View Case Study</span>
+                              <span>Details</span>
                               <ArrowRight size={14} />
                             </Link>
                           </div>
@@ -660,7 +668,7 @@ export function PortfolioList({ projects }: { projects: any[] }) {
 
       </div>
 
-      {/* FULLSCREEN LIGHTBOX MODAL */}
+      {/* FULLSCREEN LIGHTBOX IMAGE MODAL */}
       <AnimatePresence>
         {activeLightboxImage && (
           <motion.div
@@ -673,7 +681,6 @@ export function PortfolioList({ projects }: { projects: any[] }) {
             <button
               onClick={() => setActiveLightboxImage(null)}
               className="absolute top-6 right-6 p-3 rounded-full bg-white/10 text-white hover:bg-red-600 transition-colors shadow-2xl z-10"
-              title="Close Preview"
             >
               <X size={24} />
             </button>
@@ -687,8 +694,42 @@ export function PortfolioList({ projects }: { projects: any[] }) {
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={activeLightboxImage}
-                alt="Logo High Res Preview"
+                alt="High Res Preview"
                 className="object-contain max-w-full max-h-full rounded-2xl border border-white/20 shadow-2xl"
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* VIDEO LIGHTBOX PLAYER MODAL */}
+      <AnimatePresence>
+        {activeVideoUrl && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/95 backdrop-blur-xl z-[100] flex items-center justify-center p-4 md:p-10"
+          >
+            <button
+              onClick={() => setActiveVideoUrl(null)}
+              className="absolute top-6 right-6 p-3 rounded-full bg-white/10 text-white hover:bg-red-600 transition-colors shadow-2xl z-10"
+            >
+              <X size={24} />
+            </button>
+
+            <motion.div
+              initial={{ scale: 0.9 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.9 }}
+              className="relative max-w-5xl w-full aspect-video rounded-3xl overflow-hidden border border-white/20 shadow-2xl bg-black"
+            >
+              <iframe
+                src={getEmbedVideoUrl(activeVideoUrl) || ""}
+                title="Videography Showcase Player"
+                className="w-full h-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
               />
             </motion.div>
           </motion.div>

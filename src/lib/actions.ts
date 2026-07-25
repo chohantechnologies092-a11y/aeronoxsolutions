@@ -42,10 +42,14 @@ export async function createProject(formData: FormData) {
   const solution = formData.get("solution") as string | null;
   const liveUrl = formData.get("liveUrl") as string | null;
   const githubUrl = formData.get("githubUrl") as string | null;
+  const videoUrl = formData.get("videoUrl") as string | null;
   const showOnHome = formData.get("showOnHome") === "true" || formData.get("showOnHome") === "on";
 
-  const finalTitle = (title || "").trim() || (serviceCategory === "graphic-design" ? "Brand & Logo Showcase" : "");
-  const finalDescription = (description || "").trim() || (serviceCategory === "graphic-design" ? "Brand logo and visual identity asset showcase." : "");
+  const defaultTitleByService = serviceCategory === "graphic-design" ? "Brand & Logo Showcase" : serviceCategory === "videography" ? "Videography & Motion Showcase" : "New Portfolio Project";
+  const defaultDescByService = serviceCategory === "graphic-design" ? "Brand logo and visual identity asset showcase." : serviceCategory === "videography" ? "Commercial videography and motion graphic showcase." : "Digital project overview.";
+
+  const finalTitle = (title || "").trim() || defaultTitleByService;
+  const finalDescription = (description || "").trim() || defaultDescByService;
 
   if (!finalTitle) {
     throw new Error("Project Title is required.");
@@ -72,8 +76,9 @@ export async function createProject(formData: FormData) {
     solution: solution || null,
     liveUrl: liveUrl || null,
     githubUrl: githubUrl || null,
+    videoUrl: videoUrl || null,
     showOnHome,
-    image: image || (galleryImages.length > 0 ? galleryImages[0] : "https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&q=80&w=2000"),
+    image: image || (galleryImages.length > 0 ? galleryImages[0] : "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=2000"),
     createdAt: getNow(),
     updatedAt: getNow(),
   });
@@ -120,10 +125,14 @@ export async function updateProject(id: string, formData: FormData) {
   const solution = formData.get("solution") as string | null;
   const liveUrl = formData.get("liveUrl") as string | null;
   const githubUrl = formData.get("githubUrl") as string | null;
+  const videoUrl = formData.get("videoUrl") as string | null;
   const showOnHome = formData.get("showOnHome") === "true" || formData.get("showOnHome") === "on";
 
-  const finalTitle = (title || "").trim() || (serviceCategory === "graphic-design" ? "Brand & Logo Showcase" : "");
-  const finalDescription = (description || "").trim() || (serviceCategory === "graphic-design" ? "Brand logo and visual identity asset showcase." : "");
+  const defaultTitleByService = serviceCategory === "graphic-design" ? "Brand & Logo Showcase" : serviceCategory === "videography" ? "Videography & Motion Showcase" : "New Portfolio Project";
+  const defaultDescByService = serviceCategory === "graphic-design" ? "Brand logo and visual identity asset showcase." : serviceCategory === "videography" ? "Commercial videography and motion graphic showcase." : "Digital project overview.";
+
+  const finalTitle = (title || "").trim() || defaultTitleByService;
+  const finalDescription = (description || "").trim() || defaultDescByService;
 
   if (!finalTitle) {
     throw new Error("Project Title is required.");
@@ -150,8 +159,9 @@ export async function updateProject(id: string, formData: FormData) {
     solution: solution || null,
     liveUrl: liveUrl || null,
     githubUrl: githubUrl || null,
+    videoUrl: videoUrl || null,
     showOnHome,
-    image: image || (galleryImages.length > 0 ? galleryImages[0] : "https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&q=80&w=2000"),
+    image: image || (galleryImages.length > 0 ? galleryImages[0] : "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=2000"),
     updatedAt: getNow(),
   });
 

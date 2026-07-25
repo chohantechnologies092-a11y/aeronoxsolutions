@@ -2,7 +2,7 @@
 
 import React, { useState, useTransition } from "react";
 import Link from "next/link";
-import { Edit, Trash2, GripVertical, CheckCircle2, X, Calendar, User } from "lucide-react";
+import { Edit, Trash2, GripVertical, CheckCircle2, X, Calendar, User, Code2, Search, Palette, Video, Cpu, Sparkles } from "lucide-react";
 import { 
   DndContext, 
   closestCenter,
@@ -23,6 +23,43 @@ import { CSS } from "@dnd-kit/utilities";
 import { useDroppable } from "@dnd-kit/core";
 
 import { updateProjectOrder, toggleProjectHomeStatus, deleteProject } from "@/lib/actions";
+
+// --- Service Badge Helper ---
+function ServiceBadge({ category }: { category: string }) {
+  if (category === "graphic-design") {
+    return (
+      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#ff007a]/20 text-[#ff007a] border border-[#ff007a]/40 flex items-center gap-1 uppercase tracking-wider">
+        <Palette size={10} /> Graphic & Logo
+      </span>
+    );
+  }
+  if (category === "videography") {
+    return (
+      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#ff3b30]/20 text-[#ff3b30] border border-[#ff3b30]/40 flex items-center gap-1 uppercase tracking-wider">
+        <Video size={10} /> Videography
+      </span>
+    );
+  }
+  if (category === "custom-software") {
+    return (
+      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#af52de]/20 text-[#af52de] border border-[#af52de]/40 flex items-center gap-1 uppercase tracking-wider">
+        <Cpu size={10} /> Custom Software
+      </span>
+    );
+  }
+  if (category === "seo" || category === "marketing") {
+    return (
+      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#00c2ff]/20 text-[#00c2ff] border border-[#00c2ff]/40 flex items-center gap-1 uppercase tracking-wider">
+        <Search size={10} /> SEO & Growth
+      </span>
+    );
+  }
+  return (
+    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#6a35ff]/20 text-[#9b75ff] border border-[#6a35ff]/40 flex items-center gap-1 uppercase tracking-wider">
+      <Code2 size={10} /> Web Dev
+    </span>
+  );
+}
 
 // --- Sortable Table Row ---
 function SortableProjectRow({ project, isPending }: { project: any, isPending: boolean }) {
@@ -53,11 +90,7 @@ function SortableProjectRow({ project, isPending }: { project: any, isPending: b
       <td className="px-6 py-4">
         <div className="flex items-center gap-2 flex-wrap">
           <p className="font-semibold text-admin-text">{project.title}</p>
-          {project.serviceCategory && (
-            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#ffbe00]/10 text-[#ffbe00] border border-[#ffbe00]/30 uppercase tracking-wider">
-              {project.serviceCategory.replace("-", " ")}
-            </span>
-          )}
+          <ServiceBadge category={project.serviceCategory || "web-dev"} />
           {project.showOnHome && (
             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-[#00c2ff]/20 text-[#00c2ff]">
               <CheckCircle2 size={10} /> Home
@@ -132,7 +165,7 @@ function HomeProjectsDropZone({ homeProjects, toggleHomeStatus, isPending }: { h
     >
       <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
         <div>
-          <h2 className="text-xl font-bold text-admin-text">Home Page Selected Case Studies</h2>
+          <h2 className="text-xl font-bold text-admin-text">Home Page Featured Projects</h2>
           <p className="text-sm text-admin-muted mt-1">Drag case studies here to feature them on the home page (Max 3 shown).</p>
         </div>
       </div>
@@ -170,6 +203,7 @@ function HomeProjectsDropZone({ homeProjects, toggleHomeStatus, isPending }: { h
 // --- Main Manager Component ---
 export function ProjectsManager({ initialProjects }: { initialProjects: any[] }) {
   const [projects, setProjects] = useState(initialProjects);
+  const [selectedFilterTab, setSelectedFilterTab] = useState<string>("all");
   const [isPending, startTransition] = useTransition();
 
   const sensors = useSensors(
@@ -185,6 +219,19 @@ export function ProjectsManager({ initialProjects }: { initialProjects: any[] })
 
   const homeProjects = projects.filter(p => p.showOnHome);
 
+  const filterTabs = [
+    { id: "all", label: "All Services", icon: Sparkles },
+    { id: "web-dev", label: "Web Dev", icon: Code2 },
+    { id: "seo", label: "SEO & Growth", icon: Search },
+    { id: "graphic-design", label: "Graphics & Logos", icon: Palette },
+    { id: "videography", label: "Videography", icon: Video },
+    { id: "custom-software", label: "Custom Software", icon: Cpu },
+  ];
+
+  const displayedProjects = selectedFilterTab === "all"
+    ? projects
+    : projects.filter(p => (p.serviceCategory || "web-dev") === selectedFilterTab || (selectedFilterTab === "seo" && p.serviceCategory === "marketing"));
+
   const toggleHomeStatus = (id: string, showOnHome: boolean) => {
     setProjects(items => 
       items.map(item => item.id === id ? { ...item, showOnHome } : item)
@@ -199,7 +246,6 @@ export function ProjectsManager({ initialProjects }: { initialProjects: any[] })
     
     if (!over) return;
 
-    // Check if dropped on the home page dropzone
     if (over.id === 'home-projects-dropzone') {
       const draggedProject = projects.find(p => p.id === active.id);
       if (draggedProject && !draggedProject.showOnHome) {
@@ -208,7 +254,6 @@ export function ProjectsManager({ initialProjects }: { initialProjects: any[] })
       return; 
     }
 
-    // Reordering within the list
     if (active.id !== over.id) {
       const oldIndex = projects.findIndex((p) => p.id === active.id);
       const newIndex = projects.findIndex((p) => p.id === over.id);
@@ -228,30 +273,59 @@ export function ProjectsManager({ initialProjects }: { initialProjects: any[] })
       collisionDetection={closestCenter}
       onDragEnd={handleDragEnd}
     >
-      <div className="bg-admin-card rounded-2xl border border-admin-border overflow-hidden shadow-sm">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm text-admin-muted">
-            <thead className="bg-black/10 dark:bg-black/20 text-xs uppercase text-admin-text/50 tracking-wider">
-              <tr>
-                <th className="py-4 px-4 w-10"></th>
-                <th className="px-6 py-4">Project</th>
-                <th className="px-6 py-4">Client</th>
-                <th className="px-6 py-4">Tags</th>
-                <th className="px-6 py-4">Added</th>
-                <th className="px-6 py-4 text-right">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <SortableContext 
-                items={projects.map(p => p.id)}
-                strategy={verticalListSortingStrategy}
+      <div className="space-y-6">
+        {/* Service Filter Tabs */}
+        <div className="flex flex-wrap gap-2 p-1.5 bg-[#140c1e] rounded-2xl border border-white/10">
+          {filterTabs.map((tab) => {
+            const isActive = selectedFilterTab === tab.id;
+            const TabIcon = tab.icon;
+            const count = tab.id === "all" ? projects.length : projects.filter(p => (p.serviceCategory || "web-dev") === tab.id).length;
+
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setSelectedFilterTab(tab.id)}
+                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all ${
+                  isActive
+                    ? "bg-[#ffbe00] text-[#24182e] shadow-lg shadow-[#ffbe00]/20"
+                    : "text-[#dcd7e3]/70 hover:text-white hover:bg-white/5"
+                }`}
               >
-                {projects.map((project) => (
-                  <SortableProjectRow key={project.id} project={project} isPending={isPending} />
-                ))}
-              </SortableContext>
-            </tbody>
-          </table>
+                <TabIcon size={14} />
+                <span>{tab.label}</span>
+                <span className={`px-2 py-0.5 rounded-full text-[10px] ${isActive ? "bg-[#24182e] text-white" : "bg-white/10 text-white/70"}`}>
+                  {count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="bg-admin-card rounded-2xl border border-admin-border overflow-hidden shadow-sm">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm text-admin-muted">
+              <thead className="bg-black/10 dark:bg-black/20 text-xs uppercase text-admin-text/50 tracking-wider">
+                <tr>
+                  <th className="py-4 px-4 w-10"></th>
+                  <th className="px-6 py-4">Project Title</th>
+                  <th className="px-6 py-4">Client</th>
+                  <th className="px-6 py-4">Tags / Badge</th>
+                  <th className="px-6 py-4">Added Date</th>
+                  <th className="px-6 py-4 text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <SortableContext 
+                  items={displayedProjects.map(p => p.id)}
+                  strategy={verticalListSortingStrategy}
+                >
+                  {displayedProjects.map((project) => (
+                    <SortableProjectRow key={project.id} project={project} isPending={isPending} />
+                  ))}
+                </SortableContext>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
 
