@@ -12,9 +12,9 @@ type ButtonProps = {
 
 const variants = {
   primary:
-    "bg-gradient-to-r from-[#00c2ff] to-[#9b5cff] text-white shadow-lg shadow-[#00c2ff]/10 hover:shadow-[#00c2ff]/20 hover:brightness-105 active:scale-98 transition-all duration-300 font-medium",
+    "bg-[#ffbe00] text-[#24182e] font-extrabold shadow-lg shadow-[#ffbe00]/20 hover:bg-[#ffbe00]/90 hover:shadow-[#ffbe00]/30 active:scale-98 transition-all duration-300",
   secondary:
-    "border border-white/10 bg-white/5 text-foreground hover:bg-white/10 hover:border-white/20 active:scale-98 transition-all duration-300 font-medium",
+    "border border-card-border bg-card/50 text-foreground hover:bg-card hover:border-[#ffbe00]/30 active:scale-98 transition-all duration-300 font-medium",
   ghost: "text-muted hover:text-foreground transition-colors",
 };
 

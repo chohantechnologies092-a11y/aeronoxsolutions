@@ -69,17 +69,28 @@ export function Portfolio({ projects }: { projects: any[] }) {
                   />
                   <div className="absolute inset-0 bg-background/10 group-hover:bg-transparent transition-colors duration-500" />
                   
-                  {/* Category Badge */}
-                  <div className="absolute top-4 left-4 bg-background/90 backdrop-blur-md px-3 py-1.5 rounded-full z-20">
-                    <span className="text-[9px] font-black uppercase tracking-widest text-foreground">
-                      {firstTag}
+                  {/* Category & Growth Badges */}
+                  <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-20">
+                    <span className="bg-background/90 backdrop-blur-md px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest text-foreground">
+                      {project.serviceCategory ? project.serviceCategory.replace("-", " ") : firstTag}
                     </span>
+
+                    {project.growthBadge && (
+                      <span className="px-3 py-1.5 rounded-full bg-emerald-500 text-[#090512] font-black text-[10px] uppercase tracking-wider shadow-lg">
+                        {project.growthBadge}
+                      </span>
+                    )}
                   </div>
                 </div>
 
                 {/* Content Container */}
                 <div className="p-8 flex-grow flex flex-col justify-between bg-card">
                   <div>
+                    {project.client && (
+                      <span className="block text-[10px] font-black uppercase tracking-widest text-accent mb-2">
+                        {project.client}
+                      </span>
+                    )}
                     <h3 className="text-2xl font-black text-foreground mb-4 group-hover:text-accent transition-colors relative z-20">
                       {project.title}
                     </h3>

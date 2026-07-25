@@ -51,8 +51,13 @@ function SortableProjectRow({ project, isPending }: { project: any, isPending: b
         </button>
       </td>
       <td className="px-6 py-4">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <p className="font-semibold text-admin-text">{project.title}</p>
+          {project.serviceCategory && (
+            <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#ffbe00]/10 text-[#ffbe00] border border-[#ffbe00]/30 uppercase tracking-wider">
+              {project.serviceCategory.replace("-", " ")}
+            </span>
+          )}
           {project.showOnHome && (
             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold bg-[#00c2ff]/20 text-[#00c2ff]">
               <CheckCircle2 size={10} /> Home
@@ -62,19 +67,25 @@ function SortableProjectRow({ project, isPending }: { project: any, isPending: b
         <p className="text-xs text-admin-muted mt-0.5 line-clamp-1">{project.description}</p>
       </td>
       <td className="px-6 py-4">
-        <span className="flex items-center gap-1.5 text-admin-muted">
-          <User size={13} />
+        <span className="flex items-center gap-1.5 text-admin-text font-medium text-xs">
+          <User size={13} className="text-[#ffbe00]" />
           {project.client || "—"}
         </span>
       </td>
       <td className="px-6 py-4">
-        <div className="flex flex-wrap gap-1">
-          {(project.tags || "").split(",").filter((tag: string) => tag.trim() !== "").slice(0, 2).map((tag: string) => (
-            <span key={tag} className="px-2 py-0.5 rounded-full bg-[#ffbe00]/10 text-[#ffbe00] text-xs border border-[#ffbe00]/20">
-              {tag.trim()}
-            </span>
-          ))}
-        </div>
+        {project.growthBadge ? (
+          <span className="px-2.5 py-1 rounded-lg bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-xs font-bold">
+            {project.growthBadge}
+          </span>
+        ) : (
+          <div className="flex flex-wrap gap-1">
+            {(project.tags || "").split(",").filter((tag: string) => tag.trim() !== "").slice(0, 2).map((tag: string) => (
+              <span key={tag} className="px-2 py-0.5 rounded-full bg-white/5 text-[#dcd7e3]/70 text-xs border border-white/10">
+                {tag.trim()}
+              </span>
+            ))}
+          </div>
+        )}
       </td>
       <td className="px-6 py-4">
         <span className="flex items-center gap-1.5 text-admin-muted text-xs">

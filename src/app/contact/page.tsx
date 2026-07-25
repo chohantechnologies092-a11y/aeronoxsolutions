@@ -6,6 +6,7 @@ import { Mail, MapPin, MessageCircle, Phone, Loader2, ArrowRight } from "lucide-
 import { siteConfig } from "@/lib/constants";
 import { Button } from "@/components/ui/Button";
 import { Toast } from "@/components/ui/Toast";
+import { FaWhatsapp } from "react-icons/fa6";
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
@@ -89,12 +90,12 @@ export default function ContactPage() {
         {/* Ambient Gradients */}
         <div className="absolute top-0 right-0 w-1/2 h-[500px] bg-[#ffbe00]/10 rounded-full blur-[120px] pointer-events-none" />
         <div className="absolute bottom-0 left-0 w-1/2 h-[500px] bg-[#24182e]/10 rounded-full blur-[120px] pointer-events-none" />
-        
+
         <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
-          
+
           {/* New Hero Section with Banner Image */}
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center mb-24">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, x: -30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.7, ease: "easeOut" }}
@@ -104,12 +105,12 @@ export default function ContactPage() {
                 Get in Touch
               </span>
               <h1 className="font-display max-w-2xl text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl text-foreground leading-[1.1]">
-                Let's build your <br className="hidden lg:block"/> next big <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ffbe00] to-[#24182e]">idea</span>
+                Let's build your <br className="hidden lg:block" /> next big <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#ffbe00] to-[#24182e]">idea</span>
               </h1>
               <p className="mt-6 max-w-xl text-base sm:text-lg text-muted leading-relaxed">
                 Whether you have a general inquiry, need a technical blueprint, or are ready to scale operations, our engineering team is here to help. Reach out below.
               </p>
-              
+
               <div className="mt-10 flex items-center gap-4 border border-card-border bg-white/50 backdrop-blur-sm p-4 rounded-2xl shadow-sm">
                 <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#ffbe00]/20 text-[#24182e]">
                   <Phone size={20} />
@@ -121,7 +122,7 @@ export default function ContactPage() {
               </div>
             </motion.div>
 
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, x: 30 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
@@ -130,15 +131,15 @@ export default function ContactPage() {
               <div className="absolute inset-0 bg-gradient-to-tr from-[#ffbe00]/20 to-[#24182e]/20 rounded-3xl blur-2xl transform scale-95" />
               <div className="relative rounded-3xl overflow-hidden border border-card-border shadow-2xl bento-card">
                 <div className="aspect-[4/3] w-full relative">
-                  <img 
-                    src="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" 
-                    alt="Aeronox Solutions Office" 
+                  <img
+                    src="https://images.unsplash.com/photo-1497366216548-37526070297c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+                    alt="Aeronox Solutions Office"
                     className="object-cover w-full h-full transform hover:scale-105 transition-transform duration-700"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent mix-blend-multiply" />
-                  
+
                   {/* Floating map pin element */}
-                  <motion.div 
+                  <motion.div
                     animate={{ y: [0, -10, 0] }}
                     transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                     className="absolute bottom-6 left-6 bg-white/90 backdrop-blur-md p-3 rounded-2xl shadow-xl flex items-center gap-3"
@@ -148,7 +149,7 @@ export default function ContactPage() {
                     </div>
                     <div>
                       <p className="text-[10px] font-bold text-gray-400 uppercase">Global HQ</p>
-                      <p className="text-sm font-black text-[#24182e]">San Francisco, CA</p>
+                      <p className="text-sm font-black text-[#24182e]">Birmingham, UK</p>
                     </div>
                   </motion.div>
                 </div>
@@ -158,7 +159,7 @@ export default function ContactPage() {
 
           {/* Contact Methods & Form Grid */}
           <div className="grid gap-10 lg:grid-cols-2 lg:gap-16 items-start">
-            <motion.div 
+            <motion.div
               variants={staggerContainer}
               initial="initial"
               animate="animate"
@@ -190,8 +191,8 @@ export default function ContactPage() {
                   bg: "bg-emerald-500/10"
                 },
               ].map((item) => (
-                <motion.div 
-                  key={item.label} 
+                <motion.div
+                  key={item.label}
                   variants={fadeIn}
                   whileHover={{ x: 5 }}
                   className="bento-card flex items-center gap-6 p-6 bg-card/40 backdrop-blur-sm border border-card-border hover:border-[#ffbe00]/30 transition-all duration-300 group shadow-sm hover:shadow-[0_10px_30px_rgba(255,190,0,0.05)]"
@@ -218,27 +219,34 @@ export default function ContactPage() {
               ))}
 
               <motion.div variants={fadeIn} className="pt-2">
-                <Button href={siteConfig.whatsapp} variant="secondary" className="w-full sm:w-auto py-4 px-8 group bg-white hover:bg-gray-50 border border-gray-200">
-                  <MessageCircle size={18} className="text-[#24182e] group-hover:scale-110 transition-transform" />
-                  <span className="font-semibold text-[#24182e]">Chat on WhatsApp</span>
-                  <ArrowRight size={16} className="ml-2 text-[#24182e] group-hover:translate-x-1 transition-transform" />
-                </Button>
+                <a
+                  href={siteConfig.whatsapp}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-between gap-3 w-full sm:w-auto px-7 py-4 rounded-full bg-[#25D366] text-white font-extrabold text-sm shadow-xl shadow-[#25D366]/25 hover:bg-[#20bd5a] hover:shadow-[#25D366]/40 hover:-translate-y-0.5 active:scale-95 transition-all duration-300 group cursor-pointer"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <FaWhatsapp size={22} className="group-hover:rotate-12 transition-transform" />
+                    <span>Chat on WhatsApp</span>
+                  </div>
+                  <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
+                </a>
               </motion.div>
             </motion.div>
 
-            <motion.form 
+            <motion.form
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.6, delay: 0.2, ease: "easeOut" }}
-              onSubmit={handleSubmit} 
+              onSubmit={handleSubmit}
               className="bento-card p-8 sm:p-10 bg-card/60 backdrop-blur-xl border border-card-border relative shadow-2xl shadow-[#24182e]/5 mt-4 lg:mt-0"
             >
               {/* Form Glow Effect */}
               <div className="absolute inset-0 bg-gradient-to-b from-[#ffbe00]/5 to-transparent rounded-[2rem] pointer-events-none" />
-              
+
               <h2 className="font-display text-2xl font-bold text-foreground relative z-10">Send a message</h2>
               <p className="text-sm text-muted mt-2 relative z-10">Fill out the form below and we'll get back to you.</p>
-              
+
               <div className="mt-8 space-y-5 relative z-10">
                 <div>
                   <label htmlFor="name" className="text-sm font-medium text-foreground mb-1.5 block">Your name</label>
@@ -279,7 +287,7 @@ export default function ContactPage() {
                   />
                 </div>
 
-                <Button type="submit" className="w-full py-4 text-center justify-center font-bold text-base mt-2 bg-[#24182e] hover:bg-[#ffbe00] text-white hover:text-[#24182e] transition-colors" onClick={() => {}}>
+                <Button type="submit" className="w-full py-4 text-center justify-center font-bold text-base mt-2 bg-[#24182e] hover:bg-[#ffbe00] text-white hover:text-[#24182e] transition-colors" onClick={() => { }}>
                   {loading ? (
                     <>
                       <Loader2 className="animate-spin h-5 w-5 mr-2" />

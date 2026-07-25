@@ -98,22 +98,107 @@
       box-shadow: 0 20px 40px rgba(106, 53, 255, 0.1);
   }
 
-  /* Editor Overrides */
-  .ql-container {
-    font-family: inherit !important;
-    font-size: 1rem !important;
-    border-bottom-left-radius: 0.5rem;
-    border-bottom-right-radius: 0.5rem;
-    min-height: 200px;
-    background-color: var(--color-card) !important;
-    border-color: var(--color-card-border) !important;
-    color: var(--color-foreground) !important;
+  /* Editor Overrides - High Contrast Dark Theme & Sticky Floating Toolbar */
+  .rich-text-editor-container {
+    background-color: #120c1f !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-radius: 1rem !important;
+    position: relative !important;
   }
 
-  .ql-toolbar {
-    border-top-left-radius: 0.5rem;
-    border-top-right-radius: 0.5rem;
-    border-color: var(--color-card-border) !important;
-    background-color: var(--color-background) !important;
+  .rich-text-editor-container .ql-toolbar.ql-snow {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 40 !important;
+    background-color: #24182e !important;
+    border: none !important;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
+    border-top-left-radius: 1rem !important;
+    border-top-right-radius: 1rem !important;
+    padding: 10px 14px !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5) !important;
+  }
+
+  .rich-text-editor-container .ql-container.ql-snow {
+    background-color: #120c1f !important;
+    border: none !important;
+    min-height: 350px !important;
+    max-height: 550px !important;
+    overflow-y: auto !important;
+    color: #ffffff !important;
+    font-family: inherit !important;
+    font-size: 15px !important;
+  }
+
+  .rich-text-editor-container .ql-editor {
+    min-height: 350px !important;
+    max-height: 550px !important;
+    overflow-y: auto !important;
+    color: #ffffff !important;
+  }
+
+  .rich-text-editor-container .ql-editor.ql-blank::before {
+    color: rgba(255, 255, 255, 0.5) !important;
+  }
+
+  /* SVG Icon Fill & Stroke High Contrast Fix */
+  .rich-text-editor-container .ql-snow .ql-stroke,
+  .rich-text-editor-container .ql-snow button .ql-stroke,
+  .rich-text-editor-container .ql-snow .ql-picker-label svg .ql-stroke {
+    stroke: #ffffff !important;
+  }
+
+  .rich-text-editor-container .ql-snow .ql-fill,
+  .rich-text-editor-container .ql-snow button .ql-fill,
+  .rich-text-editor-container .ql-snow .ql-stroke.ql-fill,
+  .rich-text-editor-container .ql-snow .ql-picker-label svg .ql-fill {
+    fill: #ffffff !important;
+  }
+
+  .rich-text-editor-container .ql-snow .ql-picker {
+    color: #ffffff !important;
+  }
+
+  .rich-text-editor-container .ql-snow .ql-picker-label {
+    color: #ffffff !important;
+  }
+
+  /* Hover & Active States */
+  .rich-text-editor-container .ql-snow button:hover .ql-stroke,
+  .rich-text-editor-container .ql-snow .ql-picker-label:hover .ql-stroke,
+  .rich-text-editor-container .ql-snow button.ql-active .ql-stroke,
+  .rich-text-editor-container .ql-snow .ql-picker-label.ql-active .ql-stroke {
+    stroke: #ffbe00 !important;
+  }
+
+  .rich-text-editor-container .ql-snow button:hover .ql-fill,
+  .rich-text-editor-container .ql-snow .ql-picker-label:hover .ql-fill,
+  .rich-text-editor-container .ql-snow button.ql-active .ql-fill,
+  .rich-text-editor-container .ql-snow .ql-picker-label.ql-active .ql-fill {
+    fill: #ffbe00 !important;
+  }
+
+  .rich-text-editor-container .ql-snow .ql-picker-label:hover,
+  .rich-text-editor-container .ql-snow .ql-picker-label.ql-active {
+    color: #ffbe00 !important;
+  }
+
+  .rich-text-editor-container .ql-snow .ql-picker-options {
+    background-color: #24182e !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.7) !important;
+    border-radius: 12px !important;
+    padding: 6px !important;
+  }
+
+  .rich-text-editor-container .ql-snow .ql-picker-item {
+    color: #ffffff !important;
+    padding: 4px 8px !important;
+    border-radius: 6px !important;
+  }
+
+  .rich-text-editor-container .ql-snow .ql-picker-item:hover {
+    color: #ffbe00 !important;
+    background-color: rgba(255, 190, 0, 0.15) !important;
   }
 }

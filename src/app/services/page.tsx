@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Services } from "@/components/sections/Services";
-import { CTA } from "@/components/sections/CTA";
 import { getServices } from "@/lib/data";
 import Image from "next/image";
 
@@ -42,9 +41,7 @@ export default async function ServicesPage() {
         </div>
       </div>
 
-      {/* Since we have a massive banner, we might want to reduce the padding top of Services component, but we will leave it to the component defaults for now */}
       <Services services={services} />
-      <CTA />
     </>
   );
 }

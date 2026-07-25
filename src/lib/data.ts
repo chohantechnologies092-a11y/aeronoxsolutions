@@ -57,6 +57,12 @@ export async function getBlogBySlug(slug: string): Promise<any> {
   return { id: snapshot.docs[0].id, ...snapshot.docs[0].data() };
 }
 
+export async function getBlogById(id: string): Promise<any> {
+  const doc = await db.collection("blogs").doc(id).get();
+  if (!doc.exists) return null;
+  return { id: doc.id, ...doc.data() };
+}
+
 export async function getSEO(): Promise<any> {
   const doc = await db.collection("seo").doc("global").get();
   if (!doc.exists) return null;

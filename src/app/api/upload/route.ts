@@ -26,9 +26,20 @@ export async function POST(request: Request) {
 
     const bytes = await file.arrayBuffer();
     const buffer = Buffer.from(bytes);
+    const mimeType = file.type || "image/jpeg";
+    const base64Fallback = `data:${mimeType};base64,${buffer.toString("base64")}`;
 
-    // Upload to Cloudinary using a Promise wrapper
-    const publicUrl = await new Promise<string>((resolve, reject) => {
+    const hasCloudinaryKeys = 
+      process.env.CLOUDINARY_CLOUD_NAME && 
+      process.env.CLOUDINARY_API_KEY && 
+      process.env.CLOUDINARY_API_SECRET;
+
+    if (!hasCloudinaryKeys) {
+      return NextResponse.json({ url: base64Fallback });
+    }
+
+    // Try uploading to Cloudinary with a 6-second timeout race
+    const uploadPromise = new Promise<string>((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
         { folder: "aeronox_uploads" },
         (error: any, result: any) => {
@@ -36,12 +47,20 @@ export async function POST(request: Request) {
           else resolve(result?.secure_url as string);
         }
       );
-      
-      // Write the buffer to the stream
       uploadStream.end(buffer);
     });
 
-    return NextResponse.json({ url: publicUrl });
+    const timeoutPromise = new Promise<string>((_, reject) => {
+      setTimeout(() => reject(new Error("Cloudinary timeout")), 6000);
+    });
+
+    try {
+      const publicUrl = await Promise.race([uploadPromise, timeoutPromise]);
+      return NextResponse.json({ url: publicUrl });
+    } catch (uploadError) {
+      console.warn("Cloudinary upload failed or timed out. Falling back to base64 Data URI:", uploadError);
+      return NextResponse.json({ url: base64Fallback });
+    }
   } catch (error: any) {
     console.error("Upload error:", error);
     return NextResponse.json({ error: error.message || "Failed to upload file" }, { status: 500 });

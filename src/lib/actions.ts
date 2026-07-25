@@ -16,12 +16,24 @@ export async function createProject(formData: FormData) {
   const description = formData.get("description") as string;
   const content = formData.get("content") as string;
   const client = formData.get("client") as string | null;
+  const clientLogo = formData.get("clientLogo") as string | null;
   const tags = formData.get("tags") as string;
   const image = formData.get("image") as string | null;
   const rawSlug = formData.get("slug") as string;
+  
+  // Case Study & Service specific fields
+  const serviceCategory = (formData.get("serviceCategory") as string) || "web-dev";
+  const beforeStats = formData.get("beforeStats") as string | null;
+  const afterStats = formData.get("afterStats") as string | null;
+  const growthBadge = formData.get("growthBadge") as string | null;
+  const challenge = formData.get("challenge") as string | null;
+  const solution = formData.get("solution") as string | null;
+  const liveUrl = formData.get("liveUrl") as string | null;
+  const githubUrl = formData.get("githubUrl") as string | null;
+  const showOnHome = formData.get("showOnHome") === "true" || formData.get("showOnHome") === "on";
 
-  if (!title || !description || !tags) {
-    throw new Error("Title, description and tags are required.");
+  if (!title || !description) {
+    throw new Error("Title and description are required.");
   }
 
   const slug = (rawSlug || title).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -32,7 +44,17 @@ export async function createProject(formData: FormData) {
     content: content || "",
     description,
     client: client || null,
-    tags,
+    clientLogo: clientLogo || null,
+    tags: tags || serviceCategory,
+    serviceCategory,
+    beforeStats: beforeStats || null,
+    afterStats: afterStats || null,
+    growthBadge: growthBadge || null,
+    challenge: challenge || null,
+    solution: solution || null,
+    liveUrl: liveUrl || null,
+    githubUrl: githubUrl || null,
+    showOnHome,
     image: image || "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=2000",
     createdAt: getNow(),
     updatedAt: getNow(),
@@ -54,12 +76,24 @@ export async function updateProject(id: string, formData: FormData) {
   const description = formData.get("description") as string;
   const content = formData.get("content") as string;
   const client = formData.get("client") as string | null;
+  const clientLogo = formData.get("clientLogo") as string | null;
   const tags = formData.get("tags") as string;
   const image = formData.get("image") as string | null;
   const rawSlug = formData.get("slug") as string;
 
-  if (!title || !description || !tags) {
-    throw new Error("Title, description and tags are required.");
+  // Case Study & Service specific fields
+  const serviceCategory = (formData.get("serviceCategory") as string) || "web-dev";
+  const beforeStats = formData.get("beforeStats") as string | null;
+  const afterStats = formData.get("afterStats") as string | null;
+  const growthBadge = formData.get("growthBadge") as string | null;
+  const challenge = formData.get("challenge") as string | null;
+  const solution = formData.get("solution") as string | null;
+  const liveUrl = formData.get("liveUrl") as string | null;
+  const githubUrl = formData.get("githubUrl") as string | null;
+  const showOnHome = formData.get("showOnHome") === "true" || formData.get("showOnHome") === "on";
+
+  if (!title || !description) {
+    throw new Error("Title and description are required.");
   }
 
   const slug = (rawSlug || title).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
@@ -70,7 +104,17 @@ export async function updateProject(id: string, formData: FormData) {
     content: content || "",
     description,
     client: client || null,
-    tags,
+    clientLogo: clientLogo || null,
+    tags: tags || serviceCategory,
+    serviceCategory,
+    beforeStats: beforeStats || null,
+    afterStats: afterStats || null,
+    growthBadge: growthBadge || null,
+    challenge: challenge || null,
+    solution: solution || null,
+    liveUrl: liveUrl || null,
+    githubUrl: githubUrl || null,
+    showOnHome,
     image: image || "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=2000",
     updatedAt: getNow(),
   });
@@ -220,23 +264,52 @@ export async function createBlog(formData: FormData) {
   const title = formData.get("title") as string;
   const content = formData.get("content") as string;
   const author = formData.get("author") as string;
+  const authorRole = formData.get("authorRole") as string | null;
   const excerpt = formData.get("excerpt") as string | null;
+  const coverImage = formData.get("coverImage") as string | null;
+  const category = formData.get("category") as string | null;
+  const rawTags = formData.get("tags") as string | null;
+  const customSlug = formData.get("slug") as string | null;
+  const metaTitle = formData.get("metaTitle") as string | null;
+  const metaDescription = formData.get("metaDescription") as string | null;
+  const keywords = formData.get("keywords") as string | null;
+  const canonicalUrl = formData.get("canonicalUrl") as string | null;
+  const published = formData.get("published") === "true" || formData.get("published") === "on";
+  const featured = formData.get("featured") === "true" || formData.get("featured") === "on";
 
   if (!title || !content) {
     throw new Error("Title and content are required.");
   }
 
-  const baseSlug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  // Calculate clean slug
+  const baseSlug = (customSlug || title).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
   const suffix = Date.now().toString(36);
-  const slug = `${baseSlug}-${suffix}`;
+  const slug = customSlug ? baseSlug : `${baseSlug}-${suffix}`;
+
+  // Parse tags
+  const tags = rawTags ? rawTags.split(",").map(t => t.trim()).filter(Boolean) : [];
+
+  // Calculate reading time based on word count
+  const wordCount = content.replace(/<[^>]*>/g, "").split(/\s+/).filter(Boolean).length;
+  const readingTime = Math.max(1, Math.ceil(wordCount / 200));
 
   await db.collection("blogs").add({
     title,
     slug,
     content,
-    excerpt: excerpt || content.slice(0, 160),
-    author: author || "Admin",
-    published: true,
+    excerpt: excerpt || content.replace(/<[^>]*>/g, "").slice(0, 160),
+    coverImage: coverImage || null,
+    author: author || "Aeronox Team",
+    authorRole: authorRole || "Editorial Team",
+    category: category || "General",
+    tags,
+    metaTitle: metaTitle || title,
+    metaDescription: metaDescription || excerpt || content.replace(/<[^>]*>/g, "").slice(0, 160),
+    keywords: keywords || "",
+    canonicalUrl: canonicalUrl || null,
+    published: published ?? true,
+    featured: featured ?? false,
+    readingTime,
     createdAt: getNow(),
     updatedAt: getNow(),
   });
@@ -244,6 +317,68 @@ export async function createBlog(formData: FormData) {
   revalidatePath("/blog");
   revalidatePath("/admin/blogs");
   redirect("/admin/blogs");
+}
+
+export async function updateBlog(id: string, formData: FormData) {
+  const title = formData.get("title") as string;
+  const content = formData.get("content") as string;
+  const author = formData.get("author") as string;
+  const authorRole = formData.get("authorRole") as string | null;
+  const excerpt = formData.get("excerpt") as string | null;
+  const coverImage = formData.get("coverImage") as string | null;
+  const category = formData.get("category") as string | null;
+  const rawTags = formData.get("tags") as string | null;
+  const customSlug = formData.get("slug") as string | null;
+  const metaTitle = formData.get("metaTitle") as string | null;
+  const metaDescription = formData.get("metaDescription") as string | null;
+  const keywords = formData.get("keywords") as string | null;
+  const canonicalUrl = formData.get("canonicalUrl") as string | null;
+  const published = formData.get("published") === "true" || formData.get("published") === "on";
+  const featured = formData.get("featured") === "true" || formData.get("featured") === "on";
+
+  if (!title || !content) {
+    throw new Error("Title and content are required.");
+  }
+
+  const slug = (customSlug || title).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  const tags = rawTags ? rawTags.split(",").map(t => t.trim()).filter(Boolean) : [];
+
+  const wordCount = content.replace(/<[^>]*>/g, "").split(/\s+/).filter(Boolean).length;
+  const readingTime = Math.max(1, Math.ceil(wordCount / 200));
+
+  await db.collection("blogs").doc(id).update({
+    title,
+    slug,
+    content,
+    excerpt: excerpt || content.replace(/<[^>]*>/g, "").slice(0, 160),
+    coverImage: coverImage || null,
+    author: author || "Aeronox Team",
+    authorRole: authorRole || "Editorial Team",
+    category: category || "General",
+    tags,
+    metaTitle: metaTitle || title,
+    metaDescription: metaDescription || excerpt || content.replace(/<[^>]*>/g, "").slice(0, 160),
+    keywords: keywords || "",
+    canonicalUrl: canonicalUrl || null,
+    published,
+    featured,
+    readingTime,
+    updatedAt: getNow(),
+  });
+
+  revalidatePath("/blog");
+  revalidatePath(`/blog/${slug}`);
+  revalidatePath("/admin/blogs");
+  redirect("/admin/blogs");
+}
+
+export async function toggleBlogPublishStatus(id: string, published: boolean) {
+  await db.collection("blogs").doc(id).update({
+    published,
+    updatedAt: getNow(),
+  });
+  revalidatePath("/blog");
+  revalidatePath("/admin/blogs");
 }
 
 export async function deleteBlog(id: string) {
@@ -441,28 +576,43 @@ export async function createTeamMember(formData: FormData) {
   const name = formData.get("name") as string;
   const role = formData.get("role") as string;
   const image = formData.get("image") as string | null;
+  const bio = formData.get("bio") as string | null;
+  const linkedin = formData.get("linkedin") as string | null;
+  const email = formData.get("email") as string | null;
+  const orderRaw = formData.get("order") as string | null;
+  const order = orderRaw ? parseInt(orderRaw, 10) : 9999;
 
   if (!name || !role) {
     throw new Error("Name and role are required.");
   }
 
-  await db.collection("team").add({
+  const docRef = await db.collection("team").add({
     name,
     role,
     image: image || null,
+    bio: bio || null,
+    linkedin: linkedin || null,
+    email: email || null,
+    order,
     createdAt: getNow(),
     updatedAt: getNow(),
   });
 
   revalidatePath("/about");
   revalidatePath("/admin/company");
-  redirect("/admin/company");
+
+  return { id: docRef.id };
 }
 
 export async function updateTeamMember(id: string, formData: FormData) {
   const name = formData.get("name") as string;
   const role = formData.get("role") as string;
   const image = formData.get("image") as string | null;
+  const bio = formData.get("bio") as string | null;
+  const linkedin = formData.get("linkedin") as string | null;
+  const email = formData.get("email") as string | null;
+  const orderRaw = formData.get("order") as string | null;
+  const order = orderRaw ? parseInt(orderRaw, 10) : 9999;
 
   if (!name || !role) {
     throw new Error("Name and role are required.");
@@ -472,12 +622,15 @@ export async function updateTeamMember(id: string, formData: FormData) {
     name,
     role,
     image: image || null,
+    bio: bio || null,
+    linkedin: linkedin || null,
+    email: email || null,
+    order,
     updatedAt: getNow(),
   });
 
   revalidatePath("/about");
   revalidatePath("/admin/company");
-  redirect("/admin/company");
 }
 
 export async function deleteTeamMember(id: string) {

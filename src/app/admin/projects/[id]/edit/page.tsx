@@ -1,9 +1,9 @@
 import { updateProject } from "@/lib/actions";
-import { Button } from "@/components/ui/Button";
-import { ImageUpload } from "@/components/ui/ImageUpload";
-import { RichTextEditor } from "@/components/editor/RichTextEditor";
+import { ProjectForm } from "@/components/admin/ProjectForm";
 import { getProjectById } from "@/lib/data";
 import { notFound } from "next/navigation";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
 export default async function EditProjectPage({
   params,
@@ -21,96 +21,21 @@ export default async function EditProjectPage({
   const updateProjectWithId = updateProject.bind(null, id);
 
   return (
-    <div className="max-w-4xl mx-auto">
-      <h1 className="text-3xl font-bold text-admin-text mb-8">Edit Project: {project.title}</h1>
-      
-      <div className="bg-admin-card p-8 rounded-2xl border border-admin-border">
-        <form action={updateProjectWithId} className="flex flex-col gap-6">
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="flex flex-col gap-2">
-              <label htmlFor="title" className="text-sm font-medium text-admin-text">Project Title</label>
-              <input 
-                type="text" 
-                id="title" 
-                name="title" 
-                required
-                defaultValue={project.title}
-                className="bg-black/10 dark:bg-black/20 border border-admin-border rounded-lg px-4 py-3 text-admin-text placeholder:text-muted focus:outline-none focus:border-accent transition-colors"
-                placeholder="e.g. E-Commerce Replatforming"
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="slug" className="text-sm font-medium text-admin-text">Slug (Optional)</label>
-              <input 
-                type="text" 
-                id="slug" 
-                name="slug" 
-                defaultValue={project.slug}
-                className="bg-black/10 dark:bg-black/20 border border-admin-border rounded-lg px-4 py-3 text-admin-text placeholder:text-muted focus:outline-none focus:border-accent transition-colors"
-                placeholder="e.g. e-commerce-replatforming"
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="flex flex-col gap-2">
-              <label htmlFor="client" className="text-sm font-medium text-admin-text">Client Name (Optional)</label>
-              <input 
-                type="text" 
-                id="client" 
-                name="client"
-                defaultValue={project.client || ""}
-                className="bg-black/10 dark:bg-black/20 border border-admin-border rounded-lg px-4 py-3 text-admin-text placeholder:text-muted focus:outline-none focus:border-accent transition-colors"
-                placeholder="e.g. Acme Corp"
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <label htmlFor="tags" className="text-sm font-medium text-admin-text">Tags (Comma separated)</label>
-              <input 
-                type="text" 
-                id="tags" 
-                name="tags" 
-                required
-                defaultValue={project.tags}
-                className="bg-black/10 dark:bg-black/20 border border-admin-border rounded-lg px-4 py-3 text-admin-text placeholder:text-muted focus:outline-none focus:border-accent transition-colors"
-                placeholder="e.g. Next.js, Tailwind, Stripe"
-              />
-            </div>
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-admin-text">Project Image</label>
-            <ImageUpload name="image" defaultValue={project.image} />
-          </div>
-
-          <div className="flex flex-col gap-2">
-            <label htmlFor="description" className="text-sm font-medium text-admin-text">Short Description</label>
-            <textarea 
-              id="description" 
-              name="description" 
-              rows={2}
-              required
-              defaultValue={project.description}
-              className="bg-black/10 dark:bg-black/20 border border-admin-border rounded-lg px-4 py-3 text-admin-text placeholder:text-muted focus:outline-none focus:border-accent transition-colors resize-none"
-              placeholder="Brief summary for the card..."
-            />
-          </div>
-          
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-admin-text">Detailed Content</label>
-            <RichTextEditor name="content" defaultValue={project.content} />
-          </div>
-
-          <div className="pt-4 border-t border-admin-border flex justify-end gap-4">
-            <a href="/admin/projects" className="px-5 py-2.5 rounded-lg border border-admin-border text-admin-text hover:bg-black/5 dark:bg-white/5 transition-colors">
-              Cancel
-            </a>
-            <Button type="submit">Update Project</Button>
-          </div>
-
-        </form>
+    <div className="max-w-5xl mx-auto pb-12">
+      <div className="flex items-center gap-4 mb-6">
+        <Link 
+          href="/admin/projects" 
+          className="p-2 rounded-xl bg-white/5 border border-white/10 hover:bg-white/10 text-admin-text transition-colors"
+        >
+          <ArrowLeft size={20} />
+        </Link>
+        <div>
+          <h1 className="text-3xl font-bold text-admin-text">Edit Case Study: {project.title}</h1>
+          <p className="text-xs text-admin-muted mt-1">Update service category, client details, and before vs after impact metrics.</p>
+        </div>
       </div>
+      
+      <ProjectForm project={project} action={updateProjectWithId} />
     </div>
   );
 }

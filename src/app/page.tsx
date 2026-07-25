@@ -5,7 +5,6 @@ import { Services } from "@/components/sections/Services";
 import { Portfolio } from "@/components/sections/Portfolio";
 import { AboutAgency } from "@/components/sections/AboutAgency";
 import { FAQ } from "@/components/sections/FAQ";
-import { CTA } from "@/components/sections/CTA";
 
 export const revalidate = 0;
 
@@ -24,7 +23,6 @@ export default async function HomePage() {
       <Portfolio projects={projects} />
       <AboutAgency />
       <FAQ />
-      <CTA />
     </>
   );
 }
