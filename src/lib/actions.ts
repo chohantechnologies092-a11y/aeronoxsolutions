@@ -44,17 +44,20 @@ export async function createProject(formData: FormData) {
   const githubUrl = formData.get("githubUrl") as string | null;
   const showOnHome = formData.get("showOnHome") === "true" || formData.get("showOnHome") === "on";
 
-  if (!title || !description) {
-    throw new Error("Title and description are required.");
+  const finalTitle = (title || "").trim() || (serviceCategory === "graphic-design" ? "Brand & Logo Showcase" : "");
+  const finalDescription = (description || "").trim() || (serviceCategory === "graphic-design" ? "Brand logo and visual identity asset showcase." : "");
+
+  if (!finalTitle) {
+    throw new Error("Project Title is required.");
   }
 
-  const slug = (rawSlug || title).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  const slug = (rawSlug || finalTitle).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
   await db.collection("projects").add({
-    title,
+    title: finalTitle,
     slug,
     content: content || "",
-    description,
+    description: finalDescription,
     client: client || null,
     clientLogo: clientLogo || null,
     tags: tags || serviceCategory,
@@ -70,7 +73,7 @@ export async function createProject(formData: FormData) {
     liveUrl: liveUrl || null,
     githubUrl: githubUrl || null,
     showOnHome,
-    image: image || "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=2000",
+    image: image || (galleryImages.length > 0 ? galleryImages[0] : "https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&q=80&w=2000"),
     createdAt: getNow(),
     updatedAt: getNow(),
   });
@@ -119,17 +122,20 @@ export async function updateProject(id: string, formData: FormData) {
   const githubUrl = formData.get("githubUrl") as string | null;
   const showOnHome = formData.get("showOnHome") === "true" || formData.get("showOnHome") === "on";
 
-  if (!title || !description) {
-    throw new Error("Title and description are required.");
+  const finalTitle = (title || "").trim() || (serviceCategory === "graphic-design" ? "Brand & Logo Showcase" : "");
+  const finalDescription = (description || "").trim() || (serviceCategory === "graphic-design" ? "Brand logo and visual identity asset showcase." : "");
+
+  if (!finalTitle) {
+    throw new Error("Project Title is required.");
   }
 
-  const slug = (rawSlug || title).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  const slug = (rawSlug || finalTitle).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
   await db.collection("projects").doc(id).update({
-    title,
+    title: finalTitle,
     slug,
     content: content || "",
-    description,
+    description: finalDescription,
     client: client || null,
     clientLogo: clientLogo || null,
     tags: tags || serviceCategory,
@@ -145,7 +151,7 @@ export async function updateProject(id: string, formData: FormData) {
     liveUrl: liveUrl || null,
     githubUrl: githubUrl || null,
     showOnHome,
-    image: image || "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&q=80&w=2000",
+    image: image || (galleryImages.length > 0 ? galleryImages[0] : "https://images.unsplash.com/photo-1626785774573-4b799315345d?auto=format&fit=crop&q=80&w=2000"),
     updatedAt: getNow(),
   });
 
