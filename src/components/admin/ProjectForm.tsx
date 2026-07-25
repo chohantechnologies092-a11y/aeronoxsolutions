@@ -262,34 +262,48 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              {/* BEFORE STATS */}
-              <div className="flex flex-col gap-3 bg-red-500/10 border border-red-500/20 p-6 rounded-2xl">
+              {/* BEFORE STATS & IMAGE */}
+              <div className="flex flex-col gap-4 bg-red-500/10 border border-red-500/20 p-6 rounded-2xl">
                 <div className="flex items-center gap-2 text-red-400 font-bold uppercase tracking-wider text-xs">
                   <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-pulse" /> 🛑 Before Aeronox (Initial State)
                 </div>
-                <textarea 
-                  id="beforeStats" 
-                  name="beforeStats" 
-                  rows={4}
-                  defaultValue={project?.beforeStats || ""}
-                  className="bg-black/30 border border-red-500/30 rounded-xl px-4 py-3 text-white placeholder:text-gray-400 focus:outline-none focus:border-red-400 transition-colors text-sm resize-none"
-                  placeholder="e.g.&#10;• 1,200 Monthly Visitors&#10;• 0.8% E-Commerce Conversion&#10;• Google Rank #45 for core keywords"
-                />
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="beforeStats" className="text-xs font-semibold text-gray-300">Before Metrics / Points</label>
+                  <textarea 
+                    id="beforeStats" 
+                    name="beforeStats" 
+                    rows={4}
+                    defaultValue={project?.beforeStats || ""}
+                    className="bg-black/30 border border-red-500/30 rounded-xl px-4 py-3 text-white placeholder:text-gray-400 focus:outline-none focus:border-red-400 transition-colors text-sm resize-none"
+                    placeholder="e.g.&#10;• 1,200 Monthly Visitors&#10;• 0.8% E-Commerce Conversion&#10;• Google Rank #45 for core keywords"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5 pt-2 border-t border-red-500/20">
+                  <label className="text-xs font-semibold text-red-300">Before Image / Screenshot (Optional)</label>
+                  <ImageUpload name="beforeImage" defaultValue={project?.beforeImage || ""} />
+                </div>
               </div>
 
-              {/* AFTER STATS */}
-              <div className="flex flex-col gap-3 bg-emerald-500/10 border border-emerald-500/20 p-6 rounded-2xl">
+              {/* AFTER STATS & IMAGE */}
+              <div className="flex flex-col gap-4 bg-emerald-500/10 border border-emerald-500/20 p-6 rounded-2xl">
                 <div className="flex items-center gap-2 text-emerald-400 font-bold uppercase tracking-wider text-xs">
                   <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" /> 🚀 After Aeronox (Results Delivered)
                 </div>
-                <textarea 
-                  id="afterStats" 
-                  name="afterStats" 
-                  rows={4}
-                  defaultValue={project?.afterStats || ""}
-                  className="bg-black/30 border border-emerald-500/30 rounded-xl px-4 py-3 text-white placeholder:text-gray-400 focus:outline-none focus:border-emerald-400 transition-colors text-sm resize-none"
-                  placeholder="e.g.&#10;• 48,500 Monthly Visitors&#10;• 3.6% E-Commerce Conversion&#10;• Google Rank #1 & Featured Snippet"
-                />
+                <div className="flex flex-col gap-1.5">
+                  <label htmlFor="afterStats" className="text-xs font-semibold text-gray-300">After Metrics / Points</label>
+                  <textarea 
+                    id="afterStats" 
+                    name="afterStats" 
+                    rows={4}
+                    defaultValue={project?.afterStats || ""}
+                    className="bg-black/30 border border-emerald-500/30 rounded-xl px-4 py-3 text-white placeholder:text-gray-400 focus:outline-none focus:border-emerald-400 transition-colors text-sm resize-none"
+                    placeholder="e.g.&#10;• 48,500 Monthly Visitors&#10;• 3.6% E-Commerce Conversion&#10;• Google Rank #1 & Featured Snippet"
+                  />
+                </div>
+                <div className="flex flex-col gap-1.5 pt-2 border-t border-emerald-500/20">
+                  <label className="text-xs font-semibold text-emerald-300">After Image / Screenshot (Optional)</label>
+                  <ImageUpload name="afterImage" defaultValue={project?.afterImage || ""} />
+                </div>
               </div>
             </div>
 

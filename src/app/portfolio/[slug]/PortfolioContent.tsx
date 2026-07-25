@@ -18,6 +18,8 @@ type Project = {
   serviceCategory?: string;
   beforeStats?: string;
   afterStats?: string;
+  beforeImage?: string | null;
+  afterImage?: string | null;
   growthBadge?: string;
   challenge?: string;
   solution?: string;
@@ -144,7 +146,7 @@ export function PortfolioContent({ project }: { project: Project }) {
         <div className="max-w-5xl mx-auto space-y-16 mb-24">
           
           {/* BEFORE VS AFTER IMPACT COMPARISON CARD */}
-          {(project.beforeStats || project.afterStats) && (
+          {(project.beforeStats || project.afterStats || project.beforeImage || project.afterImage) && (
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -164,47 +166,59 @@ export function PortfolioContent({ project }: { project: Project }) {
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* BEFORE */}
-                <div className="bg-red-500/10 border border-red-500/30 p-6 md:p-8 rounded-3xl relative overflow-hidden">
-                  <div className="flex items-center gap-2 text-red-400 font-black uppercase tracking-wider text-xs mb-4">
-                    <span className="w-3 h-3 rounded-full bg-red-500 animate-pulse" /> 🛑 Before Aeronox Solutions
+                <div className="bg-red-500/10 border border-red-500/30 p-6 md:p-8 rounded-3xl relative overflow-hidden flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center gap-2 text-red-400 font-black uppercase tracking-wider text-xs mb-4">
+                      <span className="w-3 h-3 rounded-full bg-red-500 animate-pulse" /> 🛑 Before Aeronox Solutions
+                    </div>
+                    {beforeLines.length > 0 && (
+                      <ul className="space-y-3 text-sm text-gray-200 font-medium mb-4">
+                        {beforeLines.map((line: string, idx: number) => (
+                          <li key={idx} className="flex items-start gap-2">
+                            <span className="text-red-400 font-bold">•</span>
+                            <span>{line}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
-                  {beforeLines.length > 0 ? (
-                    <ul className="space-y-3 text-sm text-gray-200 font-medium">
-                      {beforeLines.map((line: string, idx: number) => (
-                        <li key={idx} className="flex items-start gap-2">
-                          <span className="text-red-400 font-bold">•</span>
-                          <span>{line}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="text-sm text-gray-400">Initial client state before optimization.</p>
+                  {project.beforeImage && (
+                    <div className="relative h-48 w-full rounded-2xl overflow-hidden border border-red-500/30 mt-4 shadow-lg">
+                      <Image src={project.beforeImage} alt="Before Aeronox State" fill className="object-cover" />
+                      <span className="absolute bottom-2 right-2 bg-black/80 text-red-400 text-xs px-2.5 py-1 rounded-lg font-black uppercase">Before State</span>
+                    </div>
                   )}
                 </div>
 
                 {/* AFTER */}
-                <div className="bg-emerald-500/10 border border-emerald-500/30 p-6 md:p-8 rounded-3xl relative overflow-hidden shadow-lg">
-                  <div className="flex items-center justify-between gap-2 text-emerald-400 font-black uppercase tracking-wider text-xs mb-4">
-                    <span className="flex items-center gap-2">
-                      <span className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse" /> 🚀 After Aeronox (Results)
-                    </span>
-                    {project.growthBadge && (
-                      <span className="px-3 py-1 bg-emerald-500 text-black font-black text-[10px] rounded-full uppercase">
-                        {project.growthBadge}
+                <div className="bg-emerald-500/10 border border-emerald-500/30 p-6 md:p-8 rounded-3xl relative overflow-hidden shadow-lg flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center justify-between gap-2 text-emerald-400 font-black uppercase tracking-wider text-xs mb-4">
+                      <span className="flex items-center gap-2">
+                        <span className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse" /> 🚀 After Aeronox (Results)
                       </span>
+                      {project.growthBadge && (
+                        <span className="px-3 py-1 bg-emerald-500 text-black font-black text-[10px] rounded-full uppercase">
+                          {project.growthBadge}
+                        </span>
+                      )}
+                    </div>
+                    {afterLines.length > 0 && (
+                      <ul className="space-y-3 text-sm text-emerald-100 font-bold mb-4">
+                        {afterLines.map((line: string, idx: number) => (
+                          <li key={idx} className="flex items-start gap-2">
+                            <span className="text-emerald-400 font-black">✓</span>
+                            <span>{line}</span>
+                          </li>
+                        ))}
+                      </ul>
                     )}
                   </div>
-                  {afterLines.length > 0 ? (
-                    <ul className="space-y-3 text-sm text-emerald-100 font-bold">
-                      {afterLines.map((line: string, idx: number) => (
-                        <li key={idx} className="flex items-start gap-2">
-                          <span className="text-emerald-400 font-black">✓</span>
-                          <span>{line}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="text-sm text-emerald-200 font-bold">Delivered high-converting growth outcomes.</p>
+                  {project.afterImage && (
+                    <div className="relative h-48 w-full rounded-2xl overflow-hidden border border-emerald-500/30 mt-4 shadow-lg">
+                      <Image src={project.afterImage} alt="After Aeronox Results" fill className="object-cover" />
+                      <span className="absolute bottom-2 right-2 bg-emerald-500 text-black text-xs px-2.5 py-1 rounded-lg font-black uppercase">Delivered Result</span>
+                    </div>
                   )}
                 </div>
               </div>

@@ -25,6 +25,8 @@ export async function createProject(formData: FormData) {
   const serviceCategory = (formData.get("serviceCategory") as string) || "web-dev";
   const beforeStats = formData.get("beforeStats") as string | null;
   const afterStats = formData.get("afterStats") as string | null;
+  const beforeImage = formData.get("beforeImage") as string | null;
+  const afterImage = formData.get("afterImage") as string | null;
   const growthBadge = formData.get("growthBadge") as string | null;
   const challenge = formData.get("challenge") as string | null;
   const solution = formData.get("solution") as string | null;
@@ -49,6 +51,8 @@ export async function createProject(formData: FormData) {
     serviceCategory,
     beforeStats: beforeStats || null,
     afterStats: afterStats || null,
+    beforeImage: beforeImage || null,
+    afterImage: afterImage || null,
     growthBadge: growthBadge || null,
     challenge: challenge || null,
     solution: solution || null,
@@ -85,6 +89,8 @@ export async function updateProject(id: string, formData: FormData) {
   const serviceCategory = (formData.get("serviceCategory") as string) || "web-dev";
   const beforeStats = formData.get("beforeStats") as string | null;
   const afterStats = formData.get("afterStats") as string | null;
+  const beforeImage = formData.get("beforeImage") as string | null;
+  const afterImage = formData.get("afterImage") as string | null;
   const growthBadge = formData.get("growthBadge") as string | null;
   const challenge = formData.get("challenge") as string | null;
   const solution = formData.get("solution") as string | null;
@@ -109,6 +115,8 @@ export async function updateProject(id: string, formData: FormData) {
     serviceCategory,
     beforeStats: beforeStats || null,
     afterStats: afterStats || null,
+    beforeImage: beforeImage || null,
+    afterImage: afterImage || null,
     growthBadge: growthBadge || null,
     challenge: challenge || null,
     solution: solution || null,

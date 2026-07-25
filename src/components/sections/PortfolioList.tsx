@@ -439,38 +439,50 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                         {project.description}
                       </p>
 
-                      {/* BEFORE VS AFTER DATA COMPARISON BOX */}
-                      {(project.beforeStats || project.afterStats) && (
+                      {/* BEFORE VS AFTER DATA & IMAGES COMPARISON BOX */}
+                      {(project.beforeStats || project.afterStats || project.beforeImage || project.afterImage) && (
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-black/40 p-5 rounded-2xl border border-white/10">
                           {/* BEFORE */}
-                          <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-xl">
-                            <div className="flex items-center gap-1.5 text-red-400 font-extrabold uppercase text-[10px] tracking-wider mb-2">
-                              <span className="w-2 h-2 rounded-full bg-red-500" /> BEFORE AERONOX
+                          <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-xl flex flex-col justify-between">
+                            <div>
+                              <div className="flex items-center gap-1.5 text-red-400 font-extrabold uppercase text-[10px] tracking-wider mb-2">
+                                <span className="w-2 h-2 rounded-full bg-red-500" /> BEFORE AERONOX
+                              </div>
+                              {beforeLines.length > 0 && (
+                                <ul className="space-y-1 text-xs text-gray-300 font-medium mb-3">
+                                  {beforeLines.map((line: string, idx: number) => (
+                                    <li key={idx} className="line-clamp-1">{line}</li>
+                                  ))}
+                                </ul>
+                              )}
                             </div>
-                            {beforeLines.length > 0 ? (
-                              <ul className="space-y-1 text-xs text-gray-300 font-medium">
-                                {beforeLines.map((line: string, idx: number) => (
-                                  <li key={idx} className="line-clamp-1">{line}</li>
-                                ))}
-                              </ul>
-                            ) : (
-                              <p className="text-xs text-gray-400 font-medium">Initial state data documented in full case study.</p>
+                            {project.beforeImage && (
+                              <div className="relative h-28 w-full rounded-lg overflow-hidden border border-red-500/30 mt-2">
+                                <Image src={project.beforeImage} alt="Before State" fill className="object-cover" />
+                                <span className="absolute bottom-1 right-1 bg-black/80 text-red-400 text-[9px] px-1.5 py-0.5 rounded font-extrabold">Initial</span>
+                              </div>
                             )}
                           </div>
 
                           {/* AFTER */}
-                          <div className="bg-emerald-500/10 border border-emerald-500/20 p-4 rounded-xl">
-                            <div className="flex items-center gap-1.5 text-emerald-400 font-extrabold uppercase text-[10px] tracking-wider mb-2">
-                              <span className="w-2 h-2 rounded-full bg-emerald-500" /> AFTER AERONOX (RESULTS)
+                          <div className="bg-emerald-500/10 border border-emerald-500/20 p-4 rounded-xl flex flex-col justify-between">
+                            <div>
+                              <div className="flex items-center gap-1.5 text-emerald-400 font-extrabold uppercase text-[10px] tracking-wider mb-2">
+                                <span className="w-2 h-2 rounded-full bg-emerald-500" /> AFTER AERONOX (RESULTS)
+                              </div>
+                              {afterLines.length > 0 && (
+                                <ul className="space-y-1 text-xs text-emerald-200 font-bold mb-3">
+                                  {afterLines.map((line: string, idx: number) => (
+                                    <li key={idx} className="line-clamp-1">{line}</li>
+                                  ))}
+                                </ul>
+                              )}
                             </div>
-                            {afterLines.length > 0 ? (
-                              <ul className="space-y-1 text-xs text-emerald-200 font-bold">
-                                {afterLines.map((line: string, idx: number) => (
-                                  <li key={idx} className="line-clamp-1">{line}</li>
-                                ))}
-                              </ul>
-                            ) : (
-                              <p className="text-xs text-emerald-300 font-bold">Verified growth outcomes documented.</p>
+                            {project.afterImage && (
+                              <div className="relative h-28 w-full rounded-lg overflow-hidden border border-emerald-500/30 mt-2">
+                                <Image src={project.afterImage} alt="After State" fill className="object-cover" />
+                                <span className="absolute bottom-1 right-1 bg-emerald-500 text-black text-[9px] px-1.5 py-0.5 rounded font-extrabold">Result</span>
+                              </div>
                             )}
                           </div>
                         </div>
