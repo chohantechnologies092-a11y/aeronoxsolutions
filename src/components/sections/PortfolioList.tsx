@@ -520,7 +520,7 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                 </div>
               ) : (
                 <div className="space-y-12">
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
                     {paginatedProjects.map((project, i) => {
                       const beforeLines = (project.beforeStats || "").split("\n").filter(Boolean);
                       const afterLines = (project.afterStats || "").split("\n").filter(Boolean);
@@ -532,11 +532,11 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                           initial={{ opacity: 0, y: 30 }}
                           whileInView={{ opacity: 1, y: 0 }}
                           viewport={{ once: true }}
-                          transition={{ duration: 0.6, delay: (i % 2) * 0.1 }}
-                          className="rounded-[2.5rem] bg-[#24182e] border border-white/15 text-white shadow-2xl overflow-hidden flex flex-col group hover:border-[#ffbe00]/50 transition-all duration-500"
+                          transition={{ duration: 0.5, delay: (i % 3) * 0.1 }}
+                          className="rounded-[2.2rem] bg-[#24182e] border border-white/15 text-white shadow-2xl overflow-hidden flex flex-col group hover:border-[#ffbe00]/50 transition-all duration-500"
                         >
                           {/* Cover Image / Video Thumbnail */}
-                          <div className="relative h-64 sm:h-72 w-full overflow-hidden border-b border-white/10">
+                          <div className="relative h-56 md:h-60 w-full overflow-hidden border-b border-white/10">
                             <Image
                               src={project.image}
                               alt={project.title}
@@ -546,14 +546,14 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                             <div className="absolute inset-0 bg-gradient-to-t from-[#24182e] via-[#24182e]/40 to-transparent" />
 
                             {/* Top Badges */}
-                            <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-20">
-                              <span className="px-3.5 py-1.5 rounded-full bg-[#24182e]/90 backdrop-blur-md border border-white/20 text-[#ffbe00] text-[10px] font-extrabold uppercase tracking-widest flex items-center gap-1.5">
-                                <Building2 size={12} /> {project.client || "Client Showcase"}
+                            <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between z-20">
+                              <span className="px-3 py-1 rounded-full bg-[#24182e]/90 backdrop-blur-md border border-white/20 text-[#ffbe00] text-[9px] font-extrabold uppercase tracking-widest flex items-center gap-1">
+                                <Building2 size={11} /> {project.client || "Client Showcase"}
                               </span>
 
                               {project.growthBadge && (
-                                <span className="px-3.5 py-1.5 rounded-full bg-emerald-500 text-[#090512] font-black text-xs uppercase tracking-wider shadow-lg flex items-center gap-1">
-                                  <TrendingUp size={14} /> {project.growthBadge}
+                                <span className="px-3 py-1 rounded-full bg-emerald-500 text-[#090512] font-black text-[11px] uppercase tracking-wider shadow-lg flex items-center gap-1">
+                                  <TrendingUp size={12} /> {project.growthBadge}
                                 </span>
                               )}
                             </div>
@@ -564,41 +564,41 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                                 onClick={() => setActiveVideoUrl(project.videoUrl)}
                                 className="absolute inset-0 flex items-center justify-center z-30 group/play"
                               >
-                                <div className="w-16 h-16 rounded-full bg-[#ff3b30] text-white flex items-center justify-center shadow-[0_0_30px_rgba(255,59,48,0.6)] group-hover/play:scale-110 transition-transform">
-                                  <Play size={28} className="fill-white translate-x-0.5" />
+                                <div className="w-14 h-14 rounded-full bg-[#ff3b30] text-white flex items-center justify-center shadow-[0_0_25px_rgba(255,59,48,0.6)] group-hover/play:scale-110 transition-transform">
+                                  <Play size={24} className="fill-white translate-x-0.5" />
                                 </div>
                               </button>
                             )}
 
                             {/* Project Title Overlay */}
-                            <div className="absolute bottom-4 left-6 right-6 z-20">
-                              <h3 className="text-2xl md:text-3xl font-black text-white leading-tight tracking-tight group-hover:text-[#ffbe00] transition-colors">
+                            <div className="absolute bottom-3.5 left-5 right-5 z-20">
+                              <h3 className="text-xl md:text-2xl font-black text-white leading-tight tracking-tight group-hover:text-[#ffbe00] transition-colors line-clamp-2">
                                 {project.title}
                               </h3>
                             </div>
                           </div>
 
                           {/* Body Content */}
-                          <div className="p-6 md:p-8 flex-1 flex flex-col justify-between space-y-6">
-                            <p className="text-[#dcd7e3]/90 text-sm leading-relaxed font-medium line-clamp-2">
+                          <div className="p-6 flex-1 flex flex-col justify-between space-y-5">
+                            <p className="text-[#dcd7e3]/90 text-xs leading-relaxed font-medium line-clamp-2">
                               {project.description}
                             </p>
 
                             {/* SYSTEM SCREENSHOTS / GALLERY IMAGES IF PRESENT (CUSTOM SOFTWARE / WEB DEV) */}
                             {project.galleryImages && project.galleryImages.length > 0 && (
-                              <div className="space-y-2 pt-1">
+                              <div className="space-y-1.5 pt-1">
                                 <span className="text-[10px] font-extrabold text-[#af52de] uppercase tracking-wider flex items-center gap-1">
-                                  <Cpu size={12} /> System Screenshots Gallery ({project.galleryImages.length})
+                                  <Cpu size={11} /> Screenshots Gallery ({project.galleryImages.length})
                                 </span>
-                                <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-thin">
+                                <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-thin">
                                   {project.galleryImages.map((gImg: string, gIdx: number) => (
                                     <div 
                                       key={gIdx} 
                                       onClick={() => setActiveLightboxImage(gImg)}
-                                      className="relative w-20 h-14 rounded-xl bg-black/60 border border-white/20 p-1 flex items-center justify-center shrink-0 cursor-pointer hover:border-[#af52de] hover:scale-105 transition-all overflow-hidden"
+                                      className="relative w-16 h-12 rounded-lg bg-black/60 border border-white/20 p-1 flex items-center justify-center shrink-0 cursor-pointer hover:border-[#af52de] hover:scale-105 transition-all overflow-hidden"
                                     >
                                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                                      <img src={gImg} alt="Screenshot" className="object-cover w-full h-full rounded-md" />
+                                      <img src={gImg} alt="Screenshot" className="object-cover w-full h-full rounded" />
                                     </div>
                                   ))}
                                 </div>
@@ -607,63 +607,63 @@ export function PortfolioList({ projects }: { projects: any[] }) {
 
                             {/* BEFORE VS AFTER METRICS (SEO & MARKETING) */}
                             {(project.beforeStats || project.afterStats) && (
-                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-black/40 p-5 rounded-2xl border border-white/10">
-                                <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-xl">
-                                  <div className="flex items-center gap-1.5 text-red-400 font-extrabold uppercase text-[10px] tracking-wider mb-2">
-                                    <span className="w-2 h-2 rounded-full bg-red-500" /> BEFORE AERONOX
-                                  </div>
-                                  {beforeLines.length > 0 && (
-                                    <ul className="space-y-1 text-xs text-gray-300 font-medium">
-                                      {beforeLines.map((line: string, idx: number) => (
+                              <div className="grid grid-cols-1 gap-2.5 bg-black/40 p-4 rounded-xl border border-white/10">
+                                {beforeLines.length > 0 && (
+                                  <div className="bg-red-500/10 border border-red-500/20 p-2.5 rounded-lg">
+                                    <div className="flex items-center gap-1.5 text-red-400 font-extrabold uppercase text-[9px] tracking-wider mb-1">
+                                      <span className="w-1.5 h-1.5 rounded-full bg-red-500" /> BEFORE AERONOX
+                                    </div>
+                                    <ul className="space-y-0.5 text-[11px] text-gray-300 font-medium">
+                                      {beforeLines.slice(0, 2).map((line: string, idx: number) => (
                                         <li key={idx} className="line-clamp-1">{line}</li>
                                       ))}
                                     </ul>
-                                  )}
-                                </div>
+                                  </div>
+                                )}
 
-                                <div className="bg-emerald-500/10 border border-emerald-500/20 p-4 rounded-xl">
-                                  <div className="flex items-center gap-1.5 text-emerald-400 font-extrabold uppercase text-[10px] tracking-wider mb-2">
-                                    <span className="w-2 h-2 rounded-full bg-emerald-500" /> AFTER AERONOX (RESULTS)
-                                  </div>
-                                  {afterLines.length > 0 && (
-                                    <ul className="space-y-1 text-xs text-emerald-200 font-bold">
-                                      {afterLines.map((line: string, idx: number) => (
+                                {afterLines.length > 0 && (
+                                  <div className="bg-emerald-500/10 border border-emerald-500/20 p-2.5 rounded-lg">
+                                    <div className="flex items-center gap-1.5 text-emerald-400 font-extrabold uppercase text-[9px] tracking-wider mb-1">
+                                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> AFTER AERONOX
+                                    </div>
+                                    <ul className="space-y-0.5 text-[11px] text-emerald-200 font-bold">
+                                      {afterLines.slice(0, 2).map((line: string, idx: number) => (
                                         <li key={idx} className="line-clamp-1">{line}</li>
                                       ))}
                                     </ul>
-                                  )}
-                                </div>
+                                  </div>
+                                )}
                               </div>
                             )}
 
                             {/* Action Bar */}
-                            <div className="pt-4 border-t border-white/10 flex items-center justify-between">
+                            <div className="pt-3.5 border-t border-white/10 flex items-center justify-between">
                               {project.liveUrl ? (
                                 <a
                                   href={project.liveUrl}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#ffbe00] hover:underline"
+                                  className="inline-flex items-center gap-1 text-[11px] font-bold text-[#ffbe00] hover:underline"
                                 >
-                                  <ExternalLink size={14} /> Visit Live Site
+                                  <ExternalLink size={13} /> Live Site
                                 </a>
                               ) : isVideo && project.videoUrl ? (
                                 <button
                                   onClick={() => setActiveVideoUrl(project.videoUrl)}
-                                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#ff3b30] hover:underline"
+                                  className="inline-flex items-center gap-1 text-[11px] font-bold text-[#ff3b30] hover:underline"
                                 >
-                                  <Play size={14} /> Watch Commercial
+                                  <Play size={13} /> Watch Video
                                 </button>
                               ) : (
-                                <span className="text-xs text-white/40 font-medium">Verified Project</span>
+                                <span className="text-[11px] text-white/40 font-medium">Verified Case Study</span>
                               )}
 
                               <Link
                                 href={`/portfolio/${project.slug}`}
-                                className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#ffbe00] text-[#24182e] font-black text-xs uppercase tracking-wider rounded-xl hover:bg-white transition-colors shadow-md"
+                                className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#ffbe00] text-[#24182e] font-black text-[11px] uppercase tracking-wider rounded-xl hover:bg-white transition-colors shadow-md"
                               >
                                 <span>Details</span>
-                                <ArrowRight size={14} />
+                                <ArrowRight size={13} />
                               </Link>
                             </div>
 
