@@ -1,1 +1,0 @@
-import { db } from './src/lib/firebase-admin'; async function fixData() { const snapshot = await db.collection('projects').get(); snapshot.docs.forEach(doc => { const d = doc.data(); if(d.title.toLowerCase() === 'bluetech cloud') { console.log('Deleting:', d.title); doc.ref.delete(); } }); console.log('Done'); } fixData();

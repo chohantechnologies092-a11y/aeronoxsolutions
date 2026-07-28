@@ -38,7 +38,7 @@ export function LogoMarquee({ clients = [] }: { clients?: ClientType[] }) {
   const row2Items = [...row2, ...row2, ...row2, ...row2];
 
   return (
-    <section className="py-20 bg-[#020306] border-y border-white/5 overflow-hidden flex flex-col items-center relative">
+    <section className="py-20 bg-[#120b18] border-y border-white/10 overflow-hidden flex flex-col items-center relative">
       {/* Background glowing effects */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(255,190,0,0.03)_0%,transparent_70%)] pointer-events-none" />
       <div className="absolute inset-0 bg-mesh opacity-10 pointer-events-none" />

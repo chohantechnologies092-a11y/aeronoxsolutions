@@ -8,7 +8,7 @@ export async function getServices(): Promise<any[]> {
     const docs = snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
     
     if (docs.length > 0) {
-      return docs.sort((a, b) => {
+      return docs.sort((a: any, b: any) => {
         const orderA = typeof a.order === 'number' ? a.order : 9999;
         const orderB = typeof b.order === 'number' ? b.order : 9999;
         
@@ -163,7 +163,7 @@ export async function getTeamMembers(): Promise<any[]> {
   const docs = snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
 
   // Sort by order ascending, then by createdAt descending
-  return docs.sort((a, b) => {
+  return docs.sort((a: any, b: any) => {
     const orderA = typeof a.order === 'number' ? a.order : 9999;
     const orderB = typeof b.order === 'number' ? b.order : 9999;
     

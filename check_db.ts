@@ -1,1 +1,0 @@
-import { db } from './src/lib/firebase-admin'; async function run() { const snapshot = await db.collection('services').where('title', '==', 'Email & WhatsApp Marketing').get(); snapshot.forEach(doc => console.log(doc.data())); } run().catch(console.error);
