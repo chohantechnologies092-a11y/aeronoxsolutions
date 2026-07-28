@@ -39,16 +39,28 @@ export function LogoMarquee({ clients = [] }: { clients?: ClientType[] }) {
 
   return (
     <section className="py-20 bg-[#120b18] border-y border-white/10 overflow-hidden flex flex-col items-center relative">
-      {/* Company Logo Background Watermark Shadow */}
+      {/* Company Logo Background Watermark Shadow with Floating Animation */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none overflow-hidden z-0 w-full h-full flex items-center justify-center">
-        <div className="relative w-[500px] h-[500px] md:w-[650px] md:h-[650px] opacity-10 filter blur-[1px]">
+        <motion.div 
+          animate={{
+            y: [-12, 12, -12],
+            scale: [1, 1.04, 1],
+            rotate: [0, 1.5, -1.5, 0]
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          className="relative w-[500px] h-[500px] md:w-[650px] md:h-[650px] opacity-10 filter blur-[1px]"
+        >
           <Image 
             src="/icon.png" 
             alt="Aeronox Logo Watermark" 
             fill 
             className="object-contain"
           />
-        </div>
+        </motion.div>
         <div className="absolute w-[450px] h-[450px] bg-[#ffbe00]/10 rounded-full blur-[130px] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" />
       </div>
 
