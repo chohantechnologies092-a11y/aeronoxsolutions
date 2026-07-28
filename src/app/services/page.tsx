@@ -18,9 +18,10 @@ export default async function ServicesPage() {
       {/* Banner Section */}
       <div className="w-full h-[500px] relative">
         <Image 
-          src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?q=80&w=2070&auto=format&fit=crop" 
+          src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop" 
           alt="Our Services" 
           fill 
+          unoptimized
           className="object-cover"
           priority
         />
