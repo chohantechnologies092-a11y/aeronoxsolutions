@@ -44,6 +44,45 @@ const staggerContainer = {
   }
 };
 
+// Markdown Parser Helper for Case Studies
+function parseMarkdown(md: string): string {
+  if (!md) return "";
+  
+  // If already parsed HTML
+  if (md.trim().startsWith("<div") || md.trim().startsWith("<p class=")) return md;
+
+  let html = md;
+
+  // Headings
+  html = html.replace(/^### (.*$)/gim, '<h3 class="text-xl md:text-2xl font-black text-white mt-8 mb-4 border-b border-white/10 pb-2 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-[#ffbe00]"></span><span>$1</span></h3>');
+  html = html.replace(/^## (.*$)/gim, '<h2 class="text-2xl md:text-3xl font-black text-[#ffbe00] mt-10 mb-6 border-b border-[#ffbe00]/20 pb-3 tracking-tight">$1</h2>');
+  html = html.replace(/^# (.*$)/gim, '<h1 class="text-3xl md:text-4xl font-black text-white mt-10 mb-6">$1</h1>');
+
+  // Bold & Italic
+  html = html.replace(/\*\*(.*?)\*\*/g, '<strong class="font-black text-white">$1</strong>');
+  html = html.replace(/\*(.*?)\*/g, '<em class="italic text-amber-200">$1</em>');
+
+  // Bullet Lists & Numbered Lists
+  html = html.replace(/^\* (.*$)/gim, '<li class="flex items-start gap-3 my-2 text-gray-200 font-medium text-sm md:text-base"><span class="text-[#ffbe00] font-black text-lg leading-none">•</span><span>$1</span></li>');
+  html = html.replace(/^(\d+)\. (.*$)/gim, '<li class="flex items-start gap-3 my-2 text-gray-200 font-medium text-sm md:text-base"><span class="text-[#ffbe00] font-extrabold text-sm px-2 py-0.5 rounded-md bg-[#ffbe00]/10 border border-[#ffbe00]/30">$1</span><span>$2</span></li>');
+
+  // Wrap consecutive <li> into <ul>
+  html = html.replace(/(<li.*<\/li>\n?)+/g, '<ul class="my-6 p-6 md:p-8 rounded-3xl bg-black/40 border border-white/10 space-y-2 shadow-inner">$1</ul>');
+
+  // Paragraphs
+  const blocks = html.split(/\n\n+/);
+  const formatted = blocks.map(block => {
+    const trimmed = block.trim();
+    if (!trimmed) return "";
+    if (trimmed.startsWith("<h") || trimmed.startsWith("<ul") || trimmed.startsWith("<li") || trimmed.startsWith("<div")) {
+      return trimmed;
+    }
+    return `<p class="text-base md:text-lg text-[#dcd7e3] leading-relaxed mb-6 font-medium">${trimmed}</p>`;
+  }).join("\n");
+
+  return formatted;
+}
+
 export function PortfolioContent({ project }: { project: Project }) {
   const tags = (project.tags || "").split(",").map((tag: string) => tag.trim()).filter(Boolean);
   const beforeLines = (project.beforeStats || "").split("\n").filter(Boolean);
@@ -268,21 +307,12 @@ export function PortfolioContent({ project }: { project: Project }) {
               viewport={{ once: true }}
               transition={{ duration: 0.7 }}
             >
-              <div className="bg-white/90 dark:bg-[#181120]/90 backdrop-blur-xl p-8 md:p-14 rounded-[2.5rem] border border-gray-200 dark:border-white/10 shadow-2xl relative overflow-hidden">
+              <div className="bg-gradient-to-br from-[#24182e] via-[#1d1326] to-[#140c1e] text-white p-8 md:p-14 rounded-[2.5rem] border border-white/15 shadow-2xl relative overflow-hidden">
                 <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#ffbe00] to-[#24182e]" />
                 
                 <div 
-                  className="max-w-none 
-                  [&_h2]:text-3xl md:[&_h2]:text-4xl [&_h2]:font-display [&_h2]:font-extrabold [&_h2]:tracking-tight [&_h2]:text-[#24182e] dark:[&_h2]:text-white [&_h2]:mt-12 [&_h2]:mb-6 [&_h2:first-child]:mt-0
-                  [&_h3]:text-2xl [&_h3]:font-display [&_h3]:font-bold [&_h3]:text-[#24182e] dark:[&_h3]:text-white [&_h3]:mt-10 [&_h3]:mb-4
-                  [&_p]:text-gray-700 dark:[&_p]:text-gray-300 [&_p]:leading-[1.8] [&_p]:mb-8 [&_p]:text-base md:[&_p]:text-lg
-                  [&_strong]:text-[#24182e] dark:[&_strong]:text-white [&_strong]:font-bold
-                  [&_ul]:bg-gray-50/80 dark:[&_ul]:bg-black/30 [&_ul]:p-6 md:[&_ul]:p-8 [&_ul]:rounded-3xl [&_ul]:border [&_ul]:border-gray-200 dark:[&_ul]:border-white/10 [&_ul]:space-y-3 [&_ul]:my-8 [&_ul]:shadow-sm [&_ul]:list-none
-                  [&_li]:text-gray-700 dark:[&_li]:text-gray-300 [&_li]:text-base [&_li]:relative [&_li]:pl-6
-                  [&_li::before]:content-['•'] [&_li::before]:absolute [&_li::before]:left-0 [&_li::before]:text-[#ffbe00] [&_li::before]:font-black [&_li::before]:text-xl
-                  [&_a]:text-[#ffbe00] [&_a]:font-bold [&_a]:no-underline hover:[&_a]:underline 
-                  break-words overflow-hidden"
-                  dangerouslySetInnerHTML={{ __html: project.content }}
+                  className="max-w-none text-[#dcd7e3] space-y-4 break-words overflow-hidden"
+                  dangerouslySetInnerHTML={{ __html: parseMarkdown(project.content) }}
                 />
               </div>
             </motion.div>

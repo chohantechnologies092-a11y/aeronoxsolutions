@@ -2,7 +2,7 @@
 
 import React, { useState, useTransition } from "react";
 import Link from "next/link";
-import { Edit, Trash2, GripVertical, CheckCircle2, X, Calendar, User, Code2, Search, Palette, Video, Cpu, Sparkles } from "lucide-react";
+import { Edit, Trash2, GripVertical, CheckCircle2, X, Calendar, User, Code2, Search, Palette, Video, Cpu, Sparkles, ChevronLeft, ChevronRight } from "lucide-react";
 import { 
   DndContext, 
   closestCenter,
@@ -62,7 +62,15 @@ function ServiceBadge({ category }: { category: string }) {
 }
 
 // --- Sortable Table Row ---
-function SortableProjectRow({ project, isPending }: { project: any, isPending: boolean }) {
+function SortableProjectRow({ 
+  project, 
+  isPending, 
+  onDelete 
+}: { 
+  project: any, 
+  isPending: boolean, 
+  onDelete: (id: string, title: string) => void 
+}) {
   const {
     attributes,
     listeners,
@@ -136,11 +144,7 @@ function SortableProjectRow({ project, isPending }: { project: any, isPending: b
           </Link>
           <button 
             disabled={isPending}
-            onClick={async () => {
-              if (confirm("Are you sure you want to delete this project?")) {
-                await deleteProject(project.id);
-              }
-            }}
+            onClick={() => onDelete(project.id, project.title)}
             className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-red-600 dark:text-red-400 hover:bg-red-500/10 hover:text-red-700 dark:hover:text-red-300 border border-transparent hover:border-red-500/20 transition-all disabled:opacity-50" 
             title="Delete"
           >
@@ -205,6 +209,13 @@ export function ProjectsManager({ initialProjects }: { initialProjects: any[] })
   const [projects, setProjects] = useState(initialProjects);
   const [selectedFilterTab, setSelectedFilterTab] = useState<string>("all");
   const [isPending, startTransition] = useTransition();
+  const [isMounted, setIsMounted] = React.useState(false);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const ADMIN_ITEMS_PER_PAGE = 10;
+
+  React.useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -228,9 +239,67 @@ export function ProjectsManager({ initialProjects }: { initialProjects: any[] })
     { id: "custom-software", label: "Custom Software", icon: Cpu },
   ];
 
+  // Helper matching function synchronized with public portfolio
+  const matchesCategoryLocal = (project: any, catId: string) => {
+    if (catId === "all") return true;
+    const pCat = (project.serviceCategory || project.category || "").toLowerCase().trim();
+    const pTags = (project.tags || "").toLowerCase();
+    const pTitle = (project.title || "").toLowerCase();
+
+    if (pCat === catId || pCat.replace(/\s+/g, "-") === catId) return true;
+
+    if (catId === "web-dev" && (
+      pCat.includes("web") || pCat.includes("dev") || pCat.includes("e-commerce") || 
+      pTags.includes("next.js") || pTags.includes("react") || pTags.includes("web") || pTags.includes("tailwind") ||
+      pTitle.includes("web") || pTitle.includes("site")
+    )) return true;
+
+    if ((catId === "seo" || catId === "marketing") && (
+      pCat.includes("seo") || pCat.includes("market") || pCat.includes("growth") || pCat.includes("social") ||
+      pTags.includes("seo") || pTags.includes("market") || pTags.includes("social") || pTags.includes("ad") ||
+      pTitle.includes("seo") || pTitle.includes("market") || pTitle.includes("campaign")
+    )) return true;
+
+    if (catId === "graphic-design" && (
+      pCat.includes("graphic") || pCat.includes("logo") || pCat.includes("design") || pCat.includes("brand") ||
+      pTags.includes("logo") || pTags.includes("graphic") || pTags.includes("design") || pTags.includes("branding") ||
+      pTitle.includes("logo") || pTitle.includes("graphic") || pTitle.includes("design")
+    )) return true;
+
+    if (catId === "videography" && (
+      pCat.includes("video") || pCat.includes("motion") || pCat.includes("commercial") ||
+      pTags.includes("video") || pTags.includes("motion") || project.videoUrl
+    )) return true;
+
+    if (catId === "custom-software" && (
+      pCat.includes("soft") || pCat.includes("custom") || pCat.includes("app") || pCat.includes("saas") ||
+      pTags.includes("software") || pTags.includes("saas") || pTitle.includes("app") || pTitle.includes("platform") || pTitle.includes("engine")
+    )) return true;
+
+    return false;
+  };
+
   const displayedProjects = selectedFilterTab === "all"
     ? projects
-    : projects.filter(p => (p.serviceCategory || "web-dev") === selectedFilterTab || (selectedFilterTab === "seo" && p.serviceCategory === "marketing"));
+    : projects.filter(p => matchesCategoryLocal(p, selectedFilterTab));
+
+  const totalAdminPages = Math.ceil(displayedProjects.length / ADMIN_ITEMS_PER_PAGE);
+  const adminStartIndex = (currentPage - 1) * ADMIN_ITEMS_PER_PAGE;
+  const paginatedAdminProjects = displayedProjects.slice(adminStartIndex, adminStartIndex + ADMIN_ITEMS_PER_PAGE);
+
+  const handleDeleteProject = (id: string, title: string) => {
+    if (confirm(`Are you sure you want to delete "${title}"?`)) {
+      setProjects(prev => prev.filter(p => p.id !== id));
+      startTransition(async () => {
+        await deleteProject(id);
+      });
+    }
+  };
+
+  const handleTabChange = (tabId: string) => {
+    setSelectedFilterTab(tabId);
+    setCurrentPage(1);
+  };
 
   const toggleHomeStatus = (id: string, showOnHome: boolean) => {
     setProjects(items => 
@@ -267,8 +336,17 @@ export function ProjectsManager({ initialProjects }: { initialProjects: any[] })
     }
   }
 
+  if (!isMounted) {
+    return (
+      <div className="bg-admin-card rounded-2xl border border-admin-border p-8 text-center text-admin-muted">
+        Loading Projects Management...
+      </div>
+    );
+  }
+
   return (
     <DndContext 
+      id="admin-projects-dnd-context"
       sensors={sensors}
       collisionDetection={closestCenter}
       onDragEnd={handleDragEnd}
@@ -279,12 +357,12 @@ export function ProjectsManager({ initialProjects }: { initialProjects: any[] })
           {filterTabs.map((tab) => {
             const isActive = selectedFilterTab === tab.id;
             const TabIcon = tab.icon;
-            const count = tab.id === "all" ? projects.length : projects.filter(p => (p.serviceCategory || "web-dev") === tab.id).length;
+            const count = tab.id === "all" ? projects.length : projects.filter(p => matchesCategoryLocal(p, tab.id)).length;
 
             return (
               <button
                 key={tab.id}
-                onClick={() => setSelectedFilterTab(tab.id)}
+                onClick={() => handleTabChange(tab.id)}
                 className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all ${
                   isActive
                     ? "bg-[#ffbe00] text-[#24182e] shadow-lg shadow-[#ffbe00]/20"
@@ -316,16 +394,60 @@ export function ProjectsManager({ initialProjects }: { initialProjects: any[] })
               </thead>
               <tbody>
                 <SortableContext 
-                  items={displayedProjects.map(p => p.id)}
+                  items={paginatedAdminProjects.map(p => p.id)}
                   strategy={verticalListSortingStrategy}
                 >
-                  {displayedProjects.map((project) => (
-                    <SortableProjectRow key={project.id} project={project} isPending={isPending} />
+                  {paginatedAdminProjects.map((project) => (
+                    <SortableProjectRow key={project.id} project={project} isPending={isPending} onDelete={handleDeleteProject} />
                   ))}
                 </SortableContext>
               </tbody>
             </table>
           </div>
+
+          {/* Admin Table Pagination Controls */}
+          {totalAdminPages > 1 && (
+            <div className="px-6 py-4 border-t border-admin-border flex flex-col sm:flex-row items-center justify-between gap-4 bg-admin-card">
+              <span className="text-xs text-admin-muted">
+                Showing <strong className="text-admin-text font-bold">{adminStartIndex + 1} – {Math.min(adminStartIndex + ADMIN_ITEMS_PER_PAGE, displayedProjects.length)}</strong> of <strong className="text-[#ffbe00] font-black">{displayedProjects.length}</strong> Projects
+              </span>
+
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  disabled={currentPage === 1}
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  className="px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider bg-white/5 border border-admin-border text-admin-text hover:bg-[#ffbe00] hover:text-[#24182e] disabled:opacity-30 disabled:pointer-events-none transition-colors flex items-center gap-1"
+                >
+                  <ChevronLeft size={13} /> Prev
+                </button>
+
+                {Array.from({ length: totalAdminPages }, (_, i) => i + 1).map((pageNum) => (
+                  <button
+                    key={pageNum}
+                    type="button"
+                    onClick={() => setCurrentPage(pageNum)}
+                    className={`w-8 h-8 rounded-lg text-xs font-black transition-all ${
+                      currentPage === pageNum
+                        ? "bg-[#ffbe00] text-[#24182e] shadow-md shadow-[#ffbe00]/20"
+                        : "bg-white/5 border border-admin-border text-admin-text hover:bg-white/10"
+                    }`}
+                  >
+                    {pageNum}
+                  </button>
+                ))}
+
+                <button
+                  type="button"
+                  disabled={currentPage === totalAdminPages}
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalAdminPages))}
+                  className="px-3 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider bg-white/5 border border-admin-border text-admin-text hover:bg-[#ffbe00] hover:text-[#24182e] disabled:opacity-30 disabled:pointer-events-none transition-colors flex items-center gap-1"
+                >
+                  Next <ChevronRight size={13} />
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

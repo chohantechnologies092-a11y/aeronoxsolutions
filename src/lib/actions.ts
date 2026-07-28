@@ -89,9 +89,15 @@ export async function createProject(formData: FormData) {
 }
 
 export async function deleteProject(id: string) {
-  await db.collection("projects").doc(id).delete();
+  const ref = db.collection("projects").doc(id);
+  await ref.set({
+    deleted: true,
+    updatedAt: getNow(),
+  }, { merge: true });
+
   revalidatePath("/portfolio");
   revalidatePath("/admin/projects");
+  revalidatePath("/");
 }
 
 export async function updateProject(id: string, formData: FormData) {

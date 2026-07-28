@@ -1,44 +1,81 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { db } from "@/lib/firebase-admin";
+import { ALL_PROJECTS } from "@/lib/projects-data";
 
 export async function getServices(): Promise<any[]> {
-  const snapshot = await db.collection("services").get();
-  const docs = snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
-  
-  // Sort by order ascending, then by createdAt descending
-  return docs.sort((a, b) => {
-    const orderA = typeof a.order === 'number' ? a.order : 9999;
-    const orderB = typeof b.order === 'number' ? b.order : 9999;
+  try {
+    const snapshot = await db.collection("services").get();
+    const docs = snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
     
-    if (orderA !== orderB) return orderA - orderB;
-    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-  });
+    if (docs.length > 0) {
+      return docs.sort((a, b) => {
+        const orderA = typeof a.order === 'number' ? a.order : 9999;
+        const orderB = typeof b.order === 'number' ? b.order : 9999;
+        
+        if (orderA !== orderB) return orderA - orderB;
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      });
+    }
+  } catch (err) {
+    console.error("Error fetching services from DB:", err);
+  }
+
+  return [];
 }
 
 export async function getServiceBySlug(slug: string): Promise<any> {
-  const snapshot = await db.collection("services").where("slug", "==", slug).limit(1).get();
-  if (snapshot.empty) return null;
-  return { id: snapshot.docs[0].id, ...snapshot.docs[0].data() };
+  try {
+    const snapshot = await db.collection("services").where("slug", "==", slug).limit(1).get();
+    if (!snapshot.empty) {
+      return { id: snapshot.docs[0].id, ...snapshot.docs[0].data() };
+    }
+  } catch (err) {
+    console.error("Error fetching service by slug:", err);
+  }
+  return null;
 }
 
 export async function getProjects(): Promise<any[]> {
-  const snapshot = await db.collection("projects").get();
-  const docs = snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
+  try {
+    const snapshot = await db.collection("projects").get();
+    const dbDocs = snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
 
-  // Sort by order ascending, then by createdAt descending
-  return docs.sort((a, b) => {
-    const orderA = typeof a.order === 'number' ? a.order : 9999;
-    const orderB = typeof b.order === 'number' ? b.order : 9999;
-    
-    if (orderA !== orderB) return orderA - orderB;
-    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-  });
+    const deletedIds = new Set(dbDocs.filter((d: any) => d.deleted).map((d: any) => d.id));
+    const activeDbDocs = dbDocs.filter((d: any) => !d.deleted);
+
+    const activeDbSlugs = new Set(activeDbDocs.map((d: any) => d.slug || d.id));
+    const merged = [...activeDbDocs];
+
+    for (const p of ALL_PROJECTS) {
+      if (!deletedIds.has(p.id) && !activeDbSlugs.has(p.slug) && !activeDbSlugs.has(p.id)) {
+        merged.push(p);
+      }
+    }
+
+    return merged.sort((a, b) => {
+      const orderA = typeof a.order === 'number' ? a.order : 9999;
+      const orderB = typeof b.order === 'number' ? b.order : 9999;
+      if (orderA !== orderB) return orderA - orderB;
+      return (a.title || "").localeCompare(b.title || "");
+    });
+  } catch (err) {
+    console.error("Error fetching projects from DB:", err);
+  }
+
+  return ALL_PROJECTS;
 }
 
 export async function getProjectBySlug(slug: string): Promise<any> {
-  const snapshot = await db.collection("projects").where("slug", "==", slug).limit(1).get();
-  if (snapshot.empty) return null;
-  return { id: snapshot.docs[0].id, ...snapshot.docs[0].data() };
+  try {
+    const snapshot = await db.collection("projects").where("slug", "==", slug).limit(1).get();
+    if (!snapshot.empty) {
+      return { id: snapshot.docs[0].id, ...snapshot.docs[0].data() };
+    }
+  } catch (err) {
+    console.error("Error fetching project by slug:", err);
+  }
+
+  return ALL_PROJECTS.find((p) => p.slug === slug) || null;
 }
 
 export async function getClients(): Promise<any[]> {

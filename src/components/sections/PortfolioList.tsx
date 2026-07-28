@@ -20,6 +20,8 @@ import {
   Building2,
   CheckCircle2,
   ChevronDown,
+  ChevronLeft,
+  ChevronRight,
   Maximize2,
   X,
   Play
@@ -186,6 +188,8 @@ export function PortfolioList({ projects }: { projects: any[] }) {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [activeLightboxImage, setActiveLightboxImage] = useState<string | null>(null);
   const [activeVideoUrl, setActiveVideoUrl] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const ITEMS_PER_PAGE = 6;
 
   const serviceBoxes = [
     { 
@@ -235,6 +239,11 @@ export function PortfolioList({ projects }: { projects: any[] }) {
   // Filter projects by smart matching
   const filteredProjects = projects ? projects.filter(p => matchesCategory(p, selectedCategory)) : [];
 
+  // Pagination Math
+  const totalPages = Math.ceil(filteredProjects.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedProjects = filteredProjects.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+
   // Extract all gallery images for Graphic Design category
   const graphicGalleryItems: { id: string; title: string; client: string; imageUrl: string }[] = [];
   if (projects) {
@@ -266,6 +275,7 @@ export function PortfolioList({ projects }: { projects: any[] }) {
 
   const handleServiceSelect = (id: string) => {
     setSelectedCategory(id);
+    setCurrentPage(1);
     const targetEl = document.getElementById("service-detail-section");
     if (targetEl) {
       targetEl.scrollIntoView({ behavior: "smooth" });
@@ -509,157 +519,212 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                   </button>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
-                  {filteredProjects.map((project, i) => {
-                    const beforeLines = (project.beforeStats || "").split("\n").filter(Boolean);
-                    const afterLines = (project.afterStats || "").split("\n").filter(Boolean);
-                    const isVideo = project.videoUrl || project.serviceCategory === "videography";
+                <div className="space-y-12">
+                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                    {paginatedProjects.map((project, i) => {
+                      const beforeLines = (project.beforeStats || "").split("\n").filter(Boolean);
+                      const afterLines = (project.afterStats || "").split("\n").filter(Boolean);
+                      const isVideo = project.videoUrl || project.serviceCategory === "videography";
 
-                    return (
-                      <motion.div
-                        key={project.id || i}
-                        initial={{ opacity: 0, y: 30 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6, delay: (i % 2) * 0.1 }}
-                        className="rounded-[2.5rem] bg-[#24182e] border border-white/15 text-white shadow-2xl overflow-hidden flex flex-col group hover:border-[#ffbe00]/50 transition-all duration-500"
-                      >
-                        {/* Cover Image / Video Thumbnail */}
-                        <div className="relative h-64 sm:h-72 w-full overflow-hidden border-b border-white/10">
-                          <Image
-                            src={project.image}
-                            alt={project.title}
-                            fill
-                            className="object-cover transition-transform duration-1000 group-hover:scale-105"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-[#24182e] via-[#24182e]/40 to-transparent" />
+                      return (
+                        <motion.div
+                          key={project.id || i}
+                          initial={{ opacity: 0, y: 30 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.6, delay: (i % 2) * 0.1 }}
+                          className="rounded-[2.5rem] bg-[#24182e] border border-white/15 text-white shadow-2xl overflow-hidden flex flex-col group hover:border-[#ffbe00]/50 transition-all duration-500"
+                        >
+                          {/* Cover Image / Video Thumbnail */}
+                          <div className="relative h-64 sm:h-72 w-full overflow-hidden border-b border-white/10">
+                            <Image
+                              src={project.image}
+                              alt={project.title}
+                              fill
+                              className="object-cover transition-transform duration-1000 group-hover:scale-105"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#24182e] via-[#24182e]/40 to-transparent" />
 
-                          {/* Top Badges */}
-                          <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-20">
-                            <span className="px-3.5 py-1.5 rounded-full bg-[#24182e]/90 backdrop-blur-md border border-white/20 text-[#ffbe00] text-[10px] font-extrabold uppercase tracking-widest flex items-center gap-1.5">
-                              <Building2 size={12} /> {project.client || "Client Showcase"}
-                            </span>
-
-                            {project.growthBadge && (
-                              <span className="px-3.5 py-1.5 rounded-full bg-emerald-500 text-[#090512] font-black text-xs uppercase tracking-wider shadow-lg flex items-center gap-1">
-                                <TrendingUp size={14} /> {project.growthBadge}
+                            {/* Top Badges */}
+                            <div className="absolute top-4 left-4 right-4 flex items-center justify-between z-20">
+                              <span className="px-3.5 py-1.5 rounded-full bg-[#24182e]/90 backdrop-blur-md border border-white/20 text-[#ffbe00] text-[10px] font-extrabold uppercase tracking-widest flex items-center gap-1.5">
+                                <Building2 size={12} /> {project.client || "Client Showcase"}
                               </span>
-                            )}
-                          </div>
 
-                          {/* Play Button Overlay for Videography */}
-                          {isVideo && project.videoUrl && (
-                            <button
-                              onClick={() => setActiveVideoUrl(project.videoUrl)}
-                              className="absolute inset-0 flex items-center justify-center z-30 group/play"
-                            >
-                              <div className="w-16 h-16 rounded-full bg-[#ff3b30] text-white flex items-center justify-center shadow-[0_0_30px_rgba(255,59,48,0.6)] group-hover/play:scale-110 transition-transform">
-                                <Play size={28} className="fill-white translate-x-0.5" />
-                              </div>
-                            </button>
-                          )}
-
-                          {/* Project Title Overlay */}
-                          <div className="absolute bottom-4 left-6 right-6 z-20">
-                            <h3 className="text-2xl md:text-3xl font-black text-white leading-tight tracking-tight group-hover:text-[#ffbe00] transition-colors">
-                              {project.title}
-                            </h3>
-                          </div>
-                        </div>
-
-                        {/* Body Content */}
-                        <div className="p-6 md:p-8 flex-1 flex flex-col justify-between space-y-6">
-                          <p className="text-[#dcd7e3]/90 text-sm leading-relaxed font-medium line-clamp-2">
-                            {project.description}
-                          </p>
-
-                          {/* SYSTEM SCREENSHOTS / GALLERY IMAGES IF PRESENT (CUSTOM SOFTWARE / WEB DEV) */}
-                          {project.galleryImages && project.galleryImages.length > 0 && (
-                            <div className="space-y-2 pt-1">
-                              <span className="text-[10px] font-extrabold text-[#af52de] uppercase tracking-wider flex items-center gap-1">
-                                <Cpu size={12} /> System Screenshots Gallery ({project.galleryImages.length})
-                              </span>
-                              <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-thin">
-                                {project.galleryImages.map((gImg: string, gIdx: number) => (
-                                  <div 
-                                    key={gIdx} 
-                                    onClick={() => setActiveLightboxImage(gImg)}
-                                    className="relative w-20 h-14 rounded-xl bg-black/60 border border-white/20 p-1 flex items-center justify-center shrink-0 cursor-pointer hover:border-[#af52de] hover:scale-105 transition-all overflow-hidden"
-                                  >
-                                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                                    <img src={gImg} alt="Screenshot" className="object-cover w-full h-full rounded-md" />
-                                  </div>
-                                ))}
-                              </div>
+                              {project.growthBadge && (
+                                <span className="px-3.5 py-1.5 rounded-full bg-emerald-500 text-[#090512] font-black text-xs uppercase tracking-wider shadow-lg flex items-center gap-1">
+                                  <TrendingUp size={14} /> {project.growthBadge}
+                                </span>
+                              )}
                             </div>
-                          )}
 
-                          {/* BEFORE VS AFTER METRICS (SEO & MARKETING) */}
-                          {(project.beforeStats || project.afterStats) && (
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-black/40 p-5 rounded-2xl border border-white/10">
-                              <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-xl">
-                                <div className="flex items-center gap-1.5 text-red-400 font-extrabold uppercase text-[10px] tracking-wider mb-2">
-                                  <span className="w-2 h-2 rounded-full bg-red-500" /> BEFORE AERONOX
-                                </div>
-                                {beforeLines.length > 0 && (
-                                  <ul className="space-y-1 text-xs text-gray-300 font-medium">
-                                    {beforeLines.map((line: string, idx: number) => (
-                                      <li key={idx} className="line-clamp-1">{line}</li>
-                                    ))}
-                                  </ul>
-                                )}
-                              </div>
-
-                              <div className="bg-emerald-500/10 border border-emerald-500/20 p-4 rounded-xl">
-                                <div className="flex items-center gap-1.5 text-emerald-400 font-extrabold uppercase text-[10px] tracking-wider mb-2">
-                                  <span className="w-2 h-2 rounded-full bg-emerald-500" /> AFTER AERONOX (RESULTS)
-                                </div>
-                                {afterLines.length > 0 && (
-                                  <ul className="space-y-1 text-xs text-emerald-200 font-bold">
-                                    {afterLines.map((line: string, idx: number) => (
-                                      <li key={idx} className="line-clamp-1">{line}</li>
-                                    ))}
-                                  </ul>
-                                )}
-                              </div>
-                            </div>
-                          )}
-
-                          {/* Action Bar */}
-                          <div className="pt-4 border-t border-white/10 flex items-center justify-between">
-                            {project.liveUrl ? (
-                              <a
-                                href={project.liveUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#ffbe00] hover:underline"
-                              >
-                                <ExternalLink size={14} /> Visit Live Site
-                              </a>
-                            ) : isVideo && project.videoUrl ? (
+                            {/* Play Button Overlay for Videography */}
+                            {isVideo && project.videoUrl && (
                               <button
                                 onClick={() => setActiveVideoUrl(project.videoUrl)}
-                                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#ff3b30] hover:underline"
+                                className="absolute inset-0 flex items-center justify-center z-30 group/play"
                               >
-                                <Play size={14} /> Watch Commercial
+                                <div className="w-16 h-16 rounded-full bg-[#ff3b30] text-white flex items-center justify-center shadow-[0_0_30px_rgba(255,59,48,0.6)] group-hover/play:scale-110 transition-transform">
+                                  <Play size={28} className="fill-white translate-x-0.5" />
+                                </div>
                               </button>
-                            ) : (
-                              <span className="text-xs text-white/40 font-medium">Verified Project</span>
                             )}
 
-                            <Link
-                              href={`/portfolio/${project.slug}`}
-                              className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#ffbe00] text-[#24182e] font-black text-xs uppercase tracking-wider rounded-xl hover:bg-white transition-colors shadow-md"
-                            >
-                              <span>Details</span>
-                              <ArrowRight size={14} />
-                            </Link>
+                            {/* Project Title Overlay */}
+                            <div className="absolute bottom-4 left-6 right-6 z-20">
+                              <h3 className="text-2xl md:text-3xl font-black text-white leading-tight tracking-tight group-hover:text-[#ffbe00] transition-colors">
+                                {project.title}
+                              </h3>
+                            </div>
                           </div>
 
-                        </div>
-                      </motion.div>
-                    );
-                  })}
+                          {/* Body Content */}
+                          <div className="p-6 md:p-8 flex-1 flex flex-col justify-between space-y-6">
+                            <p className="text-[#dcd7e3]/90 text-sm leading-relaxed font-medium line-clamp-2">
+                              {project.description}
+                            </p>
+
+                            {/* SYSTEM SCREENSHOTS / GALLERY IMAGES IF PRESENT (CUSTOM SOFTWARE / WEB DEV) */}
+                            {project.galleryImages && project.galleryImages.length > 0 && (
+                              <div className="space-y-2 pt-1">
+                                <span className="text-[10px] font-extrabold text-[#af52de] uppercase tracking-wider flex items-center gap-1">
+                                  <Cpu size={12} /> System Screenshots Gallery ({project.galleryImages.length})
+                                </span>
+                                <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-thin">
+                                  {project.galleryImages.map((gImg: string, gIdx: number) => (
+                                    <div 
+                                      key={gIdx} 
+                                      onClick={() => setActiveLightboxImage(gImg)}
+                                      className="relative w-20 h-14 rounded-xl bg-black/60 border border-white/20 p-1 flex items-center justify-center shrink-0 cursor-pointer hover:border-[#af52de] hover:scale-105 transition-all overflow-hidden"
+                                    >
+                                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                                      <img src={gImg} alt="Screenshot" className="object-cover w-full h-full rounded-md" />
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* BEFORE VS AFTER METRICS (SEO & MARKETING) */}
+                            {(project.beforeStats || project.afterStats) && (
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-black/40 p-5 rounded-2xl border border-white/10">
+                                <div className="bg-red-500/10 border border-red-500/20 p-4 rounded-xl">
+                                  <div className="flex items-center gap-1.5 text-red-400 font-extrabold uppercase text-[10px] tracking-wider mb-2">
+                                    <span className="w-2 h-2 rounded-full bg-red-500" /> BEFORE AERONOX
+                                  </div>
+                                  {beforeLines.length > 0 && (
+                                    <ul className="space-y-1 text-xs text-gray-300 font-medium">
+                                      {beforeLines.map((line: string, idx: number) => (
+                                        <li key={idx} className="line-clamp-1">{line}</li>
+                                      ))}
+                                    </ul>
+                                  )}
+                                </div>
+
+                                <div className="bg-emerald-500/10 border border-emerald-500/20 p-4 rounded-xl">
+                                  <div className="flex items-center gap-1.5 text-emerald-400 font-extrabold uppercase text-[10px] tracking-wider mb-2">
+                                    <span className="w-2 h-2 rounded-full bg-emerald-500" /> AFTER AERONOX (RESULTS)
+                                  </div>
+                                  {afterLines.length > 0 && (
+                                    <ul className="space-y-1 text-xs text-emerald-200 font-bold">
+                                      {afterLines.map((line: string, idx: number) => (
+                                        <li key={idx} className="line-clamp-1">{line}</li>
+                                      ))}
+                                    </ul>
+                                  )}
+                                </div>
+                              </div>
+                            )}
+
+                            {/* Action Bar */}
+                            <div className="pt-4 border-t border-white/10 flex items-center justify-between">
+                              {project.liveUrl ? (
+                                <a
+                                  href={project.liveUrl}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#ffbe00] hover:underline"
+                                >
+                                  <ExternalLink size={14} /> Visit Live Site
+                                </a>
+                              ) : isVideo && project.videoUrl ? (
+                                <button
+                                  onClick={() => setActiveVideoUrl(project.videoUrl)}
+                                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#ff3b30] hover:underline"
+                                >
+                                  <Play size={14} /> Watch Commercial
+                                </button>
+                              ) : (
+                                <span className="text-xs text-white/40 font-medium">Verified Project</span>
+                              )}
+
+                              <Link
+                                href={`/portfolio/${project.slug}`}
+                                className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#ffbe00] text-[#24182e] font-black text-xs uppercase tracking-wider rounded-xl hover:bg-white transition-colors shadow-md"
+                              >
+                                <span>Details</span>
+                                <ArrowRight size={14} />
+                              </Link>
+                            </div>
+
+                          </div>
+                        </motion.div>
+                      );
+                    })}
+                  </div>
+
+                  {/* PAGINATION CONTROLS */}
+                  {totalPages > 1 && (
+                    <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 p-6 bg-[#24182e]/80 border border-white/15 rounded-3xl shadow-xl">
+                      <span className="text-xs font-medium text-[#dcd7e3]/80">
+                        Showing <strong className="text-white font-bold">{startIndex + 1} – {Math.min(startIndex + ITEMS_PER_PAGE, filteredProjects.length)}</strong> of <strong className="text-[#ffbe00] font-black">{filteredProjects.length}</strong> Projects
+                      </span>
+
+                      <div className="flex items-center gap-2 flex-wrap justify-center">
+                        <button
+                          type="button"
+                          disabled={currentPage === 1}
+                          onClick={() => {
+                            setCurrentPage(prev => Math.max(prev - 1, 1));
+                            document.getElementById("service-detail-section")?.scrollIntoView({ behavior: "smooth" });
+                          }}
+                          className="px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-white/5 border border-white/10 text-white hover:bg-[#ffbe00] hover:text-[#24182e] disabled:opacity-30 disabled:pointer-events-none transition-colors flex items-center gap-1.5"
+                        >
+                          <ChevronLeft size={14} /> Previous
+                        </button>
+
+                        {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+                          <button
+                            key={pageNum}
+                            type="button"
+                            onClick={() => {
+                              setCurrentPage(pageNum);
+                              document.getElementById("service-detail-section")?.scrollIntoView({ behavior: "smooth" });
+                            }}
+                            className={`w-9 h-9 rounded-xl text-xs font-black transition-all ${
+                              currentPage === pageNum
+                                ? "bg-[#ffbe00] text-[#24182e] shadow-lg shadow-[#ffbe00]/20 scale-105"
+                                : "bg-white/5 border border-white/10 text-white hover:bg-white/15"
+                            }`}
+                          >
+                            {pageNum}
+                          </button>
+                        ))}
+
+                        <button
+                          type="button"
+                          disabled={currentPage === totalPages}
+                          onClick={() => {
+                            setCurrentPage(prev => Math.min(prev + 1, totalPages));
+                            document.getElementById("service-detail-section")?.scrollIntoView({ behavior: "smooth" });
+                          }}
+                          className="px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-white/5 border border-white/10 text-white hover:bg-[#ffbe00] hover:text-[#24182e] disabled:opacity-30 disabled:pointer-events-none transition-colors flex items-center gap-1.5"
+                        >
+                          Next <ChevronRight size={14} />
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

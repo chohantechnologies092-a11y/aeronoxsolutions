@@ -27,6 +27,11 @@ export async function generateMetadata(): Promise<Metadata> {
       },
       description: seo.description,
       keywords: seo.keywords,
+      icons: {
+        icon: "/icon.png",
+        shortcut: "/icon.png",
+        apple: "/icon.png",
+      },
     };
   }
 
@@ -34,6 +39,11 @@ export async function generateMetadata(): Promise<Metadata> {
     title: "Aeronox Solutions | Premium Digital Engineering",
     description: "Architecting digital products that drive growth. Specialized in headless commerce, Next.js applications, and custom backend systems.",
     keywords: ["digital agency", "web engineering", "software development"],
+    icons: {
+      icon: "/icon.png",
+      shortcut: "/icon.png",
+      apple: "/icon.png",
+    },
   };
 }
 
