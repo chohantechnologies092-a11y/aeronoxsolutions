@@ -17,16 +17,15 @@ export default async function ServicesPage() {
     <>
       {/* Banner Section */}
       <div className="w-full h-[500px] relative">
-        <Image 
-          src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop" 
-          alt="Our Services" 
-          fill 
-          unoptimized
+        <Image
+          src="/website-hosting-concept-with-bright-light.jpg"
+          alt="Our Services"
+          fill
           className="object-cover"
           priority
         />
         <div className="absolute inset-0 bg-black/70 backdrop-blur-[2px]" />
-        
+
         <div className="absolute inset-0 flex items-center justify-center text-center">
           <div className="max-w-4xl mx-auto px-6 w-full pt-16">
             <p className="text-accent font-bold text-xs uppercase tracking-[0.4em] mb-4">
