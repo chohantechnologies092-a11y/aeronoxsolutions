@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import * as LucideIcons from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -14,6 +14,9 @@ interface ServicesProps {
 }
 
 export function Services({ services, limit }: ServicesProps) {
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const ITEMS_PER_PAGE = 6;
+
   if (!services || services.length === 0) return null;
 
   // If a limit is specified (e.g. Homepage), filter by showOnHome and slice
@@ -23,6 +26,11 @@ export function Services({ services, limit }: ServicesProps) {
     const homeOnly = services.filter(service => service.showOnHome);
     displayServices = homeOnly.length > 0 ? homeOnly.slice(0, limit) : services.slice(0, limit);
   }
+
+  // Pagination math for full services page
+  const totalPages = Math.ceil(displayServices.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedServices = limit ? displayServices : displayServices.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   return (
     <section id="services" className="py-24 md:py-32 bg-background font-sans relative overflow-hidden">
@@ -55,7 +63,7 @@ export function Services({ services, limit }: ServicesProps) {
         {/* Services Grid */}
         <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <AnimatePresence mode="popLayout">
-            {displayServices.map((service) => {
+            {paginatedServices.map((service) => {
               const iconName = service.icon 
                 ? service.icon.charAt(0).toUpperCase() + service.icon.slice(1)
                 : "Search";
@@ -124,6 +132,59 @@ export function Services({ services, limit }: ServicesProps) {
             })}
           </AnimatePresence>
         </motion.div>
+
+        {/* PAGINATION CONTROLS FOR SERVICES PAGE */}
+        {!limit && totalPages > 1 && (
+          <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 p-6 bg-[#1a1122]/80 border border-white/10 rounded-3xl shadow-xl">
+            <span className="text-xs font-medium text-gray-400">
+              Showing <strong className="text-white font-bold">{startIndex + 1} – {Math.min(startIndex + ITEMS_PER_PAGE, displayServices.length)}</strong> of <strong className="text-[#ffbe00] font-black">{displayServices.length}</strong> Services
+            </span>
+
+            <div className="flex items-center gap-2 flex-wrap justify-center">
+              <button
+                type="button"
+                disabled={currentPage === 1}
+                onClick={() => {
+                  setCurrentPage(prev => Math.max(prev - 1, 1));
+                  document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-white/5 border border-white/10 text-white hover:bg-[#ffbe00] hover:text-[#24182e] disabled:opacity-30 disabled:pointer-events-none transition-colors flex items-center gap-1.5"
+              >
+                <ChevronLeft size={14} /> Previous
+              </button>
+
+              {Array.from({ length: totalPages }, (_, i) => i + 1).map((pageNum) => (
+                <button
+                  key={pageNum}
+                  type="button"
+                  onClick={() => {
+                    setCurrentPage(pageNum);
+                    document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className={`w-9 h-9 rounded-xl text-xs font-black transition-all ${
+                    currentPage === pageNum
+                      ? "bg-[#ffbe00] text-[#24182e] shadow-lg shadow-[#ffbe00]/20 scale-105"
+                      : "bg-white/5 border border-white/10 text-white hover:bg-white/15"
+                  }`}
+                >
+                  {pageNum}
+                </button>
+              ))}
+
+              <button
+                type="button"
+                disabled={currentPage === totalPages}
+                onClick={() => {
+                  setCurrentPage(prev => Math.min(prev + 1, totalPages));
+                  document.getElementById("services")?.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-white/5 border border-white/10 text-white hover:bg-[#ffbe00] hover:text-[#24182e] disabled:opacity-30 disabled:pointer-events-none transition-colors flex items-center gap-1.5"
+              >
+                Next <ChevronRight size={14} />
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Action Button */}
         <div className="mt-16 flex justify-center">
