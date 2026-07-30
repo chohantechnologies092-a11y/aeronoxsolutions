@@ -146,7 +146,7 @@ export async function updateProject(id: string, formData: FormData) {
 
   const slug = (rawSlug || finalTitle).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
-  await db.collection("projects").doc(id).update({
+  await db.collection("projects").doc(id).set({
     title: finalTitle,
     slug,
     content: content || "",
@@ -169,7 +169,7 @@ export async function updateProject(id: string, formData: FormData) {
     showOnHome,
     image: image || (galleryImages.length > 0 ? galleryImages[0] : "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=2000"),
     updatedAt: getNow(),
-  });
+  }, { merge: true });
 
   revalidatePath("/portfolio");
   revalidatePath("/admin/projects");

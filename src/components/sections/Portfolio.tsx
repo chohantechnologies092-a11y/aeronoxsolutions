@@ -48,7 +48,7 @@ export function Portfolio({ projects }: { projects: any[] }) {
             
             return (
               <motion.div
-                key={project.id || i}
+                key={`${project.id || 'project'}-${i}`}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}

@@ -25,6 +25,8 @@ type Project = {
   solution?: string;
   liveUrl: string | null;
   githubUrl: string | null;
+  videoUrl?: string | null;
+  galleryImages?: string[];
   featured: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -167,20 +169,53 @@ export function PortfolioContent({ project }: { project: Project }) {
         </motion.header>
 
         {/* Cover Feature Image */}
-        <motion.div 
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="w-full h-[400px] md:h-[500px] relative rounded-[2.5rem] overflow-hidden shadow-2xl border border-card-border mb-16 group"
-        >
-          <Image 
-            src={project.image} 
-            alt={project.title}
-            fill
-            className="object-cover transition-transform duration-1000 group-hover:scale-105"
-            priority
-          />
-        </motion.div>
+        {project.videoUrl ? (
+          <motion.div 
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="w-full relative rounded-[2.5rem] overflow-hidden shadow-2xl border border-card-border mb-16 aspect-video group"
+          >
+            <iframe 
+              src={project.videoUrl.replace("watch?v=", "embed/").replace("vimeo.com/", "player.vimeo.com/video/")}
+              title={project.title}
+              className="absolute inset-0 w-full h-full border-0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          </motion.div>
+        ) : (
+          <motion.div 
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="w-full h-[400px] md:h-[500px] relative rounded-[2.5rem] overflow-hidden shadow-2xl border border-card-border mb-16 group"
+          >
+            <Image 
+              src={project.image} 
+              alt={project.title}
+              fill
+              className="object-cover transition-transform duration-1000 group-hover:scale-105"
+              priority
+            />
+          </motion.div>
+        )}
+
+        {project.galleryImages && project.galleryImages.length > 0 && (
+          <motion.div 
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.7 }}
+            className="grid grid-cols-2 md:grid-cols-3 gap-6 mb-16 max-w-5xl mx-auto"
+          >
+            {project.galleryImages.map((img, idx) => (
+              <div key={idx} className="relative aspect-square md:aspect-[4/3] rounded-3xl overflow-hidden shadow-lg border border-white/10 group">
+                <Image src={img} alt={`Gallery ${idx + 1}`} fill className="object-cover group-hover:scale-110 transition-transform duration-700" />
+              </div>
+            ))}
+          </motion.div>
+        )}
 
         <div className="max-w-5xl mx-auto space-y-16 mb-24">
           

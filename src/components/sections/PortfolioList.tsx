@@ -528,7 +528,7 @@ export function PortfolioList({ projects }: { projects: any[] }) {
 
                       return (
                         <motion.div
-                          key={project.id || i}
+                          key={`${project.id || 'project'}-${i}`}
                           initial={{ opacity: 0, y: 30 }}
                           whileInView={{ opacity: 1, y: 0 }}
                           viewport={{ once: true }}
@@ -537,18 +537,37 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                         >
                           {/* Cover Image / Video Thumbnail */}
                           <div className="relative h-56 md:h-60 w-full overflow-hidden border-b border-white/10">
-                            <Image
-                              src={project.image}
-                              alt={project.title}
-                              fill
-                              className="object-cover transition-transform duration-1000 group-hover:scale-105"
-                            />
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#24182e] via-[#24182e]/40 to-transparent" />
+                            <Link href={`/portfolio/${project.slug}`} className="absolute inset-0 z-10">
+                              <Image
+                                src={project.image}
+                                alt={project.title}
+                                fill
+                                className="object-cover transition-transform duration-1000 group-hover:scale-105"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-[#24182e] via-[#24182e]/40 to-transparent" />
+                            </Link>
 
                             {/* Top Badges */}
                             <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between z-20">
                               <span className="px-3 py-1 rounded-full bg-[#24182e]/90 backdrop-blur-md border border-white/20 text-[#ffbe00] text-[9px] font-extrabold uppercase tracking-widest flex items-center gap-1">
-                                <Building2 size={11} /> {project.client || "Client Showcase"}
+                                <Sparkles size={11} /> {(() => {
+                                  const cat = project.serviceCategory || project.category || "";
+                                  if (!cat) return "Digital Project";
+                                  const map: Record<string, string> = {
+                                    "web-dev": "Web Development",
+                                    "seo": "SEO & Marketing",
+                                    "graphic-design": "Graphic Design",
+                                    "videography": "Videography",
+                                    "marketing": "Growth Marketing",
+                                    "ai-automation": "AI Automation",
+                                    "telemarketing": "Telemarketing",
+                                    "custom-software": "Custom Software"
+                                  };
+                                  return cat.split(',').map((c: string) => {
+                                    const cleanCat = c.trim();
+                                    return map[cleanCat] || cleanCat.replace(/-/g, " ");
+                                  }).join(" & ");
+                                })()}
                               </span>
 
                               {project.growthBadge && (
@@ -637,30 +656,10 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                             )}
 
                             {/* Action Bar */}
-                            <div className="pt-3.5 border-t border-white/10 flex items-center justify-between">
-                              {project.liveUrl ? (
-                                <a
-                                  href={project.liveUrl}
-                                  target="_blank"
-                                  rel="noopener noreferrer"
-                                  className="inline-flex items-center gap-1 text-[11px] font-bold text-[#ffbe00] hover:underline"
-                                >
-                                  <ExternalLink size={13} /> Live Site
-                                </a>
-                              ) : isVideo && project.videoUrl ? (
-                                <button
-                                  onClick={() => setActiveVideoUrl(project.videoUrl)}
-                                  className="inline-flex items-center gap-1 text-[11px] font-bold text-[#ff3b30] hover:underline"
-                                >
-                                  <Play size={13} /> Watch Video
-                                </button>
-                              ) : (
-                                <span className="text-[11px] text-white/40 font-medium">Verified Case Study</span>
-                              )}
-
+                            <div className="pt-3.5 border-t border-white/10 flex items-center justify-center">
                               <Link
                                 href={`/portfolio/${project.slug}`}
-                                className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#ffbe00] text-[#24182e] font-black text-[11px] uppercase tracking-wider rounded-xl hover:bg-white transition-colors shadow-md"
+                                className="inline-flex items-center gap-1.5 px-6 py-2.5 bg-[#ffbe00] text-[#24182e] font-black text-[11px] uppercase tracking-wider rounded-xl hover:bg-white transition-colors shadow-md"
                               >
                                 <span>Details</span>
                                 <ArrowRight size={13} />

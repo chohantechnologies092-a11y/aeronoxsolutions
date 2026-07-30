@@ -40,15 +40,38 @@ export async function getProjects(): Promise<any[]> {
     const snapshot = await db.collection("projects").get();
     const dbDocs = snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
 
-    const deletedIds = new Set(dbDocs.filter((d: any) => d.deleted).map((d: any) => d.id));
+    const deletedIds = new Set(dbDocs.filter((d: any) => d.deleted).map((d: any) => String(d.id).toLowerCase()));
     const activeDbDocs = dbDocs.filter((d: any) => !d.deleted);
 
-    const activeDbSlugs = new Set(activeDbDocs.map((d: any) => d.slug || d.id));
     const merged = [...activeDbDocs];
 
+    // Build unique tracking using lowercase values
+    const seenIds = new Set<string>();
+    const seenSlugs = new Set<string>();
+    const seenTitles = new Set<string>();
+
+    activeDbDocs.forEach((d: any) => {
+      if (d.id) seenIds.add(String(d.id).toLowerCase());
+      if (d.slug) seenSlugs.add(String(d.slug).toLowerCase());
+      if (d.title) seenTitles.add(String(d.title).toLowerCase());
+    });
+
     for (const p of ALL_PROJECTS) {
-      if (!deletedIds.has(p.id) && !activeDbSlugs.has(p.slug) && !activeDbSlugs.has(p.id)) {
+      const pId = String(p.id).toLowerCase();
+      const pSlug = String(p.slug).toLowerCase();
+      const pTitle = String(p.title).toLowerCase();
+
+      if (
+        !deletedIds.has(pId) &&
+        !seenIds.has(pId) &&
+        !seenSlugs.has(pSlug) &&
+        !seenTitles.has(pTitle)
+      ) {
         merged.push(p);
+        // Track the newly added hardcoded project to prevent any duplicate overlaps
+        seenIds.add(pId);
+        seenSlugs.add(pSlug);
+        seenTitles.add(pTitle);
       }
     }
 
@@ -137,7 +160,9 @@ export async function getServiceById(id: string): Promise<any> {
 
 export async function getProjectById(id: string): Promise<any> {
   const doc = await db.collection("projects").doc(id).get();
-  if (!doc.exists) return null;
+  if (!doc.exists) {
+    return ALL_PROJECTS.find((p) => p.id === id) || null;
+  }
   return { id: doc.id, ...doc.data() };
 }
 

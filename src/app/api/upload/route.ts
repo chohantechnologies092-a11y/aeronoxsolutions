@@ -51,7 +51,7 @@ export async function POST(request: Request) {
     });
 
     const timeoutPromise = new Promise<string>((_, reject) => {
-      setTimeout(() => reject(new Error("Cloudinary timeout")), 6000);
+      setTimeout(() => reject(new Error("Cloudinary timeout")), 30000);
     });
 
     try {
