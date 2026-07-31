@@ -34,6 +34,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         return {
           id: userDoc.id,
           email: user.email,
+          role: user.role || "admin",
         };
       },
     }),

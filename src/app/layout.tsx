@@ -48,12 +48,15 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
+import { ClientTracker } from "@/components/ui/ClientTracker";
+import { auth } from "@/auth";
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await auth();
   return (
     <html lang="en" className="dark antialiased" suppressHydrationWarning>
       <body
@@ -67,6 +70,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <LayoutShell>{children}</LayoutShell>
+          {!session && <ClientTracker />}
         </ThemeProvider>
       </body>
     </html>

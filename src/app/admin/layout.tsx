@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { auth, signOut } from "@/auth";
 import { Sidebar } from "@/components/admin/Sidebar";
+import { getRolePermissions } from "@/lib/data";
 
 export default async function AdminLayout({ children }: { children: React.ReactNode }) {
   // Middleware already handles unauthenticated redirect to /admin/login.
@@ -12,6 +13,8 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     redirect("/login");
   }
 
+  const editorPermissions = await getRolePermissions();
+
   async function handleSignOut() {
     "use server";
     await signOut({ redirectTo: "/login" });
@@ -19,7 +22,12 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-admin-bg">
-      <Sidebar userEmail={session.user?.email || null} onSignOut={handleSignOut} />
+      <Sidebar 
+        userEmail={session.user?.email || null} 
+        userRole={(session.user as any)?.role || "admin"}
+        editorPermissions={editorPermissions}
+        onSignOut={handleSignOut} 
+      />
       {/* Main Content */}
       <main className="flex-1 p-4 md:p-8 overflow-y-auto">{children}</main>
     </div>

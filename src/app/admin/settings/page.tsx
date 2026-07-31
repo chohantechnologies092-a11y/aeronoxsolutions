@@ -1,5 +1,5 @@
-import { getSettings } from "@/lib/data";
-import { upsertSettings, resetAnalyticsData } from "@/lib/actions";
+import { getSettings, getRolePermissions } from "@/lib/data";
+import { upsertSettings, resetAnalyticsData, upsertRolePermissions } from "@/lib/actions";
 
 export default async function AdminSettings() {
   const settings = await getSettings() || {
@@ -10,6 +10,22 @@ export default async function AdminSettings() {
       instagram: "",
     }
   };
+
+  const editorPermissions = await getRolePermissions();
+
+  const availableNavItems = [
+    { href: "/admin", label: "Dashboard" },
+    { href: "/admin/analytics", label: "Analytics" },
+    { href: "/admin/company", label: "Company Profile" },
+    { href: "/admin/projects", label: "Projects" },
+    { href: "/admin/services", label: "Services" },
+    { href: "/admin/clients", label: "Clients" },
+    { href: "/admin/blogs", label: "Blogs" },
+    { href: "/admin/seo", label: "Global SEO" },
+    { href: "/admin/leads", label: "Leads" },
+    { href: "/admin/users", label: "Users" },
+    { href: "/admin/settings", label: "Settings" },
+  ];
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -58,6 +74,35 @@ export default async function AdminSettings() {
           <div className="pt-4 border-t border-admin-border flex justify-end">
             <button type="submit" className="px-5 py-2.5 rounded-lg bg-accent text-[#24182e] font-bold hover:bg-white transition-colors">
               Save Settings
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <div className="bg-admin-card p-8 rounded-2xl border border-admin-border mt-8">
+        <h2 className="text-xl font-bold text-[#ffbe00] mb-4">Editor Role Permissions</h2>
+        <p className="text-sm text-admin-muted mb-6">
+          Select the dashboard pages that users with the <strong>Editor</strong> role are allowed to access.
+        </p>
+        <form action={upsertRolePermissions} className="flex flex-col gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {availableNavItems.map((item) => (
+              <label key={item.href} className="flex items-center gap-3 p-3 bg-black/10 dark:bg-black/20 rounded-xl border border-admin-border cursor-pointer hover:border-accent transition-colors">
+                <input 
+                  type="checkbox" 
+                  name="permissions" 
+                  value={item.href}
+                  defaultChecked={editorPermissions.includes(item.href)}
+                  className="w-4 h-4 text-[#ffbe00] bg-admin-bg border-admin-border rounded focus:ring-[#ffbe00]"
+                />
+                <span className="text-sm font-medium text-admin-text">{item.label}</span>
+              </label>
+            ))}
+          </div>
+
+          <div className="pt-4 border-t border-admin-border flex justify-end">
+            <button type="submit" className="px-5 py-2.5 rounded-lg bg-accent text-[#24182e] font-bold hover:bg-white transition-colors">
+              Save Permissions
             </button>
           </div>
         </form>

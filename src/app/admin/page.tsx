@@ -1,4 +1,4 @@
-import { getCount, getLeads, getMessages } from "@/lib/data";
+import { getCount, getLeads, getMessages, getAnalyticsEvents } from "@/lib/data";
 import { FolderKanban, FileText, Magnet, MessageCircle, BarChart3, Users, Clock } from "lucide-react";
 import Link from "next/link";
 import { DashboardChart } from "@/components/admin/DashboardChart";
@@ -10,8 +10,30 @@ export default async function AdminDashboard() {
   
   const leads = await getLeads();
   const messages = await getMessages();
+  const events = await getAnalyticsEvents();
 
   const recentLeads = leads.slice(0, 5);
+
+  // Calculate past 7 days data for chart
+  const last7DaysData = Array.from({ length: 7 }).map((_, i) => {
+    const d = new Date();
+    d.setDate(d.getDate() - (6 - i));
+    return {
+      dateObj: d,
+      name: d.toLocaleDateString([], { weekday: 'short' }),
+      views: 0
+    };
+  });
+
+  let weeklyTraffic = 0;
+  events.forEach((ev: any) => {
+    const d = new Date(ev.timestamp);
+    const chartDay = last7DaysData.find(item => item.dateObj.toDateString() === d.toDateString());
+    if (chartDay) {
+      chartDay.views += 1;
+      weeklyTraffic += 1;
+    }
+  });
 
   return (
     <div>
@@ -31,10 +53,13 @@ export default async function AdminDashboard() {
           <div className="relative z-10 flex items-center justify-between">
             <div>
               <h3 className="text-admin-muted text-sm font-medium">Weekly Traffic</h3>
-              <p className="text-4xl font-bold text-admin-text mt-1">12,450 <span className="text-sm font-medium text-emerald-600 dark:text-emerald-400">↑ 14%</span></p>
+              <p className="text-4xl font-bold text-admin-text mt-1">
+                {weeklyTraffic.toLocaleString()} 
+                {weeklyTraffic > 0 && <span className="text-sm font-medium text-emerald-600 dark:text-emerald-400 ml-2">Live</span>}
+              </p>
             </div>
           </div>
-          <DashboardChart />
+          <DashboardChart data={last7DaysData.map(d => ({ name: d.name, views: d.views }))} />
         </div>
 
         <div className="flex flex-col gap-6">

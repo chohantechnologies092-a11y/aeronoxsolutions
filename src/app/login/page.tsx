@@ -4,6 +4,8 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { Lock, Mail, Eye, EyeOff, ArrowRight, Loader2 } from "lucide-react";
+import Image from "next/image";
+import logoImage from "@/Untitled-2-01.png";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -52,8 +54,12 @@ export default function AdminLoginPage() {
       <div className="relative w-full max-w-md px-6">
         {/* Logo */}
         <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-gradient-to-br from-[#ffbe00] to-white text-[#24182e] text-2xl font-black shadow-[0_0_40px_rgba(255,190,0,0.4)] mb-5">
-            A
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-to-br from-[#ffbe00]/20 to-white/5 backdrop-blur-sm shadow-[0_0_40px_rgba(255,190,0,0.2)] mb-5 overflow-hidden p-2">
+            <Image 
+              src={logoImage} 
+              alt="Aeronox Logo" 
+              className="w-full h-full object-contain drop-shadow-[0_0_8px_rgba(255,190,0,0.4)]" 
+            />
           </div>
           <h1 className="text-2xl font-bold text-white font-display">Admin Portal</h1>
           <p className="mt-2 text-sm text-[#dcd7e3]/70">Sign in to manage your website</p>

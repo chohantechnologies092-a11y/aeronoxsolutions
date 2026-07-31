@@ -196,3 +196,29 @@ export async function getTeamMembers(): Promise<any[]> {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
 }
+
+export async function getRolePermissions(): Promise<string[]> {
+  try {
+    const doc = await db.collection("settings").doc("roles").get();
+    if (doc.exists) {
+      const data = doc.data();
+      return data?.editorPermissions || [];
+    }
+  } catch (err) {
+    console.error("Error fetching role permissions:", err);
+  }
+  // Default permissions for editor if not set
+  return ["/admin", "/admin/projects", "/admin/services", "/admin/blogs", "/admin/seo", "/admin/leads"];
+}
+
+export async function getAnalyticsEvents(): Promise<any[]> {
+  try {
+    const snapshot = await db.collection("analytics_events").orderBy("timestamp", "desc").get();
+    return snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
+  } catch (err) {
+    console.error("Error fetching analytics events:", err);
+    return [];
+  }
+}
+
+

@@ -2,17 +2,7 @@
 
 import { ResponsiveContainer, AreaChart, Area, Tooltip, XAxis } from 'recharts';
 
-const data = [
-  { name: 'Mon', views: 400 },
-  { name: 'Tue', views: 300 },
-  { name: 'Wed', views: 550 },
-  { name: 'Thu', views: 450 },
-  { name: 'Fri', views: 700 },
-  { name: 'Sat', views: 650 },
-  { name: 'Sun', views: 900 },
-];
-
-export function DashboardChart() {
+export function DashboardChart({ data }: { data: { name: string; views: number }[] }) {
   return (
     <div className="h-[200px] w-full mt-4">
       <ResponsiveContainer width="100%" height="100%">

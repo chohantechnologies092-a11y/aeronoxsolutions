@@ -2,6 +2,7 @@
 
 import { db } from "@/lib/firebase-admin";
 import { revalidatePath } from "next/cache";
+import bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
 
 // Helper for dates
@@ -543,16 +544,7 @@ export async function fetchSettingsAction() {
   return doc.data();
 }
 
-export async function resetAnalyticsData(formData?: FormData) {
-  // In a real application, you would delete tracking data or reset a counter in the database.
-  // For now, since we're using mock analytics data, we can just pretend it succeeded or log it.
-  console.log("Analytics data reset initiated by admin.");
-  // Add a small delay to simulate backend work
-  await new Promise(resolve => setTimeout(resolve, 500));
-  
-  revalidatePath("/admin/analytics");
-  revalidatePath("/admin");
-}
+
 
 // ────────────────────────────────────────────────────────────────────────────
 // Leads
@@ -701,4 +693,106 @@ export async function updateTeamMemberOrder(orderedIds: string[]) {
   revalidatePath("/about");
   revalidatePath("/admin/company");
 }
+
+// ────────────────────────────────────────────────────────────────────────────
+// Users
+// ────────────────────────────────────────────────────────────────────────────
+
+export async function getUsers() {
+  const snapshot = await db.collection("users").get();
+  return snapshot.docs.map((doc: any) => {
+    const data = doc.data();
+    return {
+      id: doc.id,
+      email: data.email,
+      role: data.role || "admin",
+    };
+  });
+}
+
+export async function createUser(formData: FormData) {
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
+  const role = (formData.get("role") as string) || "admin";
+
+  if (!email || !password) {
+    throw new Error("Email and password are required.");
+  }
+
+  // Check if user already exists
+  const existingUser = await db.collection("users").where("email", "==", email).limit(1).get();
+  if (!existingUser.empty) {
+    throw new Error("User with this email already exists.");
+  }
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  await db.collection("users").add({
+    email,
+    password: hashedPassword,
+    role,
+    createdAt: getNow(),
+    updatedAt: getNow(),
+  });
+
+  revalidatePath("/admin/users");
+}
+
+export async function updateUser(formData: FormData) {
+  const id = formData.get("id") as string;
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
+  const role = formData.get("role") as string;
+
+  if (!id || !email || !role) {
+    throw new Error("Missing required fields.");
+  }
+
+  const userRef = db.collection("users").doc(id);
+  const updateData: any = {
+    email,
+    role,
+    updatedAt: getNow(),
+  };
+
+  // Only update password if provided
+  if (password) {
+    updateData.password = await bcrypt.hash(password, 10);
+  }
+
+  await userRef.update(updateData);
+  revalidatePath("/admin/users");
+}
+
+export async function deleteUser(id: string) {
+  if (!id) throw new Error("ID is required.");
+  await db.collection("users").doc(id).delete();
+  revalidatePath("/admin/users");
+}
+
+export async function upsertRolePermissions(formData: FormData) {
+  const permissions = formData.getAll("permissions") as string[];
+  
+  const roleRef = db.collection("settings").doc("roles");
+  await roleRef.set({
+    editorPermissions: permissions,
+    updatedAt: getNow(),
+  }, { merge: true });
+
+  revalidatePath("/admin");
+  revalidatePath("/admin/settings");
+}
+
+export async function resetAnalyticsData() {
+  const snapshot = await db.collection("analytics_events").get();
+  const batch = db.batch();
+  snapshot.docs.forEach((doc: any) => {
+    batch.delete(doc.ref);
+  });
+  await batch.commit();
+  
+  revalidatePath("/admin/analytics");
+  revalidatePath("/admin/settings");
+}
+
 

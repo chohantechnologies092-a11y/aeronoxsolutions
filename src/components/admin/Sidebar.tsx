@@ -21,14 +21,19 @@ const navItems = [
   { href: "/admin/blogs", label: "Blogs", icon: FileText },
   { href: "/admin/seo", label: "Global SEO", icon: Search },
   { href: "/admin/leads", label: "Leads", icon: Magnet },
+  { href: "/admin/users", label: "Users", icon: Users },
   { href: "/admin/settings", label: "Settings", icon: Settings },
 ];
 
 export function Sidebar({ 
   userEmail, 
+  userRole,
+  editorPermissions,
   onSignOut 
 }: { 
   userEmail: string | null; 
+  userRole: string;
+  editorPermissions?: string[];
   onSignOut: () => void;
 }) {
   const pathname = usePathname();
@@ -95,7 +100,7 @@ export function Sidebar({
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-xs font-medium text-admin-text truncate">{userEmail}</p>
-            <p className="text-xs text-admin-muted">Administrator</p>
+            <p className="text-xs text-admin-muted capitalize">{userRole}</p>
           </div>
         </div>
       </div>
@@ -103,6 +108,11 @@ export function Sidebar({
       {/* Nav */}
       <nav className="flex-1 p-4 flex flex-col gap-1 overflow-y-auto custom-scrollbar">
         {navItems.map(({ href, label, icon: Icon }) => {
+          // Filter out restricted items for editors dynamically
+          if (userRole !== "admin" && editorPermissions && !editorPermissions.includes(href)) {
+            return null;
+          }
+
           const isActive = pathname === href || (href !== "/admin" && pathname?.startsWith(href));
           return (
             <Link
