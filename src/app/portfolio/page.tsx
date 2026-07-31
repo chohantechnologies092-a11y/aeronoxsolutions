@@ -1,12 +1,18 @@
 import type { Metadata } from "next";
 import { PortfolioList } from "@/components/sections/PortfolioList";
-import { getProjects } from "@/lib/data";
+import { getPageSEO, getSEO, getProjects } from "@/lib/data";
 import Image from "next/image";
 
-export const metadata: Metadata = {
-  title: "Case Studies & Work Portfolio",
-  description: "Explore our successful projects across web development, custom software engineering, SEO optimization, and social campaigns.",
-};
+export async function generateMetadata() {
+  const globalSeo = await getSEO();
+  const pageSeo = await getPageSEO("portfolio");
+
+  return {
+    title: pageSeo?.title || globalSeo?.title || "Case Studies & Work Portfolio | Aeronox Solutions",
+    description: pageSeo?.description || globalSeo?.description || "Explore our successful projects.",
+    keywords: pageSeo?.keywords || globalSeo?.keywords,
+  };
+}
 
 export const revalidate = 0; // Disable caching for dynamic data
 

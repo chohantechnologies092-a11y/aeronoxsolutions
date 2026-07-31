@@ -133,6 +133,46 @@ export default async function EditServicePage({
             <RichTextEditor name="content" defaultValue={service.content} />
           </div>
 
+          {/* SEO & ACCESSIBILITY SECTION */}
+          <div className="pt-6 border-t border-admin-border space-y-4">
+            <h3 className="text-lg font-bold text-admin-text">SEO & Accessibility Settings</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="flex flex-col gap-2">
+                <label htmlFor="metaTitle" className="text-sm font-medium text-admin-text">Meta Title (SEO)</label>
+                <input 
+                  type="text" 
+                  id="metaTitle"
+                  name="metaTitle" 
+                  defaultValue={service.metaTitle || ""}
+                  className="bg-black/10 dark:bg-black/20 border border-admin-border rounded-lg px-4 py-3 text-admin-text placeholder:text-muted focus:outline-none focus:border-accent transition-colors"
+                  placeholder="Custom title for Google"
+                />
+              </div>
+              <div className="flex flex-col gap-2">
+                <label htmlFor="imageAltText" className="text-sm font-medium text-admin-text">Image Alt Text (Accessibility)</label>
+                <input 
+                  type="text" 
+                  id="imageAltText"
+                  name="imageAltText" 
+                  defaultValue={service.imageAltText || ""}
+                  className="bg-black/10 dark:bg-black/20 border border-admin-border rounded-lg px-4 py-3 text-admin-text placeholder:text-muted focus:outline-none focus:border-accent transition-colors"
+                  placeholder="Describe banner image"
+                />
+              </div>
+            </div>
+            <div className="flex flex-col gap-2">
+              <label htmlFor="metaDescription" className="text-sm font-medium text-admin-text">Meta Description (SEO)</label>
+              <textarea 
+                id="metaDescription"
+                name="metaDescription" 
+                rows={2}
+                defaultValue={service.metaDescription || ""}
+                className="bg-black/10 dark:bg-black/20 border border-admin-border rounded-lg px-4 py-3 text-admin-text placeholder:text-muted focus:outline-none focus:border-accent transition-colors resize-none"
+                placeholder="Custom description for Google search results"
+              />
+            </div>
+          </div>
+
           <div className="pt-4 border-t border-admin-border flex justify-end gap-4">
             <a href="/admin/services" className="px-5 py-2.5 rounded-lg border border-admin-border text-admin-text hover:bg-black/5 dark:bg-white/5 transition-colors">
               Cancel

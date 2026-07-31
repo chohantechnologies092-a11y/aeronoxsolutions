@@ -8,7 +8,7 @@ import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
 export function LayoutShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const isAdmin = pathname.startsWith("/admin");
-  const isLogin = pathname.startsWith("/login");
+  const isLogin = pathname.startsWith("/login_back");
 
   if (isAdmin || isLogin) {
     return <>{children}</>;

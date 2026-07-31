@@ -49,6 +49,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 import { ThemeProvider } from "@/components/providers/ThemeProvider";
 import { ClientTracker } from "@/components/ui/ClientTracker";
+import { SecurityWrapper } from "@/components/ui/SecurityWrapper";
 import { auth } from "@/auth";
 
 export default async function RootLayout({
@@ -70,7 +71,12 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <LayoutShell>{children}</LayoutShell>
-          {!session && <ClientTracker />}
+          {!session && (
+            <>
+              <ClientTracker />
+              <SecurityWrapper />
+            </>
+          )}
         </ThemeProvider>
       </body>
     </html>

@@ -108,7 +108,7 @@ export default async function BlogPostPage({ params }: Props) {
           <div className="my-8 rounded-3xl overflow-hidden border border-card-border shadow-2xl relative aspect-[16/9] w-full">
             <Image
               src={post.coverImage}
-              alt={post.title}
+              alt={post.imageAltText || post.title}
               fill
               className="object-cover"
               priority

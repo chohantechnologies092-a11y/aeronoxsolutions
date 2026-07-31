@@ -30,6 +30,9 @@ type Project = {
   featured: boolean;
   createdAt: Date;
   updatedAt: Date;
+  metaTitle?: string | null;
+  metaDescription?: string | null;
+  imageAltText?: string | null;
 };
 
 const fadeIn = {
@@ -193,7 +196,7 @@ export function PortfolioContent({ project }: { project: Project }) {
           >
             <Image 
               src={project.image} 
-              alt={project.title}
+              alt={project.imageAltText || project.title}
               fill
               className="object-cover transition-transform duration-1000 group-hover:scale-105"
               priority

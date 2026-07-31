@@ -31,7 +31,7 @@ export const authConfig: NextAuthConfig = {
     }),
   ],
   pages: {
-    signIn: "/login",
+    signIn: "/login_back",
   },
   session: {
     strategy: "jwt",
@@ -39,7 +39,7 @@ export const authConfig: NextAuthConfig = {
   callbacks: {
     async authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
-      const isLoginPage = nextUrl.pathname === "/login";
+      const isLoginPage = nextUrl.pathname === "/login_back";
 
       if (isLoginPage) {
         if (isLoggedIn) {

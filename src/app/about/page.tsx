@@ -1,14 +1,20 @@
 import type { Metadata } from "next";
 import { AboutContent } from "./AboutContent";
 import Image from "next/image";
-import { getCompanyProfile, getTeamMembers } from "@/lib/data";
+import { getCompanyProfile, getTeamMembers, getPageSEO, getSEO } from "@/lib/data";
 import { Quote, Mail, Sparkles, ShieldCheck } from "lucide-react";
 import { FaLinkedin } from "react-icons/fa6";
 
-export const metadata: Metadata = {
-  title: "About Our Agency | Aeronox Solutions",
-  description: "Learn more about Aeronox Solutions, our engineering philosophy, digital capabilities, and leadership team.",
-};
+export async function generateMetadata() {
+  const globalSeo = await getSEO();
+  const pageSeo = await getPageSEO("about");
+
+  return {
+    title: pageSeo?.title || globalSeo?.title || "About Our Agency | Aeronox Solutions",
+    description: pageSeo?.description || globalSeo?.description || "Learn more about Aeronox Solutions.",
+    keywords: pageSeo?.keywords || globalSeo?.keywords,
+  };
+}
 
 export default async function AboutPage() {
   const profile = await getCompanyProfile();

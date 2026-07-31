@@ -200,6 +200,20 @@ export function BlogForm({ initialData, action, isEdit = false }: BlogFormProps)
                 Header Cover Image
               </label>
               <ImageUpload name="coverImage" defaultValue={initialData?.coverImage} />
+
+              <div className="mt-4">
+                <label htmlFor="imageAltText" className="block text-xs font-semibold uppercase tracking-wider text-admin-muted mb-2">
+                  Image Alt Text (Accessibility)
+                </label>
+                <input
+                  type="text"
+                  id="imageAltText"
+                  name="imageAltText"
+                  defaultValue={initialData?.imageAltText || ""}
+                  placeholder="Describe the cover image for screen readers"
+                  className="w-full bg-black/5 dark:bg-black/20 border border-admin-border rounded-xl px-4 py-3 text-sm text-admin-text focus:outline-none focus:ring-2 focus:ring-[#ffbe00]/50"
+                />
+              </div>
             </div>
 
             {/* Rich Editor */}

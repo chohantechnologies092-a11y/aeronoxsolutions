@@ -402,6 +402,45 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
           <RichTextEditor name="content" defaultValue={project?.content || ""} />
         </div>
 
+        {/* SEO & ACCESSIBILITY SECTION */}
+        <div className="pt-6 border-t border-white/10 space-y-4">
+          <label className="text-sm font-bold text-white uppercase tracking-wider flex items-center gap-2">
+            <Search size={16} className="text-[#ffbe00]" /> SEO & Accessibility Settings
+          </label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-semibold text-white">Meta Title (SEO)</label>
+              <input 
+                type="text" 
+                name="metaTitle" 
+                defaultValue={project?.metaTitle || ""}
+                className="bg-black/30 border border-white/15 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#ffbe00]"
+                placeholder="Custom title for Google (default: Project Title)"
+              />
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-semibold text-white">Image Alt Text (Accessibility)</label>
+              <input 
+                type="text" 
+                name="imageAltText" 
+                defaultValue={project?.imageAltText || ""}
+                className="bg-black/30 border border-white/15 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#ffbe00]"
+                placeholder="Describe cover image for screen readers"
+              />
+            </div>
+          </div>
+          <div className="flex flex-col gap-2">
+            <label className="text-sm font-semibold text-white">Meta Description (SEO)</label>
+            <textarea 
+              name="metaDescription" 
+              rows={2}
+              defaultValue={project?.metaDescription || ""}
+              className="bg-black/30 border border-white/15 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-[#ffbe00] text-sm resize-none"
+              placeholder="Custom description for Google search results"
+            />
+          </div>
+        </div>
+
         {/* HOME PAGE FEATURE CHECKBOX & SUBMIT ACTION BAR */}
         <div className="pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4">
           <label className="flex items-center gap-2 cursor-pointer text-white font-medium text-xs">

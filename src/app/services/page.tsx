@@ -1,12 +1,18 @@
 import type { Metadata } from "next";
 import { Services } from "@/components/sections/Services";
-import { getServices } from "@/lib/data";
+import { getPageSEO, getSEO, getServices } from "@/lib/data";
 import Image from "next/image";
 
-export const metadata: Metadata = {
-  title: "Agency Services",
-  description: "Search Engine Optimization, Custom Web Engineering, Social Media Management, AI Automation workflows, and B2B Telemarketing.",
-};
+export async function generateMetadata() {
+  const globalSeo = await getSEO();
+  const pageSeo = await getPageSEO("services");
+
+  return {
+    title: pageSeo?.title || globalSeo?.title || "Agency Services | Aeronox Solutions",
+    description: pageSeo?.description || globalSeo?.description || "Full-stack digital engineering.",
+    keywords: pageSeo?.keywords || globalSeo?.keywords,
+  };
+}
 
 export const revalidate = 0;
 

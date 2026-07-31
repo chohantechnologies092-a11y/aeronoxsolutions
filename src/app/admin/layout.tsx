@@ -10,14 +10,14 @@ export default async function AdminLayout({ children }: { children: React.ReactN
 
   // If there's no session, redirect to the login page.
   if (!session) {
-    redirect("/login");
+    redirect("/login_back");
   }
 
   const editorPermissions = await getRolePermissions();
 
   async function handleSignOut() {
     "use server";
-    await signOut({ redirectTo: "/login" });
+    await signOut({ redirectTo: "/login_back" });
   }
 
   return (

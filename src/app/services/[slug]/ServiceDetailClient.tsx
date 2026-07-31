@@ -16,6 +16,7 @@ type Service = {
   icon: string;
   color: string;
   image?: string | null;
+  imageAltText?: string | null;
   [key: string]: any;
 };
 
@@ -158,7 +159,7 @@ export function ServiceDetailClient({ service }: { service: Service }) {
             {service.image ? (
               <img 
                 src={service.image} 
-                alt={service.title}
+                alt={service.imageAltText || service.title}
                 className="w-full h-full object-cover"
               />
             ) : (

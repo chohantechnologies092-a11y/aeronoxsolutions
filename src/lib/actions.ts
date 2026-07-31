@@ -21,6 +21,9 @@ export async function createProject(formData: FormData) {
   const tags = formData.get("tags") as string;
   const image = formData.get("image") as string | null;
   const rawSlug = formData.get("slug") as string;
+  const metaTitle = formData.get("metaTitle") as string | null;
+  const metaDescription = formData.get("metaDescription") as string | null;
+  const imageAltText = formData.get("imageAltText") as string | null;
   
   // Case Study & Service specific fields
   const serviceCategory = (formData.get("serviceCategory") as string) || "web-dev";
@@ -80,6 +83,9 @@ export async function createProject(formData: FormData) {
     videoUrl: videoUrl || null,
     showOnHome,
     image: image || (galleryImages.length > 0 ? galleryImages[0] : "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=2000"),
+    metaTitle: metaTitle || null,
+    metaDescription: metaDescription || null,
+    imageAltText: imageAltText || null,
     createdAt: getNow(),
     updatedAt: getNow(),
   });
@@ -110,6 +116,9 @@ export async function updateProject(id: string, formData: FormData) {
   const tags = formData.get("tags") as string;
   const image = formData.get("image") as string | null;
   const rawSlug = formData.get("slug") as string;
+  const metaTitle = formData.get("metaTitle") as string | null;
+  const metaDescription = formData.get("metaDescription") as string | null;
+  const imageAltText = formData.get("imageAltText") as string | null;
 
   // Case Study & Service specific fields
   const serviceCategory = (formData.get("serviceCategory") as string) || "web-dev";
@@ -169,6 +178,9 @@ export async function updateProject(id: string, formData: FormData) {
     videoUrl: videoUrl || null,
     showOnHome,
     image: image || (galleryImages.length > 0 ? galleryImages[0] : "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=2000"),
+    metaTitle: metaTitle || null,
+    metaDescription: metaDescription || null,
+    imageAltText: imageAltText || null,
     updatedAt: getNow(),
   }, { merge: true });
 
@@ -214,6 +226,9 @@ export async function createService(formData: FormData) {
   const image = formData.get("image") as string | null;
   const capabilities = formData.get("capabilities") as string | null;
   const showOnHome = formData.get("showOnHome") === "on";
+  const metaTitle = formData.get("metaTitle") as string | null;
+  const metaDescription = formData.get("metaDescription") as string | null;
+  const imageAltText = formData.get("imageAltText") as string | null;
 
   if (!title || !shortDescription) {
     throw new Error("Title and short description are required.");
@@ -232,6 +247,9 @@ export async function createService(formData: FormData) {
     bentoClass: bentoClass || "md:col-span-1",
     capabilities: capabilities || "",
     showOnHome,
+    metaTitle: metaTitle || null,
+    metaDescription: metaDescription || null,
+    imageAltText: imageAltText || null,
     createdAt: getNow(),
     updatedAt: getNow(),
   });
@@ -253,6 +271,9 @@ export async function updateService(id: string, formData: FormData) {
   const image = formData.get("image") as string | null;
   const capabilities = formData.get("capabilities") as string | null;
   const showOnHome = formData.get("showOnHome") === "on";
+  const metaTitle = formData.get("metaTitle") as string | null;
+  const metaDescription = formData.get("metaDescription") as string | null;
+  const imageAltText = formData.get("imageAltText") as string | null;
 
   if (!title || !shortDescription) {
     throw new Error("Title and short description are required.");
@@ -271,6 +292,9 @@ export async function updateService(id: string, formData: FormData) {
     bentoClass: bentoClass || "md:col-span-1",
     capabilities: capabilities || "",
     showOnHome,
+    metaTitle: metaTitle || null,
+    metaDescription: metaDescription || null,
+    imageAltText: imageAltText || null,
     updatedAt: getNow(),
   });
 
@@ -325,6 +349,7 @@ export async function createBlog(formData: FormData) {
   const customSlug = formData.get("slug") as string | null;
   const metaTitle = formData.get("metaTitle") as string | null;
   const metaDescription = formData.get("metaDescription") as string | null;
+  const imageAltText = formData.get("imageAltText") as string | null;
   const keywords = formData.get("keywords") as string | null;
   const canonicalUrl = formData.get("canonicalUrl") as string | null;
   const published = formData.get("published") === "true" || formData.get("published") === "on";
@@ -358,6 +383,7 @@ export async function createBlog(formData: FormData) {
     tags,
     metaTitle: metaTitle || title,
     metaDescription: metaDescription || excerpt || content.replace(/<[^>]*>/g, "").slice(0, 160),
+    imageAltText: imageAltText || null,
     keywords: keywords || "",
     canonicalUrl: canonicalUrl || null,
     published: published ?? true,
@@ -384,6 +410,7 @@ export async function updateBlog(id: string, formData: FormData) {
   const customSlug = formData.get("slug") as string | null;
   const metaTitle = formData.get("metaTitle") as string | null;
   const metaDescription = formData.get("metaDescription") as string | null;
+  const imageAltText = formData.get("imageAltText") as string | null;
   const keywords = formData.get("keywords") as string | null;
   const canonicalUrl = formData.get("canonicalUrl") as string | null;
   const published = formData.get("published") === "true" || formData.get("published") === "on";
@@ -411,6 +438,7 @@ export async function updateBlog(id: string, formData: FormData) {
     tags,
     metaTitle: metaTitle || title,
     metaDescription: metaDescription || excerpt || content.replace(/<[^>]*>/g, "").slice(0, 160),
+    imageAltText: imageAltText || null,
     keywords: keywords || "",
     canonicalUrl: canonicalUrl || null,
     published,
@@ -458,6 +486,29 @@ export async function upsertSEO(formData: FormData) {
   }, { merge: true });
 
   revalidatePath("/");
+  revalidatePath("/admin/seo");
+  redirect("/admin/seo");
+}
+
+export async function upsertPageSEO(pageSlug: string, formData: FormData) {
+  const title = formData.get("title") as string;
+  const description = formData.get("description") as string;
+  const keywords = formData.get("keywords") as string;
+
+  const seoRef = db.collection("seo").doc(pageSlug);
+  await seoRef.set({
+    title,
+    description,
+    keywords,
+    updatedAt: getNow(),
+  }, { merge: true });
+
+  if (pageSlug === "home") {
+    revalidatePath("/");
+  } else {
+    revalidatePath(`/${pageSlug}`);
+  }
+  
   revalidatePath("/admin/seo");
   redirect("/admin/seo");
 }

@@ -129,6 +129,17 @@ export async function getSEO(): Promise<any> {
   return { id: doc.id, ...doc.data() };
 }
 
+export async function getPageSEO(pageSlug: string): Promise<any> {
+  try {
+    const doc = await db.collection("seo").doc(pageSlug).get();
+    if (!doc.exists) return null;
+    return { id: doc.id, ...doc.data() };
+  } catch (err) {
+    console.error(`Error fetching SEO for page ${pageSlug}:`, err);
+    return null;
+  }
+}
+
 export async function getSettings(): Promise<any> {
   const doc = await db.collection("settings").doc("global").get();
   if (!doc.exists) return null;

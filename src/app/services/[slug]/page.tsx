@@ -12,8 +12,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 
   return {
-    title: `${service.title} | Aeronox Solutions`,
-    description: service.shortDescription,
+    title: service.metaTitle || `${service.title} | Aeronox Solutions`,
+    description: service.metaDescription || service.shortDescription,
   };
 }
 
