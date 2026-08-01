@@ -27,6 +27,7 @@ type Project = {
   githubUrl: string | null;
   videoUrl?: string | null;
   galleryImages?: string[];
+  socialMediaStats?: any[];
   featured: boolean;
   createdAt: Date;
   updatedAt: Date;
