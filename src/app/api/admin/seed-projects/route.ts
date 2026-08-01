@@ -9,11 +9,11 @@ export async function GET() {
 
     // Fetch existing projects to check for duplicates by slug or title
     const snapshot = await projectsRef.get();
-    const existingDocs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() as any }));
+    const existingDocs = snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() as any }));
     
-    const existingIds = new Set(existingDocs.map(d => String(d.id).toLowerCase()));
-    const existingSlugs = new Set(existingDocs.map(d => String(d.slug).toLowerCase()));
-    const existingTitles = new Set(existingDocs.map(d => String(d.title).toLowerCase()));
+    const existingIds = new Set(existingDocs.map((d: any) => String(d.id).toLowerCase()));
+    const existingSlugs = new Set(existingDocs.map((d: any) => String(d.slug).toLowerCase()));
+    const existingTitles = new Set(existingDocs.map((d: any) => String(d.title).toLowerCase()));
 
     for (const project of ALL_PROJECTS) {
       const pId = String(project.id).toLowerCase();
