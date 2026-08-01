@@ -44,6 +44,16 @@ export async function createProject(formData: FormData) {
   const growthBadge = formData.get("growthBadge") as string | null;
   const challenge = formData.get("challenge") as string | null;
   const solution = formData.get("solution") as string | null;
+
+  const socialMediaStatsRaw = formData.get("socialMediaStats") as string | null;
+  let socialMediaStats: any[] = [];
+  try {
+    if (socialMediaStatsRaw) {
+      socialMediaStats = JSON.parse(socialMediaStatsRaw);
+    }
+  } catch {
+    socialMediaStats = [];
+  }
   const liveUrl = formData.get("liveUrl") as string | null;
   const githubUrl = formData.get("githubUrl") as string | null;
   const videoUrl = formData.get("videoUrl") as string | null;
@@ -82,6 +92,7 @@ export async function createProject(formData: FormData) {
     githubUrl: githubUrl || null,
     videoUrl: videoUrl || null,
     showOnHome,
+    socialMediaStats,
     image: image || (galleryImages.length > 0 ? galleryImages[0] : "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=2000"),
     metaTitle: metaTitle || null,
     metaDescription: metaDescription || null,
@@ -139,6 +150,16 @@ export async function updateProject(id: string, formData: FormData) {
   const growthBadge = formData.get("growthBadge") as string | null;
   const challenge = formData.get("challenge") as string | null;
   const solution = formData.get("solution") as string | null;
+
+  const socialMediaStatsRaw = formData.get("socialMediaStats") as string | null;
+  let socialMediaStats: any[] = [];
+  try {
+    if (socialMediaStatsRaw) {
+      socialMediaStats = JSON.parse(socialMediaStatsRaw);
+    }
+  } catch {
+    socialMediaStats = [];
+  }
   const liveUrl = formData.get("liveUrl") as string | null;
   const githubUrl = formData.get("githubUrl") as string | null;
   const videoUrl = formData.get("videoUrl") as string | null;
@@ -177,6 +198,7 @@ export async function updateProject(id: string, formData: FormData) {
     githubUrl: githubUrl || null,
     videoUrl: videoUrl || null,
     showOnHome,
+    socialMediaStats,
     image: image || (galleryImages.length > 0 ? galleryImages[0] : "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=2000"),
     metaTitle: metaTitle || null,
     metaDescription: metaDescription || null,
@@ -476,12 +498,14 @@ export async function upsertSEO(formData: FormData) {
   const title = formData.get("title") as string;
   const description = formData.get("description") as string;
   const keywords = formData.get("keywords") as string;
+  const bannerImage = formData.get("bannerImage") as string;
 
   const seoRef = db.collection("seo").doc("global");
   await seoRef.set({
     title,
     description,
     keywords,
+    bannerImage: bannerImage || null,
     updatedAt: getNow(),
   }, { merge: true });
 
@@ -494,12 +518,14 @@ export async function upsertPageSEO(pageSlug: string, formData: FormData) {
   const title = formData.get("title") as string;
   const description = formData.get("description") as string;
   const keywords = formData.get("keywords") as string;
+  const bannerImage = formData.get("bannerImage") as string;
 
   const seoRef = db.collection("seo").doc(pageSlug);
   await seoRef.set({
     title,
     description,
     keywords,
+    bannerImage: bannerImage || null,
     updatedAt: getNow(),
   }, { merge: true });
 
@@ -511,6 +537,25 @@ export async function upsertPageSEO(pageSlug: string, formData: FormData) {
   
   revalidatePath("/admin/seo");
   redirect("/admin/seo");
+}
+
+export async function upsertPageBanner(pageSlug: string, formData: FormData) {
+  const bannerImage = formData.get("bannerImage") as string;
+
+  const seoRef = db.collection("seo").doc(pageSlug);
+  await seoRef.set({
+    bannerImage: bannerImage || null,
+    updatedAt: getNow(),
+  }, { merge: true });
+
+  if (pageSlug === "home") {
+    revalidatePath("/");
+  } else {
+    revalidatePath(`/${pageSlug}`);
+  }
+  
+  revalidatePath("/admin/banners");
+  redirect(`/admin/banners?page=${pageSlug}`);
 }
 
 // ────────────────────────────────────────────────────────────────────────────

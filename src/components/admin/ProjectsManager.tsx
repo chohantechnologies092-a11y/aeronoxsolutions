@@ -2,7 +2,7 @@
 
 import React, { useState, useTransition } from "react";
 import Link from "next/link";
-import { Edit, Trash2, GripVertical, CheckCircle2, X, Calendar, User, Code2, Search, Palette, Video, Cpu, Sparkles, ChevronLeft, ChevronRight } from "lucide-react";
+import { Edit, Trash2, GripVertical, CheckCircle2, X, Calendar, User, Code2, Search, Palette, Video, Cpu, Sparkles, ChevronLeft, ChevronRight, TrendingUp } from "lucide-react";
 import { 
   DndContext, 
   closestCenter,
@@ -211,11 +211,16 @@ export function ProjectsManager({ initialProjects }: { initialProjects: any[] })
   const [isPending, startTransition] = useTransition();
   const [isMounted, setIsMounted] = React.useState(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
+  const [searchQuery, setSearchQuery] = useState("");
   const ADMIN_ITEMS_PER_PAGE = 10;
 
   React.useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  React.useEffect(() => {
+    setProjects(initialProjects);
+  }, [initialProjects]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -233,9 +238,9 @@ export function ProjectsManager({ initialProjects }: { initialProjects: any[] })
   const filterTabs = [
     { id: "all", label: "All Services", icon: Sparkles },
     { id: "web-dev", label: "Web Dev", icon: Code2 },
-    { id: "seo", label: "SEO & Growth", icon: Search },
+    { id: "seo", label: "SEO", icon: Search },
     { id: "graphic-design", label: "Graphics & Logos", icon: Palette },
-    { id: "videography", label: "Videography", icon: Video },
+    { id: "marketing", label: "Social Media Marketing", icon: TrendingUp },
     { id: "custom-software", label: "Custom Software", icon: Cpu },
   ];
 
@@ -254,10 +259,14 @@ export function ProjectsManager({ initialProjects }: { initialProjects: any[] })
       pTitle.includes("web") || pTitle.includes("site")
     )) return true;
 
-    if ((catId === "seo" || catId === "marketing") && (
-      pCat.includes("seo") || pCat.includes("market") || pCat.includes("growth") || pCat.includes("social") ||
-      pTags.includes("seo") || pTags.includes("market") || pTags.includes("social") || pTags.includes("ad") ||
-      pTitle.includes("seo") || pTitle.includes("market") || pTitle.includes("campaign")
+    if (catId === "seo" && (
+      pCat.includes("seo") || pTags.includes("seo") || pTitle.includes("seo") || (project.description || "").toLowerCase().includes("seo")
+    )) return true;
+
+    if (catId === "marketing" && (
+      pCat.includes("market") || pCat.includes("growth") || pCat.includes("social") ||
+      pTags.includes("market") || pTags.includes("social") || pTags.includes("ad") ||
+      pTitle.includes("market") || pTitle.includes("campaign")
     )) return true;
 
     if (catId === "graphic-design" && (
@@ -279,9 +288,15 @@ export function ProjectsManager({ initialProjects }: { initialProjects: any[] })
     return false;
   };
 
-  const displayedProjects = selectedFilterTab === "all"
-    ? projects
-    : projects.filter(p => matchesCategoryLocal(p, selectedFilterTab));
+  const displayedProjects = projects
+    .filter(p => matchesCategoryLocal(p, selectedFilterTab))
+    .filter(p => 
+      searchQuery === "" || 
+      (p.title || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (p.client || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (p.tags || "").toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (p.description || "").toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
   const totalAdminPages = Math.ceil(displayedProjects.length / ADMIN_ITEMS_PER_PAGE);
   const adminStartIndex = (currentPage - 1) * ADMIN_ITEMS_PER_PAGE;
@@ -352,31 +367,48 @@ export function ProjectsManager({ initialProjects }: { initialProjects: any[] })
       onDragEnd={handleDragEnd}
     >
       <div className="space-y-6">
-        {/* Service Filter Tabs */}
-        <div className="flex flex-wrap gap-2 p-1.5 bg-[#140c1e] rounded-2xl border border-white/10">
-          {filterTabs.map((tab) => {
-            const isActive = selectedFilterTab === tab.id;
-            const TabIcon = tab.icon;
-            const count = tab.id === "all" ? projects.length : projects.filter(p => matchesCategoryLocal(p, tab.id)).length;
+        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-4">
+          {/* Service Filter Tabs */}
+          <div className="flex flex-wrap gap-2 p-1.5 bg-[#140c1e] rounded-2xl border border-white/10 flex-1">
+            {filterTabs.map((tab) => {
+              const isActive = selectedFilterTab === tab.id;
+              const TabIcon = tab.icon;
+              const count = tab.id === "all" ? projects.length : projects.filter(p => matchesCategoryLocal(p, tab.id)).length;
+  
+              return (
+                <button
+                  key={tab.id}
+                  onClick={() => handleTabChange(tab.id)}
+                  className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all ${
+                    isActive
+                      ? "bg-[#ffbe00] text-[#24182e] shadow-lg shadow-[#ffbe00]/20"
+                      : "text-[#dcd7e3]/70 hover:text-white hover:bg-white/5"
+                  }`}
+                >
+                  <TabIcon size={14} />
+                  <span>{tab.label}</span>
+                  <span className={`px-2 py-0.5 rounded-full text-[10px] ${isActive ? "bg-[#24182e] text-white" : "bg-white/10 text-white/70"}`}>
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
 
-            return (
-              <button
-                key={tab.id}
-                onClick={() => handleTabChange(tab.id)}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs uppercase tracking-wider transition-all ${
-                  isActive
-                    ? "bg-[#ffbe00] text-[#24182e] shadow-lg shadow-[#ffbe00]/20"
-                    : "text-[#dcd7e3]/70 hover:text-white hover:bg-white/5"
-                }`}
-              >
-                <TabIcon size={14} />
-                <span>{tab.label}</span>
-                <span className={`px-2 py-0.5 rounded-full text-[10px] ${isActive ? "bg-[#24182e] text-white" : "bg-white/10 text-white/70"}`}>
-                  {count}
-                </span>
-              </button>
-            );
-          })}
+          {/* Search Bar */}
+          <div className="relative w-full xl:w-72 shrink-0">
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 text-admin-muted" size={16} />
+            <input 
+              type="text" 
+              placeholder="Search projects..." 
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="w-full bg-[#140c1e] border border-white/10 rounded-2xl pl-10 pr-4 py-3.5 text-sm text-admin-text focus:outline-none focus:border-[#ffbe00] transition-colors"
+            />
+          </div>
         </div>
 
         <div className="bg-admin-card rounded-2xl border border-admin-border overflow-hidden shadow-sm">

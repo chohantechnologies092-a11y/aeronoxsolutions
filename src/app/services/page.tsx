@@ -18,13 +18,15 @@ export const revalidate = 0;
 
 export default async function ServicesPage() {
   const services = await getServices();
+  const pageSeo = await getPageSEO("services");
+  const bannerImage = pageSeo?.bannerImage || "/website-hosting-concept-with-bright-light.jpg";
 
   return (
     <>
       {/* Banner Section */}
       <div className="w-full h-[500px] relative">
         <Image
-          src="/website-hosting-concept-with-bright-light.jpg"
+          src={bannerImage}
           alt="Our Services"
           fill
           className="object-cover"

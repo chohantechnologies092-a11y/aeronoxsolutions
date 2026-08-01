@@ -88,7 +88,10 @@ function parseMarkdown(md: string): string {
   return formatted;
 }
 
+import { useState } from "react";
+
 export function PortfolioContent({ project }: { project: Project }) {
+  const [activePlatform, setActivePlatform] = useState<string>(project?.socialMediaStats?.[0]?.platform || "");
   const tags = (project.tags || "").split(",").map((tag: string) => tag.trim()).filter(Boolean);
   const beforeLines = (project.beforeStats || "").split("\n").filter(Boolean);
   const afterLines = (project.afterStats || "").split("\n").filter(Boolean);
@@ -299,6 +302,87 @@ export function PortfolioContent({ project }: { project: Project }) {
                   )}
                 </div>
               </div>
+            </motion.div>
+          )}
+
+          {/* SOCIAL MEDIA STATS */}
+          {project.socialMediaStats && project.socialMediaStats.length > 0 && (
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="p-8 md:p-12 bg-[#1a1122] rounded-[2.5rem] border border-white/10 shadow-2xl relative overflow-hidden"
+            >
+              <div className="flex items-center gap-3 mb-8">
+                <div className="w-12 h-12 rounded-2xl bg-[#ff3b30]/20 flex items-center justify-center text-[#ff3b30]">
+                  <TrendingUp size={24} />
+                </div>
+                <div>
+                  <h3 className="text-2xl font-black uppercase tracking-tight text-white">Social Media Campaign Stats</h3>
+                  <p className="text-xs text-[#dcd7e3]/70">Platform-specific growth and engagement metrics.</p>
+                </div>
+              </div>
+
+              {/* Platform Tabs */}
+              <div className="flex flex-wrap gap-3 mb-8">
+                {project.socialMediaStats.map((stat, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setActivePlatform(stat.platform)}
+                    className={`px-6 py-3 rounded-xl font-bold uppercase tracking-wider text-sm transition-all ${
+                      activePlatform === stat.platform 
+                        ? "bg-[#ff3b30] text-white shadow-[0_0_20px_rgba(255,59,48,0.4)]" 
+                        : "bg-white/5 text-white/70 hover:bg-white/10"
+                    }`}
+                  >
+                    {stat.platform}
+                  </button>
+                ))}
+              </div>
+
+              {/* Active Platform Content */}
+              {project.socialMediaStats.filter(s => s.platform === activePlatform).map((stat, idx) => (
+                <div key={idx} className="space-y-8 animate-in fade-in zoom-in-95 duration-300">
+                  {stat.description && (
+                    <div className="bg-white/5 border border-white/10 p-6 rounded-2xl text-[#dcd7e3] text-sm md:text-base leading-relaxed">
+                      {stat.description}
+                    </div>
+                  )}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div className="bg-red-500/10 border border-red-500/30 p-6 md:p-8 rounded-3xl relative flex flex-col justify-between">
+                      <div>
+                        <div className="text-red-400 font-black uppercase tracking-wider text-xs mb-4 flex items-center gap-2">
+                          <span className="w-3 h-3 rounded-full bg-red-500 animate-pulse" /> Before Campaign
+                        </div>
+                        <div className="whitespace-pre-line text-sm text-red-100/90 font-medium leading-relaxed">
+                          {stat.beforeStats || "N/A"}
+                        </div>
+                      </div>
+                      {stat.beforeImage && (
+                        <div className="relative h-40 md:h-48 w-full rounded-2xl overflow-hidden border border-red-500/30 mt-6 shadow-lg">
+                          <Image src={stat.beforeImage} alt={`${stat.platform} Before`} fill className="object-cover" />
+                        </div>
+                      )}
+                    </div>
+                    <div className="bg-emerald-500/10 border border-emerald-500/30 p-6 md:p-8 rounded-3xl relative flex flex-col justify-between">
+                      <div>
+                        <div className="text-emerald-400 font-black uppercase tracking-wider text-xs mb-4 flex items-center gap-2">
+                          <span className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse" /> After Campaign
+                        </div>
+                        <div className="whitespace-pre-line text-sm text-emerald-100/90 font-bold leading-relaxed">
+                          {stat.afterStats || "N/A"}
+                        </div>
+                      </div>
+                      {stat.afterImage && (
+                        <div className="relative h-40 md:h-48 w-full rounded-2xl overflow-hidden border border-emerald-500/30 mt-6 shadow-lg">
+                          <Image src={stat.afterImage} alt={`${stat.platform} After`} fill className="object-cover" />
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
             </motion.div>
           )}
 

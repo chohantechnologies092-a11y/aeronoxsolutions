@@ -40,6 +40,21 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
   const [selectedServiceCategories, setSelectedServiceCategories] = useState<string[]>(initialCategories.length > 0 ? initialCategories : ["web-dev"]);
   const [galleryList, setGalleryList] = useState<string[]>(project?.galleryImages || []);
   const [tempImage, setTempImage] = useState<string>("");
+  const [socialStats, setSocialStats] = useState<any[]>(project?.socialMediaStats || []);
+
+  const addSocialStat = () => {
+    setSocialStats([...socialStats, { platform: "Facebook", description: "", beforeStats: "", afterStats: "" }]);
+  };
+
+  const removeSocialStat = (idx: number) => {
+    setSocialStats(socialStats.filter((_, i) => i !== idx));
+  };
+
+  const updateSocialStat = (idx: number, field: string, value: string) => {
+    const updated = [...socialStats];
+    updated[idx][field] = value;
+    setSocialStats(updated);
+  };
 
   const toggleCategory = (id: string) => {
     setSelectedServiceCategories(prev => {
@@ -72,7 +87,7 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
     },
     { 
       id: "seo", 
-      title: "SEO & Marketing", 
+      title: "SEO", 
       subtitle: "Before vs After metrics & ROI", 
       icon: Search, 
       color: "#00c2ff" 
@@ -85,10 +100,10 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
       color: "#ff007a" 
     },
     { 
-      id: "videography", 
-      title: "Videography", 
-      subtitle: "Video URL (YouTube/Vimeo)", 
-      icon: Video, 
+      id: "marketing", 
+      title: "Social Media Marketing", 
+      subtitle: "Social campaigns & ad creatives", 
+      icon: TrendingUp, 
       color: "#ff3b30" 
     },
     { 
@@ -159,6 +174,7 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
         {/* Hidden inputs combining the selected categories */}
         <input type="hidden" name="serviceCategory" value={selectedServiceCategories.join(',')} />
         <input type="hidden" name="galleryImages" value={JSON.stringify(galleryList)} />
+        <input type="hidden" name="socialMediaStats" value={JSON.stringify(socialStats)} />
 
         {/* GLOBAL CORE FIELDS (Always visible) */}
         <div className="space-y-6 animate-in fade-in duration-300">
@@ -287,6 +303,90 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
                 <ImageUpload name="afterImage" defaultValue={project?.afterImage || ""} />
               </div>
             </div>
+          </div>
+        )}
+
+        {/* Social Media Stats (Marketing Only) */}
+        {selectedServiceCategories.includes("marketing") && (
+          <div className="space-y-4 pt-6 border-t border-white/10 animate-in fade-in">
+            <div className="flex items-center justify-between">
+              <label className="text-sm font-bold text-[#ffbe00] flex items-center gap-1.5 uppercase tracking-wider">
+                <TrendingUp size={16} /> Social Media Stats
+              </label>
+              <button type="button" onClick={addSocialStat} className="text-xs bg-[#ffbe00] text-[#1a1122] px-3 py-1.5 rounded-lg font-bold hover:bg-white transition-colors">
+                + Add Platform
+              </button>
+            </div>
+            {socialStats.map((stat, idx) => (
+              <div key={idx} className="bg-black/20 p-5 rounded-2xl border border-white/10 space-y-4 relative">
+                <button type="button" onClick={() => removeSocialStat(idx)} className="absolute top-4 right-4 text-red-400 hover:text-red-300">
+                  <X size={16} />
+                </button>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pr-6">
+                  <div className="flex flex-col gap-2">
+                    <label className="text-xs text-white font-semibold">Platform</label>
+                    <select 
+                      value={stat.platform}
+                      onChange={(e) => updateSocialStat(idx, "platform", e.target.value)}
+                      className="bg-black/30 border border-white/15 rounded-xl px-4 py-2.5 text-white text-sm focus:border-[#ffbe00] focus:outline-none"
+                    >
+                      <option value="Facebook">Facebook</option>
+                      <option value="Instagram">Instagram</option>
+                      <option value="LinkedIn">LinkedIn</option>
+                      <option value="TikTok">TikTok</option>
+                      <option value="Twitter/X">Twitter/X</option>
+                      <option value="Pinterest">Pinterest</option>
+                      <option value="YouTube">YouTube</option>
+                      <option value="Meta Ads">Meta Ads</option>
+                    </select>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="text-xs text-white font-semibold">Short Description</label>
+                    <input 
+                      type="text" 
+                      value={stat.description}
+                      onChange={(e) => updateSocialStat(idx, "description", e.target.value)}
+                      className="bg-black/30 border border-white/15 rounded-xl px-4 py-2.5 text-white text-sm focus:border-[#ffbe00] focus:outline-none"
+                      placeholder="e.g. Daily posting and ad management"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="text-xs font-bold text-red-400">Before Stats</label>
+                    <textarea 
+                      value={stat.beforeStats}
+                      onChange={(e) => updateSocialStat(idx, "beforeStats", e.target.value)}
+                      className="bg-black/30 border border-red-500/30 rounded-xl px-4 py-2.5 text-white text-xs resize-none focus:border-red-500 focus:outline-none"
+                      rows={2}
+                      placeholder="e.g. 500 followers, 1% engagement"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="text-xs font-bold text-emerald-400">After Stats</label>
+                    <textarea 
+                      value={stat.afterStats}
+                      onChange={(e) => updateSocialStat(idx, "afterStats", e.target.value)}
+                      className="bg-black/30 border border-emerald-500/30 rounded-xl px-4 py-2.5 text-white text-xs resize-none focus:border-emerald-500 focus:outline-none"
+                      rows={2}
+                      placeholder="e.g. 5,000 followers, 8% engagement"
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="text-xs font-bold text-red-400">Before Image</label>
+                    <ImageUpload 
+                      defaultValue={stat.beforeImage || ""} 
+                      onChange={(url) => updateSocialStat(idx, "beforeImage", url)} 
+                    />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <label className="text-xs font-bold text-emerald-400">After Image</label>
+                    <ImageUpload 
+                      defaultValue={stat.afterImage || ""} 
+                      onChange={(url) => updateSocialStat(idx, "afterImage", url)} 
+                    />
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         )}
 

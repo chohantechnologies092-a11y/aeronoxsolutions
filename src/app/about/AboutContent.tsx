@@ -19,7 +19,7 @@ const staggerContainer = {
   }
 };
 
-export function AboutContent() {
+export function AboutContent({ bannerImage = "/images/team_workspace.png" }: { bannerImage?: string }) {
   return (
     <>
       <div className="bg-mesh pt-36 pb-20 relative overflow-hidden">
@@ -74,7 +74,7 @@ export function AboutContent() {
               <div className="relative rounded-3xl overflow-hidden border border-card-border shadow-2xl bento-card">
                 <div className="aspect-[4/3] w-full relative">
                   <img 
-                    src="/images/team_workspace.png" 
+                    src={bannerImage} 
                     alt="Aeronox Solutions Team Collaboration" 
                     className="object-cover w-full h-full"
                   />

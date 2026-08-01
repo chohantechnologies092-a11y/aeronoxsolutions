@@ -77,7 +77,7 @@ const SERVICE_OVERVIEWS: Record<string, {
     gradient: "from-[#2e1818] via-[#241111] to-[#180b0b]"
   },
   "marketing": {
-    title: "Growth & Performance Marketing",
+    title: "Social Media Marketing",
     subtitle: "Full-funnel customer acquisition, paid media strategy, and conversion rate optimization (CRO).",
     description: "We execute aggressive multi-channel marketing campaigns that lower CAC, increase LTV, and scale monthly recurring revenue (MRR).",
     icon: TrendingUp,
@@ -197,42 +197,48 @@ export function PortfolioList({ projects }: { projects: any[] }) {
       title: "All Work", 
       subtitle: "Complete agency client portfolio", 
       icon: Sparkles, 
-      color: "#ffbe00" 
+      color: "#ffbe00",
+      image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop"
     },
     { 
       id: "web-dev", 
       title: "Web Development", 
       subtitle: "Simple details, live links & Next.js sites", 
       icon: Code2, 
-      color: "#6a35ff" 
+      color: "#6a35ff",
+      image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2072&auto=format&fit=crop"
     },
     { 
       id: "seo", 
-      title: "SEO & Growth Marketing", 
+      title: "SEO", 
       subtitle: "Before vs After metrics & ROI stats", 
       icon: Search, 
-      color: "#00c2ff" 
+      color: "#00c2ff",
+      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop"
     },
     { 
       id: "graphic-design", 
       title: "Graphics & Logo Design", 
       subtitle: "Pure brand logo & design image gallery", 
       icon: Palette, 
-      color: "#ff007a" 
+      color: "#ff007a",
+      image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=2071&auto=format&fit=crop"
     },
     { 
-      id: "videography", 
-      title: "Videography & Motion", 
-      subtitle: "Commercial videos & motion ads", 
-      icon: Video, 
-      color: "#ff3b30" 
+      id: "marketing", 
+      title: "Social Media Marketing", 
+      subtitle: "Social campaigns & ad creatives", 
+      icon: TrendingUp, 
+      color: "#ff3b30",
+      image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1974&auto=format&fit=crop"
     },
     { 
       id: "custom-software", 
       title: "Custom Software", 
       subtitle: "SaaS platforms & system screenshots", 
       icon: Cpu, 
-      color: "#af52de" 
+      color: "#af52de",
+      image: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070&auto=format&fit=crop"
     },
   ];
 
@@ -248,7 +254,8 @@ export function PortfolioList({ projects }: { projects: any[] }) {
   const graphicGalleryItems: { id: string; title: string; client: string; imageUrl: string }[] = [];
   if (projects) {
     projects.forEach(p => {
-      if (matchesCategory(p, "graphic-design") || (p.galleryImages && p.galleryImages.length > 0)) {
+      // ONLY include projects that are actually classified as graphic-design
+      if (matchesCategory(p, "graphic-design")) {
         if (p.galleryImages && p.galleryImages.length > 0) {
           p.galleryImages.forEach((gImg: string) => {
             graphicGalleryItems.push({
@@ -321,55 +328,55 @@ export function PortfolioList({ projects }: { projects: any[] }) {
             const isActive = selectedCategory === box.id;
             const BoxIcon = box.icon;
             const matchCount = projects ? projects.filter(p => matchesCategory(p, box.id)).length : 0;
+            const count = box.id === "all" ? `${projects?.length || 0}` : box.id === "graphic-design" ? `${graphicGalleryItems.length}` : `${matchCount}`;
 
             return (
               <button
                 key={box.id}
                 type="button"
                 onClick={() => handleServiceSelect(box.id)}
-                className={`p-5 rounded-[2rem] text-left transition-all duration-500 relative overflow-hidden group flex flex-col justify-between h-56 border ${
-                  isActive
-                    ? "bg-[#24182e] border-[#ffbe00] shadow-[0_0_30px_rgba(255,190,0,0.3)] scale-[1.03] ring-2 ring-[#ffbe00]/50"
-                    : "bg-[#24182e]/80 border-white/10 hover:border-white/30 hover:bg-[#24182e] hover:scale-[1.02] shadow-xl"
+                className={`group relative h-48 sm:h-56 rounded-[2rem] overflow-hidden text-left transition-all duration-500 shadow-xl ${
+                  isActive ? "ring-4 ring-[#ffbe00] scale-[1.02] shadow-[0_0_30px_rgba(255,190,0,0.3)] z-10" : "hover:scale-[1.02] hover:shadow-2xl"
                 }`}
               >
-                <div 
-                  className="absolute top-0 right-0 w-32 h-32 rounded-full blur-3xl opacity-20 group-hover:opacity-40 transition-opacity pointer-events-none"
-                  style={{ backgroundColor: box.color }}
+                {/* Background Image */}
+                <Image 
+                  src={box.image || ""} 
+                  alt={box.title} 
+                  fill 
+                  className={`object-cover transition-transform duration-700 ${isActive ? 'scale-110' : 'group-hover:scale-110'}`} 
                 />
+                
+                {/* Overlay */}
+                <div className={`absolute inset-0 transition-colors duration-500 ${
+                  isActive ? "bg-[#1a1122]/70" : "bg-[#1a1122]/80 group-hover:bg-[#1a1122]/60"
+                }`} />
 
-                <div className="flex items-center justify-between z-10">
-                  <div 
-                    className="w-11 h-11 rounded-2xl flex items-center justify-center border border-white/15 bg-white/10 backdrop-blur-md shadow-lg transition-transform group-hover:scale-110"
-                  >
-                    <BoxIcon size={22} style={{ color: box.color }} strokeWidth={2.5} />
+                {/* Content */}
+                <div className="absolute inset-0 p-5 flex flex-col justify-between z-10">
+                  <div className="flex items-start justify-between">
+                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center backdrop-blur-md border shadow-lg ${
+                      isActive ? "bg-[#ffbe00] border-[#ffbe00] text-[#1a1122]" : "bg-white/20 border-white/30 text-white"
+                    }`}>
+                      <BoxIcon size={20} strokeWidth={2.5} />
+                    </div>
+                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-black tracking-wider shadow-lg border ${
+                      isActive ? "bg-[#1a1122] text-[#ffbe00] border-[#ffbe00]/30" : "bg-black/50 text-white border-white/10 backdrop-blur-sm"
+                    }`}>
+                      {count}
+                    </span>
                   </div>
 
-                  <span className={`px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider ${
-                    isActive 
-                      ? "bg-[#ffbe00] text-[#24182e]" 
-                      : "bg-white/10 text-white/80 border border-white/10"
-                  }`}>
-                    {box.id === "all" ? `${projects?.length || 0}` : box.id === "graphic-design" ? `${graphicGalleryItems.length}` : `${matchCount}`}
-                  </span>
-                </div>
-
-                <div className="z-10 mt-3">
-                  <h3 className={`text-sm font-black leading-tight mb-1 transition-colors ${
-                    isActive ? "text-[#ffbe00]" : "text-white group-hover:text-[#ffbe00]"
-                  }`}>
-                    {box.title}
-                  </h3>
-                  <p className="text-[11px] text-[#dcd7e3]/70 font-medium line-clamp-2 leading-tight">
-                    {box.subtitle}
-                  </p>
-                </div>
-
-                <div className="z-10 pt-2 border-t border-white/10 flex items-center justify-between text-[10px] font-bold uppercase tracking-wider text-[#dcd7e3]/80 group-hover:text-white">
-                  <span>{isActive ? "Opened" : "Open Service"}</span>
-                  <ArrowRight size={12} className={`transition-transform duration-300 ${
-                    isActive ? "rotate-90 text-[#ffbe00]" : "group-hover:translate-x-1"
-                  }`} />
+                  <div>
+                    <h3 className={`text-base md:text-lg font-black leading-tight mb-1 drop-shadow-md transition-colors ${
+                      isActive ? "text-[#ffbe00]" : "text-white group-hover:text-[#ffbe00]"
+                    }`}>
+                      {box.title}
+                    </h3>
+                    <p className="text-xs text-white/80 font-medium line-clamp-2 drop-shadow-sm">
+                      {box.subtitle}
+                    </p>
+                  </div>
                 </div>
               </button>
             );
@@ -520,11 +527,19 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                 </div>
               ) : (
                 <div className="space-y-12">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 auto-rows-fr">
                     {paginatedProjects.map((project, i) => {
                       const beforeLines = (project.beforeStats || "").split("\n").filter(Boolean);
                       const afterLines = (project.afterStats || "").split("\n").filter(Boolean);
                       const isVideo = project.videoUrl || project.serviceCategory === "videography";
+                      
+                      // Bento Box Logic: Make specific indices span 2 columns to perfectly fill a 3-col grid with 6 items.
+                      // Row 1: index 0 (2 cols), index 1 (1 col)
+                      // Row 2: index 2 (1 col), index 3 (2 cols)
+                      // Row 3: index 4 (2 cols), index 5 (1 col)
+                      const isFeatured = i === 0 || i === 3 || i === 4;
+                      const cardSpanClass = isFeatured ? "md:col-span-2 lg:col-span-2" : "col-span-1";
+                      const imageContainerHeight = isFeatured ? "h-72 md:h-80" : "h-56 md:h-60";
 
                       return (
                         <motion.div
@@ -533,46 +548,67 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                           whileInView={{ opacity: 1, y: 0 }}
                           viewport={{ once: true }}
                           transition={{ duration: 0.5, delay: (i % 3) * 0.1 }}
-                          className="rounded-[2.2rem] bg-[#24182e] border border-white/15 text-white shadow-2xl overflow-hidden flex flex-col group hover:border-[#ffbe00]/50 transition-all duration-500"
+                          className={`rounded-[2.2rem] bg-[#1a1122]/90 border border-white/10 text-white shadow-2xl overflow-hidden flex flex-col group hover:border-[#ffbe00]/50 hover:shadow-[0_0_30px_rgba(255,190,0,0.15)] transition-all duration-700 relative ${cardSpanClass}`}
                         >
                           {/* Cover Image / Video Thumbnail */}
-                          <div className="relative h-56 md:h-60 w-full overflow-hidden border-b border-white/10">
-                            <Link href={`/portfolio/${project.slug}`} className="absolute inset-0 z-10">
-                              <Image
-                                src={project.image}
-                                alt={project.title}
-                                fill
-                                className="object-cover transition-transform duration-1000 group-hover:scale-105"
-                              />
-                              <div className="absolute inset-0 bg-gradient-to-t from-[#24182e] via-[#24182e]/40 to-transparent" />
+                          <div className={`relative w-full overflow-hidden border-b border-white/10 ${imageContainerHeight}`}>
+                            <Image
+                              src={project.image}
+                              alt={project.title}
+                              fill
+                              className="object-cover transition-transform duration-1000 group-hover:scale-105"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#1a1122] via-transparent to-transparent z-10" />
+                            
+                            {/* Glassmorphism Hover Reveal */}
+                            <Link href={`/portfolio/${project.slug}`} className="absolute inset-0 z-40 bg-[#1a1122]/40 backdrop-blur-md flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 overflow-hidden">
+                              <div className="transform translate-y-10 group-hover:translate-y-0 transition-transform duration-700 ease-out flex flex-col items-center">
+                                <div className="w-16 h-16 rounded-full bg-[#ffbe00] text-[#1a1122] flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(255,190,0,0.5)]">
+                                  <ArrowRight size={28} strokeWidth={3} className="-rotate-45" />
+                                </div>
+                                <span className="text-white font-black uppercase tracking-widest text-sm bg-black/50 px-6 py-2 rounded-full border border-white/20">
+                                  View Case Study
+                                </span>
+                              </div>
                             </Link>
 
                             {/* Top Badges */}
-                            <div className="absolute top-3.5 left-3.5 right-3.5 flex items-center justify-between z-20">
-                              <span className="px-3 py-1 rounded-full bg-[#24182e]/90 backdrop-blur-md border border-white/20 text-[#ffbe00] text-[9px] font-extrabold uppercase tracking-widest flex items-center gap-1">
-                                <Sparkles size={11} /> {(() => {
+                            <div className="absolute top-4 left-4 right-4 flex items-start justify-between z-20 pointer-events-none">
+                              <div className="flex flex-wrap gap-2 max-w-[65%]">
+                                {(() => {
                                   const cat = project.serviceCategory || project.category || "";
-                                  if (!cat) return "Digital Project";
+                                  if (!cat) return (
+                                    <span className="px-3.5 py-1.5 rounded-full bg-[#090512]/80 backdrop-blur-md border border-white/10 text-white text-[9px] font-extrabold uppercase tracking-widest flex items-center gap-1.5 whitespace-nowrap shadow-lg">
+                                      <Sparkles size={11} className="text-[#ffbe00]" /> Digital Project
+                                    </span>
+                                  );
+
                                   const map: Record<string, string> = {
                                     "web-dev": "Web Development",
-                                    "seo": "SEO & Marketing",
+                                    "seo": "SEO",
                                     "graphic-design": "Graphic Design",
                                     "videography": "Videography",
-                                    "marketing": "Growth Marketing",
+                                    "marketing": "Social Media Marketing",
                                     "ai-automation": "AI Automation",
                                     "telemarketing": "Telemarketing",
                                     "custom-software": "Custom Software"
                                   };
-                                  return cat.split(',').map((c: string) => {
+                                  
+                                  return cat.split(',').map((c: string, idx: number) => {
                                     const cleanCat = c.trim();
-                                    return map[cleanCat] || cleanCat.replace(/-/g, " ");
-                                  }).join(" & ");
+                                    const label = map[cleanCat] || cleanCat.replace(/-/g, " ");
+                                    return (
+                                      <span key={idx} className="px-3.5 py-1.5 rounded-full bg-[#090512]/80 backdrop-blur-md border border-white/10 text-white text-[9px] font-extrabold uppercase tracking-widest flex items-center gap-1.5 whitespace-nowrap shadow-lg">
+                                        <Sparkles size={11} className="text-[#ffbe00]" /> {label}
+                                      </span>
+                                    );
+                                  });
                                 })()}
-                              </span>
+                              </div>
 
                               {project.growthBadge && (
-                                <span className="px-3 py-1 rounded-full bg-emerald-500 text-[#090512] font-black text-[11px] uppercase tracking-wider shadow-lg flex items-center gap-1">
-                                  <TrendingUp size={12} /> {project.growthBadge}
+                                <span className="px-3.5 py-1.5 rounded-full bg-[#ffbe00] text-[#1a1122] font-black text-[10px] md:text-[11px] uppercase tracking-wider shadow-xl flex items-center gap-1.5 shrink-0 ml-2 whitespace-nowrap text-right">
+                                  <TrendingUp size={12} strokeWidth={3} /> {project.growthBadge}
                                 </span>
                               )}
                             </div>
@@ -581,43 +617,43 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                             {isVideo && project.videoUrl && (
                               <button
                                 onClick={() => setActiveVideoUrl(project.videoUrl)}
-                                className="absolute inset-0 flex items-center justify-center z-30 group/play"
+                                className="absolute inset-0 flex items-center justify-center z-50 group/play"
                               >
-                                <div className="w-14 h-14 rounded-full bg-[#ff3b30] text-white flex items-center justify-center shadow-[0_0_25px_rgba(255,59,48,0.6)] group-hover/play:scale-110 transition-transform">
-                                  <Play size={24} className="fill-white translate-x-0.5" />
+                                <div className="w-16 h-16 rounded-full bg-[#ff3b30] text-white flex items-center justify-center shadow-[0_0_30px_rgba(255,59,48,0.6)] group-hover/play:scale-110 transition-transform">
+                                  <Play size={28} className="fill-white translate-x-1" />
                                 </div>
                               </button>
                             )}
 
                             {/* Project Title Overlay */}
-                            <div className="absolute bottom-3.5 left-5 right-5 z-20">
-                              <h3 className="text-xl md:text-2xl font-black text-white leading-tight tracking-tight group-hover:text-[#ffbe00] transition-colors line-clamp-2">
+                            <div className="absolute bottom-5 left-6 right-6 z-20">
+                              <h3 className={`font-black text-white leading-tight tracking-tight drop-shadow-2xl line-clamp-2 ${isFeatured ? 'text-2xl md:text-4xl' : 'text-xl md:text-2xl'}`}>
                                 {project.title}
                               </h3>
                             </div>
                           </div>
 
                           {/* Body Content */}
-                          <div className="p-6 flex-1 flex flex-col justify-between space-y-5">
-                            <p className="text-[#dcd7e3]/90 text-xs leading-relaxed font-medium line-clamp-2">
+                          <div className="p-6 md:p-8 flex-1 flex flex-col justify-between space-y-6 bg-gradient-to-b from-[#1a1122] to-[#090512]">
+                            <p className="text-[#dcd7e3]/80 text-sm leading-relaxed font-medium line-clamp-2">
                               {project.description}
                             </p>
 
                             {/* SYSTEM SCREENSHOTS / GALLERY IMAGES IF PRESENT (CUSTOM SOFTWARE / WEB DEV) */}
                             {project.galleryImages && project.galleryImages.length > 0 && (
-                              <div className="space-y-1.5 pt-1">
-                                <span className="text-[10px] font-extrabold text-[#af52de] uppercase tracking-wider flex items-center gap-1">
-                                  <Cpu size={11} /> Screenshots Gallery ({project.galleryImages.length})
+                              <div className="space-y-2 pt-2">
+                                <span className="text-[10px] font-extrabold text-[#af52de] uppercase tracking-wider flex items-center gap-1.5">
+                                  <Cpu size={12} /> Screenshots Gallery ({project.galleryImages.length})
                                 </span>
-                                <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-thin">
+                                <div className="flex items-center gap-3 overflow-x-auto pb-2 scrollbar-thin">
                                   {project.galleryImages.map((gImg: string, gIdx: number) => (
                                     <div 
                                       key={gIdx} 
                                       onClick={() => setActiveLightboxImage(gImg)}
-                                      className="relative w-16 h-12 rounded-lg bg-black/60 border border-white/20 p-1 flex items-center justify-center shrink-0 cursor-pointer hover:border-[#af52de] hover:scale-105 transition-all overflow-hidden"
+                                      className="relative w-20 h-14 rounded-xl bg-black/60 border border-white/10 p-1 flex items-center justify-center shrink-0 cursor-pointer hover:border-[#af52de] hover:scale-105 transition-all overflow-hidden shadow-md"
                                     >
                                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                                      <img src={gImg} alt="Screenshot" className="object-cover w-full h-full rounded" />
+                                      <img src={gImg} alt="Screenshot" className="object-cover w-full h-full rounded-lg" />
                                     </div>
                                   ))}
                                 </div>
@@ -626,13 +662,13 @@ export function PortfolioList({ projects }: { projects: any[] }) {
 
                             {/* BEFORE VS AFTER METRICS (SEO & MARKETING) */}
                             {(project.beforeStats || project.afterStats) && (
-                              <div className="grid grid-cols-1 gap-2.5 bg-black/40 p-4 rounded-xl border border-white/10">
+                              <div className="grid grid-cols-1 gap-3 bg-white/5 p-5 rounded-2xl border border-white/5">
                                 {beforeLines.length > 0 && (
-                                  <div className="bg-red-500/10 border border-red-500/20 p-2.5 rounded-lg">
-                                    <div className="flex items-center gap-1.5 text-red-400 font-extrabold uppercase text-[9px] tracking-wider mb-1">
-                                      <span className="w-1.5 h-1.5 rounded-full bg-red-500" /> BEFORE AERONOX
+                                  <div className="bg-red-500/10 border border-red-500/20 p-3 rounded-xl">
+                                    <div className="flex items-center gap-2 text-red-400 font-extrabold uppercase text-[9px] md:text-[10px] tracking-widest mb-1.5">
+                                      <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" /> BEFORE AERONOX
                                     </div>
-                                    <ul className="space-y-0.5 text-[11px] text-gray-300 font-medium">
+                                    <ul className="space-y-1 text-xs text-gray-300 font-medium">
                                       {beforeLines.slice(0, 2).map((line: string, idx: number) => (
                                         <li key={idx} className="line-clamp-1">{line}</li>
                                       ))}
@@ -641,11 +677,11 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                                 )}
 
                                 {afterLines.length > 0 && (
-                                  <div className="bg-emerald-500/10 border border-emerald-500/20 p-2.5 rounded-lg">
-                                    <div className="flex items-center gap-1.5 text-emerald-400 font-extrabold uppercase text-[9px] tracking-wider mb-1">
-                                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> AFTER AERONOX
+                                  <div className="bg-emerald-500/10 border border-emerald-500/20 p-3 rounded-xl">
+                                    <div className="flex items-center gap-2 text-emerald-400 font-extrabold uppercase text-[9px] md:text-[10px] tracking-widest mb-1.5">
+                                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> AFTER AERONOX
                                     </div>
-                                    <ul className="space-y-0.5 text-[11px] text-emerald-200 font-bold">
+                                    <ul className="space-y-1 text-xs text-emerald-100 font-bold">
                                       {afterLines.slice(0, 2).map((line: string, idx: number) => (
                                         <li key={idx} className="line-clamp-1">{line}</li>
                                       ))}
@@ -654,18 +690,6 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                                 )}
                               </div>
                             )}
-
-                            {/* Action Bar */}
-                            <div className="pt-3.5 border-t border-white/10 flex items-center justify-center">
-                              <Link
-                                href={`/portfolio/${project.slug}`}
-                                className="inline-flex items-center gap-1.5 px-6 py-2.5 bg-[#ffbe00] text-[#24182e] font-black text-[11px] uppercase tracking-wider rounded-xl hover:bg-white transition-colors shadow-md"
-                              >
-                                <span>Details</span>
-                                <ArrowRight size={13} />
-                              </Link>
-                            </div>
-
                           </div>
                         </motion.div>
                       );

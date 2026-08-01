@@ -19,10 +19,12 @@ export async function generateMetadata() {
 export default async function AboutPage() {
   const profile = await getCompanyProfile();
   const team = await getTeamMembers();
+  const pageSeo = await getPageSEO("about");
+  const bannerImage = pageSeo?.bannerImage || "/images/team_workspace.png";
 
   return (
     <main>
-      <AboutContent />
+      <AboutContent bannerImage={bannerImage} />
       
       <div className="pt-12 pb-24 text-foreground relative">
         <div className="max-w-6xl mx-auto px-6">

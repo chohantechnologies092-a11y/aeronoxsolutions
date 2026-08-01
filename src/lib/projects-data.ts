@@ -17,6 +17,14 @@ export interface ProjectItem {
   liveUrl?: string;
   showOnHome: boolean;
   order: number;
+  socialMediaStats?: {
+    platform: string;
+    description: string;
+    beforeStats: string;
+    afterStats: string;
+    beforeImage?: string;
+    afterImage?: string;
+  }[];
 }
 
 export const ALL_PROJECTS: ProjectItem[] = [

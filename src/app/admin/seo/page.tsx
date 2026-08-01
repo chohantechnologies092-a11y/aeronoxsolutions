@@ -18,9 +18,9 @@ export default async function AdminSEO({ searchParams }: { searchParams: Promise
 
   let seo;
   if (currentPage === "global") {
-    seo = await getSEO() || { title: "", description: "", keywords: "" };
+    seo = await getSEO() || { title: "", description: "", keywords: "", bannerImage: "" };
   } else {
-    seo = await getPageSEO(currentPage) || { title: "", description: "", keywords: "" };
+    seo = await getPageSEO(currentPage) || { title: "", description: "", keywords: "", bannerImage: "" };
   }
 
   const upsertAction = currentPage === "global" 
@@ -93,7 +93,7 @@ export default async function AdminSEO({ searchParams }: { searchParams: Promise
 
             <div className="pt-4 border-t border-admin-border flex justify-end">
               <button type="submit" className="px-5 py-2.5 rounded-lg bg-accent text-[#24182e] font-bold hover:bg-white transition-colors">
-                Save SEO Settings
+                Save Page Settings
               </button>
             </div>
           </form>

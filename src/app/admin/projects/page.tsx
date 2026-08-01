@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/Button";
 import { Plus } from "lucide-react";
 import { ProjectsManager } from "@/components/admin/ProjectsManager";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminProjects() {
   const projects = await getProjects();
 
