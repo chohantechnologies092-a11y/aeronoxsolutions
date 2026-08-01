@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { ImageUpload } from "@/components/ui/ImageUpload";
-import { Plus, X, ImageIcon, Search, Save } from "lucide-react";
+import { MultiImageUpload } from "@/components/ui/MultiImageUpload";
+import { X, ImageIcon, Search, Save } from "lucide-react";
 
 interface GraphicGalleryFormProps {
   gallery?: any;
@@ -11,13 +11,9 @@ interface GraphicGalleryFormProps {
 
 export function GraphicGalleryForm({ gallery, action }: GraphicGalleryFormProps) {
   const [galleryList, setGalleryList] = useState<string[]>(gallery?.galleryImages || []);
-  const [tempImage, setTempImage] = useState<string>("");
 
-  const addImageToGallery = () => {
-    if (tempImage && !galleryList.includes(tempImage)) {
-      setGalleryList([...galleryList, tempImage]);
-      setTempImage("");
-    }
+  const handleMultipleUploads = (urls: string[]) => {
+    setGalleryList((prev) => [...prev, ...urls]);
   };
 
   const removeImageFromGallery = (idx: number) => {
@@ -58,23 +54,10 @@ export function GraphicGalleryForm({ gallery, action }: GraphicGalleryFormProps)
         <div className="pt-6 border-t border-white/10 animate-in fade-in space-y-4">
           <div className="p-6 rounded-2xl bg-[#ff007a]/10 border border-[#ff007a]/30 space-y-4">
             <label className="text-sm font-bold text-[#ff007a] flex items-center gap-2 uppercase tracking-wider">
-              <ImageIcon size={18} /> Upload Image Gallery (Screenshots / Logos)
+              <ImageIcon size={18} /> Upload Image Gallery (Bulk Upload Supported)
             </label>
 
-            <ImageUpload onChange={(url) => setTempImage(url)} defaultValue="" />
-            
-            {tempImage && (
-              <div className="flex items-center gap-3 pt-2">
-                <span className="text-xs text-emerald-400 font-bold">Image Uploaded!</span>
-                <button
-                  type="button"
-                  onClick={addImageToGallery}
-                  className="px-4 py-2 bg-[#ff007a] text-white font-bold text-xs rounded-xl uppercase flex items-center gap-1.5 shadow-md hover:bg-white hover:text-black transition-colors"
-                >
-                  <Plus size={14} /> Add Image To Showcase Gallery
-                </button>
-              </div>
-            )}
+            <MultiImageUpload onUploadSuccess={handleMultipleUploads} />
           </div>
 
           <div className="space-y-3">
@@ -89,13 +72,36 @@ export function GraphicGalleryForm({ gallery, action }: GraphicGalleryFormProps)
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-4">
                 {galleryList.map((imgUrl, idx) => (
-                  <div key={idx} className="relative group rounded-2xl bg-black/60 border border-white/15 aspect-square flex items-center justify-center p-2">
+                  <div 
+                    key={idx} 
+                    draggable
+                    onDragStart={(e) => {
+                      e.dataTransfer.effectAllowed = "move";
+                      e.dataTransfer.setData("text/plain", idx.toString());
+                    }}
+                    onDragOver={(e) => {
+                      e.preventDefault();
+                      e.dataTransfer.dropEffect = "move";
+                    }}
+                    onDrop={(e) => {
+                      e.preventDefault();
+                      const draggedIdx = parseInt(e.dataTransfer.getData("text/plain"), 10);
+                      if (draggedIdx === idx) return;
+                      const newList = [...galleryList];
+                      const draggedItem = newList[draggedIdx];
+                      newList.splice(draggedIdx, 1);
+                      newList.splice(idx, 0, draggedItem);
+                      setGalleryList(newList);
+                    }}
+                    className="relative group rounded-2xl bg-black/60 border border-white/15 aspect-square flex items-center justify-center p-2 cursor-move hover:border-[#ff007a] transition-colors"
+                    title="Drag to reorder"
+                  >
                     {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={imgUrl} alt={`Gallery ${idx}`} className="object-contain max-h-full max-w-full rounded-lg" />
+                    <img src={imgUrl} alt={`Gallery ${idx}`} className="object-contain max-h-full max-w-full rounded-lg pointer-events-none" />
                     <button
                       type="button"
                       onClick={() => removeImageFromGallery(idx)}
-                      className="absolute top-1 right-1 p-1 rounded-full bg-red-600 text-white shadow-lg"
+                      className="absolute top-1 right-1 p-1 rounded-full bg-red-600 text-white shadow-lg z-10"
                     >
                       <X size={12} />
                     </button>

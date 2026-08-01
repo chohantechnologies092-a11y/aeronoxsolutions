@@ -137,13 +137,7 @@ function matchesCategory(project: any, catId: string): boolean {
     return true;
   }
 
-  if (catId === "graphic-design" && (
-    pCat.includes("graphic") || pCat.includes("logo") || pCat.includes("design") || pCat.includes("brand") ||
-    pTags.includes("logo") || pTags.includes("graphic") || pTags.includes("design") || pTags.includes("branding") ||
-    pTitle.includes("logo") || pTitle.includes("graphic") || pTitle.includes("design") || pTitle.includes("brand")
-  )) {
-    return true;
-  }
+
 
   if (catId === "videography" && (
     pCat.includes("video") || pCat.includes("motion") || pCat.includes("commercial") ||
@@ -475,7 +469,7 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                                 viewport={{ once: true }}
                                 transition={{ duration: 0.4, delay: (idx % 4) * 0.05 }}
                                 onClick={() => setActiveLightboxImage(imgUrl)}
-                                className="group relative rounded-3xl bg-[#1d1326] border border-white/15 p-6 flex flex-col items-center justify-center cursor-pointer overflow-hidden shadow-2xl hover:border-[#ff007a] hover:shadow-[0_0_30px_rgba(255,0,122,0.3)] transition-all duration-500 h-64"
+                                className="group relative rounded-3xl bg-[#1d1326] border border-white/15 flex flex-col items-center justify-center cursor-pointer overflow-hidden shadow-2xl hover:border-[#ff007a] hover:shadow-[0_0_30px_rgba(255,0,122,0.3)] transition-all duration-500 h-auto"
                               >
                                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 flex flex-col justify-end p-5">
                                   <span className="mt-2 text-[10px] text-white/70 flex items-center gap-1 font-bold">
@@ -483,9 +477,9 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                                   </span>
                                 </div>
 
-                                <div className="relative w-full h-full flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
+                                <div className="relative w-full flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
                                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                                  <img src={imgUrl} alt={`${gallery.title} Image ${idx + 1}`} className="object-contain max-h-full max-w-full rounded-xl" />
+                                  <img src={imgUrl} alt={`${gallery.title} Image ${idx + 1}`} className="w-full h-auto block" />
                                 </div>
                               </motion.div>
                             ))}

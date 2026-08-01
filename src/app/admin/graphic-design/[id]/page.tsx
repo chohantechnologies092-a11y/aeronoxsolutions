@@ -5,8 +5,9 @@ import { Palette, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
-export default async function EditGraphicGalleryPage({ params }: { params: { id: string } }) {
-  const gallery = await getProjectBySlug(params.id);
+export default async function EditGraphicGalleryPage({ params }: { params: Promise<{ id: string }> }) {
+  const resolvedParams = await params;
+  const gallery = await getProjectBySlug(resolvedParams.id);
 
   if (!gallery) {
     redirect("/admin/graphic-design");
