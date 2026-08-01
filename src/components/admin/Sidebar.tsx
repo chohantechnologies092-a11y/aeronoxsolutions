@@ -16,6 +16,7 @@ const navItems = [
   { href: "/admin/analytics", label: "Analytics", icon: BarChart3 },
   { href: "/admin/company", label: "Company Profile", icon: Building2 },
   { href: "/admin/projects", label: "Projects", icon: FolderKanban },
+  { href: "/admin/graphic-design", label: "Graphic Galleries", icon: ImageIcon },
   { href: "/admin/services", label: "Services", icon: Layers },
   { href: "/admin/clients", label: "Clients", icon: Users },
   { href: "/admin/blogs", label: "Blogs", icon: FileText },

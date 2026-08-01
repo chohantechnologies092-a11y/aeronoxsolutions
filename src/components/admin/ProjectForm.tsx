@@ -93,13 +93,6 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
       color: "#00c2ff" 
     },
     { 
-      id: "graphic-design", 
-      title: "Graphics & Design", 
-      subtitle: "Logo & asset gallery uploads", 
-      icon: Palette, 
-      color: "#ff007a" 
-    },
-    { 
       id: "marketing", 
       title: "Social Media Marketing", 
       subtitle: "Social campaigns & ad creatives", 
@@ -440,8 +433,8 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
           </div>
         )}
 
-        {/* 5. Gallery Images (Graphic Design, Custom Software) */}
-        {(selectedServiceCategories.includes("graphic-design") || selectedServiceCategories.includes("custom-software")) && (
+        {/* 5. Gallery Images (Custom Software) */}
+        {(selectedServiceCategories.includes("custom-software")) && (
           <div className="pt-6 border-t border-white/10 animate-in fade-in space-y-4">
             <div className="p-6 rounded-2xl bg-[#ff007a]/10 border border-[#ff007a]/30 space-y-4">
               <label className="text-sm font-bold text-[#ff007a] flex items-center gap-2 uppercase tracking-wider">
