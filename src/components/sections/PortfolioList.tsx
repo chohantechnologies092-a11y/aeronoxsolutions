@@ -314,7 +314,7 @@ export function PortfolioList({ projects }: { projects: any[] }) {
             const isActive = selectedCategory === box.id;
             const BoxIcon = box.icon;
             const matchCount = projects ? projects.filter(p => matchesCategory(p, box.id)).length : 0;
-            const count = box.id === "all" ? `${projects?.length || 0}` : box.id === "graphic-design" ? `${graphicGalleryItems.length}` : `${matchCount}`;
+            const count = box.id === "all" ? `${projects?.length || 0}` : `${matchCount}`;
 
             return (
               <button
