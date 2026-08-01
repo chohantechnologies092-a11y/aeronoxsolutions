@@ -456,8 +456,8 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                     return (
                       <div key={gallery.id || gIdx} className="space-y-6">
                         <div className="flex items-center gap-4">
-                          <h4 className="text-2xl font-black text-white">{gallery.title}</h4>
-                          <div className="h-[1px] flex-1 bg-gradient-to-r from-white/20 to-transparent" />
+                          <h4 className="text-2xl font-black text-foreground">{gallery.title}</h4>
+                          <div className="h-[1px] flex-1 bg-gradient-to-r from-black/10 dark:from-white/20 to-transparent" />
                           <span className="text-xs text-[#ff007a] font-bold uppercase tracking-widest">{images.length} Assets</span>
                         </div>
                         
