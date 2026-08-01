@@ -83,7 +83,11 @@ export default async function GraphicGalleriesPage() {
                   >
                     <ExternalLink size={16} />
                   </Link>
-                  <form action={deleteProject}>
+                  <form action={async (formData) => {
+                    "use server";
+                    const id = formData.get("id") as string;
+                    if (id) await deleteProject(id);
+                  }}>
                     <input type="hidden" name="id" value={gallery.id} />
                     <button type="submit" className="text-red-400 hover:text-red-300 transition-colors">
                       Delete
