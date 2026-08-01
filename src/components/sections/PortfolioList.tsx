@@ -260,32 +260,7 @@ export function PortfolioList({ projects }: { projects: any[] }) {
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const paginatedProjects = filteredProjects.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
-  // Extract all gallery images for Graphic Design category
-  const graphicGalleryItems: { id: string; title: string; client: string; imageUrl: string }[] = [];
-  if (projects) {
-    projects.forEach(p => {
-      // ONLY include projects that are actually classified as graphic-design
-      if (matchesCategory(p, "graphic-design")) {
-        if (p.galleryImages && p.galleryImages.length > 0) {
-          p.galleryImages.forEach((gImg: string) => {
-            graphicGalleryItems.push({
-              id: p.id,
-              title: p.title,
-              client: p.client || "Brand Showcase",
-              imageUrl: gImg
-            });
-          });
-        } else if (p.image) {
-          graphicGalleryItems.push({
-            id: p.id,
-            title: p.title,
-            client: p.client || "Brand Showcase",
-            imageUrl: p.image
-          });
-        }
-      }
-    });
-  }
+  // Graphic Galleries will just use paginatedProjects natively now.
 
   const activeOverview = SERVICE_OVERVIEWS[selectedCategory] || SERVICE_OVERVIEWS["all"];
   const OverviewIcon = activeOverview.icon;
@@ -454,51 +429,71 @@ export function PortfolioList({ projects }: { projects: any[] }) {
               <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-gray-200 dark:border-white/10 pb-6">
                 <div>
                   <h3 className="text-2xl md:text-3xl font-black text-foreground tracking-tight flex items-center gap-2">
-                    <Palette className="text-[#ff007a]" /> Brand Logo & Graphic Design Gallery
+                    <Palette className="text-[#ff007a]" /> Graphic Design Galleries
                   </h3>
                   <p className="text-sm text-muted mt-1 font-medium">
-                    Click any logo image below to view in full screen Lightbox preview.
+                    Explore our curated collections of logos and visual brand assets. Click any image for full-screen preview.
                   </p>
                 </div>
                 <span className="text-xs font-bold uppercase tracking-wider text-[#ff007a] bg-[#24182e] px-4 py-2 rounded-full border border-white/10">
-                  {graphicGalleryItems.length} Logo Design Assets
+                  {filteredProjects.length} Galleries
                 </span>
               </div>
 
-              {graphicGalleryItems.length === 0 ? (
+              {filteredProjects.length === 0 ? (
                 <div className="p-16 rounded-3xl bg-[#24182e]/40 border border-white/10 text-center">
                   <Palette size={40} className="text-[#ff007a] mx-auto mb-3" />
-                  <h4 className="text-xl font-bold text-white mb-2">No Logos Uploaded Yet</h4>
+                  <h4 className="text-xl font-bold text-white mb-2">No Galleries Created Yet</h4>
                   <p className="text-sm text-[#dcd7e3]/60 max-w-md mx-auto mb-6">
-                    Add Graphic Design logos from Admin Dashboard &gt; Projects &gt; Graphics & Logo Design!
+                    Create your first Graphic Design Gallery in the Admin Dashboard!
                   </p>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                  {graphicGalleryItems.map((item, idx) => (
-                    <motion.div
-                      key={idx}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.4, delay: (idx % 4) * 0.05 }}
-                      onClick={() => setActiveLightboxImage(item.imageUrl)}
-                      className="group relative rounded-3xl bg-[#1d1326] border border-white/15 p-6 flex flex-col items-center justify-center cursor-pointer overflow-hidden shadow-2xl hover:border-[#ff007a] hover:shadow-[0_0_30px_rgba(255,0,122,0.3)] transition-all duration-500 h-64"
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 flex flex-col justify-end p-5">
-                        <span className="text-xs font-bold text-[#ff007a] uppercase tracking-wider">{item.client}</span>
-                        <h4 className="text-sm font-black text-white line-clamp-1">{item.title}</h4>
-                        <span className="mt-2 text-[10px] text-white/70 flex items-center gap-1 font-bold">
-                          <Maximize2 size={12} className="text-[#ff007a]" /> Click for Lightbox Preview
-                        </span>
-                      </div>
+                <div className="space-y-16">
+                  {paginatedProjects.map((gallery: any, gIdx: number) => {
+                    const images = gallery.galleryImages?.length > 0 ? gallery.galleryImages : (gallery.image ? [gallery.image] : []);
+                    
+                    return (
+                      <div key={gallery.id || gIdx} className="space-y-6">
+                        <div className="flex items-center gap-4">
+                          <h4 className="text-2xl font-black text-white">{gallery.title}</h4>
+                          <div className="h-[1px] flex-1 bg-gradient-to-r from-white/20 to-transparent" />
+                          <span className="text-xs text-[#ff007a] font-bold uppercase tracking-widest">{images.length} Assets</span>
+                        </div>
+                        
+                        {images.length === 0 ? (
+                          <div className="p-8 rounded-2xl bg-black/30 border border-white/10 text-center text-sm text-gray-400">
+                            No images in this gallery yet.
+                          </div>
+                        ) : (
+                          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                            {images.map((imgUrl: string, idx: number) => (
+                              <motion.div
+                                key={`${gallery.id}-${idx}`}
+                                initial={{ opacity: 0, scale: 0.9 }}
+                                whileInView={{ opacity: 1, scale: 1 }}
+                                viewport={{ once: true }}
+                                transition={{ duration: 0.4, delay: (idx % 4) * 0.05 }}
+                                onClick={() => setActiveLightboxImage(imgUrl)}
+                                className="group relative rounded-3xl bg-[#1d1326] border border-white/15 p-6 flex flex-col items-center justify-center cursor-pointer overflow-hidden shadow-2xl hover:border-[#ff007a] hover:shadow-[0_0_30px_rgba(255,0,122,0.3)] transition-all duration-500 h-64"
+                              >
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10 flex flex-col justify-end p-5">
+                                  <span className="mt-2 text-[10px] text-white/70 flex items-center gap-1 font-bold">
+                                    <Maximize2 size={12} className="text-[#ff007a]" /> Click for Lightbox Preview
+                                  </span>
+                                </div>
 
-                      <div className="relative w-full h-full flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={item.imageUrl} alt={item.title} className="object-contain max-h-full max-w-full rounded-xl" />
+                                <div className="relative w-full h-full flex items-center justify-center transition-transform duration-500 group-hover:scale-110">
+                                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                                  <img src={imgUrl} alt={`${gallery.title} Image ${idx + 1}`} className="object-contain max-h-full max-w-full rounded-xl" />
+                                </div>
+                              </motion.div>
+                            ))}
+                          </div>
+                        )}
                       </div>
-                    </motion.div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
             </div>
