@@ -243,7 +243,17 @@ export function PortfolioList({ projects }: { projects: any[] }) {
   ];
 
   // Filter projects by smart matching
-  const filteredProjects = projects ? projects.filter(p => matchesCategory(p, selectedCategory)) : [];
+  let filteredProjects = projects ? projects.filter(p => matchesCategory(p, selectedCategory)) : [];
+
+  const [selectedPlatform, setSelectedPlatform] = useState<string>("All Platforms");
+
+  // Filter Marketing by platform if applicable
+  if (selectedCategory === "marketing" && selectedPlatform !== "All Platforms") {
+    filteredProjects = filteredProjects.filter(p => {
+      if (!p.socialMediaStats || !Array.isArray(p.socialMediaStats)) return false;
+      return p.socialMediaStats.some((stat: any) => stat.platform === selectedPlatform);
+    });
+  }
 
   // Pagination Math
   const totalPages = Math.ceil(filteredProjects.length / ITEMS_PER_PAGE);
@@ -282,6 +292,7 @@ export function PortfolioList({ projects }: { projects: any[] }) {
 
   const handleServiceSelect = (id: string) => {
     setSelectedCategory(id);
+    setSelectedPlatform("All Platforms");
     setCurrentPage(1);
     const targetEl = document.getElementById("service-detail-section");
     if (targetEl) {
@@ -507,6 +518,25 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                   {filteredProjects.length} Projects
                 </span>
               </div>
+
+              {selectedCategory === "marketing" && (
+                <div className="mb-10 flex flex-wrap items-center gap-2">
+                  <span className="text-xs font-bold text-white mr-2">Filter by Platform:</span>
+                  {["All Platforms", "Facebook", "Instagram", "TikTok", "LinkedIn", "Meta Ads", "Twitter/X", "YouTube", "Pinterest"].map((platform) => (
+                    <button
+                      key={platform}
+                      onClick={() => setSelectedPlatform(platform)}
+                      className={`px-4 py-1.5 rounded-full text-xs font-bold transition-colors border ${
+                        selectedPlatform === platform
+                          ? "bg-[#ffbe00] text-[#1a1122] border-[#ffbe00]"
+                          : "bg-white/5 border-white/10 text-white hover:bg-white/10"
+                      }`}
+                    >
+                      {platform}
+                    </button>
+                  ))}
+                </div>
+              )}
 
               {filteredProjects.length === 0 ? (
                 <div className="p-16 rounded-3xl bg-[#24182e]/40 border border-white/10 text-center">
