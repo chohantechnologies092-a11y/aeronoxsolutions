@@ -14,7 +14,7 @@ export default async function EditGraphicGalleryPage({ params }: { params: { id:
 
   const handleUpdate = async (formData: FormData) => {
     "use server";
-    await updateProject(formData);
+    await updateProject(gallery.id, formData);
     redirect("/admin/graphic-design");
   };
 
