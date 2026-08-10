@@ -32,6 +32,9 @@ export async function generateMetadata(): Promise<Metadata> {
         shortcut: "/icon.png",
         apple: "/icon.png",
       },
+      verification: {
+        google: "1zQ2ugBoO4bwKnSXSrenHYfkRQ7C9FfAVTsY9Coze2c",
+      },
     };
   }
 
@@ -43,6 +46,9 @@ export async function generateMetadata(): Promise<Metadata> {
       icon: "/icon.png",
       shortcut: "/icon.png",
       apple: "/icon.png",
+    },
+    verification: {
+      google: "1zQ2ugBoO4bwKnSXSrenHYfkRQ7C9FfAVTsY9Coze2c",
     },
   };
 }
