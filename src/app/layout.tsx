@@ -66,6 +66,9 @@ export default async function RootLayout({
   const session = await auth();
   return (
     <html lang="en" className="dark antialiased" suppressHydrationWarning>
+      <head>
+        <meta name="google-site-verification" content="1zQ2ugBoO4bwKnSXSrenHYfkRQ7C9FfAVTsY9Coze2c" />
+      </head>
       <body
         className={`${inter.variable} ${spaceGrotesk.variable} bg-background text-foreground font-sans`}
         suppressHydrationWarning
