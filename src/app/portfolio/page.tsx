@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { PortfolioList } from "@/components/sections/PortfolioList";
 import { getPageSEO, getSEO, getProjects } from "@/lib/data";
 import Image from "next/image";
@@ -58,7 +59,9 @@ export default async function PortfolioPage() {
           </div>
         </div>
       </div>
-      <PortfolioList projects={projects} />
+      <Suspense fallback={<div className="min-h-[400px] bg-mesh" />}>
+        <PortfolioList projects={projects} />
+      </Suspense>
     </>
   );
 }

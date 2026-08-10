@@ -68,9 +68,17 @@ export default function NewServicePage() {
             </div>
           </div>
 
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-admin-text">Banner Image (Optional)</label>
-            <ImageUpload name="image" />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium text-admin-text">Card Image (Services Grid Card)</label>
+              <ImageUpload name="cardImage" />
+              <p className="text-xs text-admin-muted">Image displayed on service card in Homepage / Services page grid.</p>
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium text-admin-text">Header Banner Image (Detail Page)</label>
+              <ImageUpload name="image" />
+              <p className="text-xs text-admin-muted">Image displayed in hero banner on service detail page.</p>
+            </div>
           </div>
 
           <div className="flex flex-col gap-2">

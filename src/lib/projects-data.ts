@@ -9,6 +9,8 @@ export interface ProjectItem {
   description: string;
   content: string;
   image: string;
+  cardImage?: string;
+  bannerImage?: string;
   growthBadge?: string;
   beforeStats?: string;
   afterStats?: string;

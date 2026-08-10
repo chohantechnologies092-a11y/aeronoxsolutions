@@ -16,6 +16,8 @@ type Service = {
   icon: string;
   color: string;
   image?: string | null;
+  cardImage?: string | null;
+  bannerImage?: string | null;
   imageAltText?: string | null;
   [key: string]: any;
 };
@@ -156,17 +158,17 @@ export function ServiceDetailClient({ service }: { service: Service }) {
 
           {/* Hero Image */}
           <div className="relative w-full min-h-[300px] max-h-[500px] rounded-2xl overflow-hidden bg-card shadow-xl ring-1 ring-black/5 dark:ring-white/10 flex items-center justify-center p-3">
-            {service.image ? (
+            {(service.bannerImage || service.image) ? (
               <>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
-                  src={service.image} 
+                  src={(service.bannerImage || service.image) ?? undefined} 
                   alt=""
                   className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-20 pointer-events-none"
                 />
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
-                  src={service.image} 
+                  src={(service.bannerImage || service.image) ?? undefined} 
                   alt={service.imageAltText || service.title}
                   className="relative z-10 w-auto h-auto max-w-full max-h-[460px] object-contain rounded-xl shadow-md"
                 />

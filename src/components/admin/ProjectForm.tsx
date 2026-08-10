@@ -210,9 +210,18 @@ export function ProjectForm({ project, action }: ProjectFormProps) {
             />
           </div>
 
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-semibold text-white">Main Cover Image <span className="text-[#ffbe00]">*</span></label>
-            <ImageUpload name="image" defaultValue={project?.image || ""} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-semibold text-white">Card Cover Image (Portfolio Grid)</label>
+              <ImageUpload name="cardImage" defaultValue={project?.cardImage || project?.image || ""} />
+              <p className="text-[11px] text-[#dcd7e3]/60">Displayed on portfolio cards in the list/grid view.</p>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-semibold text-white">Header Banner Image (Detail Page)</label>
+              <ImageUpload name="bannerImage" defaultValue={project?.bannerImage || project?.image || ""} />
+              <p className="text-[11px] text-[#dcd7e3]/60">Displayed at the top of the project case study detail page.</p>
+            </div>
           </div>
         </div>
 

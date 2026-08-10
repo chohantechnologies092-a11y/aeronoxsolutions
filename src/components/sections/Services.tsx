@@ -81,10 +81,10 @@ export function Services({ services, limit }: ServicesProps) {
                   className="p-8 flex flex-col h-full relative group overflow-hidden rounded-[2rem] border border-white/10 shadow-2xl bg-[#1a1122]"
                 >
                   {/* Background Image */}
-                  {service.image && (
+                  {(service.cardImage || service.image) && (
                     <>
                       <Image 
-                        src={service.image} 
+                        src={service.cardImage || service.image} 
                         alt={service.title}
                         fill
                         className="object-cover transition-transform duration-1000 group-hover:scale-110 z-0"

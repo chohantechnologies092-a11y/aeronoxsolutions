@@ -20,6 +20,8 @@ export async function createProject(formData: FormData) {
   const clientLogo = formData.get("clientLogo") as string | null;
   const tags = formData.get("tags") as string;
   const image = formData.get("image") as string | null;
+  const cardImage = formData.get("cardImage") as string | null;
+  const bannerImage = formData.get("bannerImage") as string | null;
   const rawSlug = formData.get("slug") as string;
   const metaTitle = formData.get("metaTitle") as string | null;
   const metaDescription = formData.get("metaDescription") as string | null;
@@ -93,7 +95,9 @@ export async function createProject(formData: FormData) {
     videoUrl: videoUrl || null,
     showOnHome,
     socialMediaStats,
-    image: image || (galleryImages.length > 0 ? galleryImages[0] : "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=2000"),
+    cardImage: cardImage || image || null,
+    bannerImage: bannerImage || image || null,
+    image: image || cardImage || bannerImage || (galleryImages.length > 0 ? galleryImages[0] : "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=2000"),
     metaTitle: metaTitle || null,
     metaDescription: metaDescription || null,
     imageAltText: imageAltText || null,
@@ -126,6 +130,8 @@ export async function updateProject(id: string, formData: FormData) {
   const clientLogo = formData.get("clientLogo") as string | null;
   const tags = formData.get("tags") as string;
   const image = formData.get("image") as string | null;
+  const cardImage = formData.get("cardImage") as string | null;
+  const bannerImage = formData.get("bannerImage") as string | null;
   const rawSlug = formData.get("slug") as string;
   const metaTitle = formData.get("metaTitle") as string | null;
   const metaDescription = formData.get("metaDescription") as string | null;
@@ -199,7 +205,9 @@ export async function updateProject(id: string, formData: FormData) {
     videoUrl: videoUrl || null,
     showOnHome,
     socialMediaStats,
-    image: image || (galleryImages.length > 0 ? galleryImages[0] : "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=2000"),
+    cardImage: cardImage || image || null,
+    bannerImage: bannerImage || image || null,
+    image: image || cardImage || bannerImage || (galleryImages.length > 0 ? galleryImages[0] : "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=2000"),
     metaTitle: metaTitle || null,
     metaDescription: metaDescription || null,
     imageAltText: imageAltText || null,
@@ -246,6 +254,8 @@ export async function createService(formData: FormData) {
   const bentoClass = formData.get("bentoClass") as string;
   const rawSlug = formData.get("slug") as string;
   const image = formData.get("image") as string | null;
+  const cardImage = formData.get("cardImage") as string | null;
+  const bannerImage = (formData.get("bannerImage") as string | null) || image;
   const capabilities = formData.get("capabilities") as string | null;
   const showOnHome = formData.get("showOnHome") === "on";
   const metaTitle = formData.get("metaTitle") as string | null;
@@ -263,7 +273,9 @@ export async function createService(formData: FormData) {
     slug,
     shortDescription,
     content: content || "",
-    image: image || null,
+    cardImage: cardImage || null,
+    bannerImage: bannerImage || null,
+    image: image || cardImage || bannerImage || null,
     icon: icon || "search",
     color: color || "#ffbe00",
     bentoClass: bentoClass || "md:col-span-1",
@@ -291,6 +303,8 @@ export async function updateService(id: string, formData: FormData) {
   const bentoClass = formData.get("bentoClass") as string;
   const rawSlug = formData.get("slug") as string;
   const image = formData.get("image") as string | null;
+  const cardImage = formData.get("cardImage") as string | null;
+  const bannerImage = (formData.get("bannerImage") as string | null) || image;
   const capabilities = formData.get("capabilities") as string | null;
   const showOnHome = formData.get("showOnHome") === "on";
   const metaTitle = formData.get("metaTitle") as string | null;
@@ -308,7 +322,9 @@ export async function updateService(id: string, formData: FormData) {
     slug,
     shortDescription,
     content: content || "",
-    image: image || null,
+    cardImage: cardImage || null,
+    bannerImage: bannerImage || null,
+    image: image || cardImage || bannerImage || null,
     icon: icon || "search",
     color: color || "#ffbe00",
     bentoClass: bentoClass || "md:col-span-1",

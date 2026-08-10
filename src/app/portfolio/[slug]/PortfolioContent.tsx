@@ -13,6 +13,8 @@ type Project = {
   content: string;
   description: string;
   image: string;
+  cardImage?: string | null;
+  bannerImage?: string | null;
   client: string | null;
   tags: string;
   serviceCategory?: string;
@@ -98,8 +100,10 @@ function parseMarkdown(md: string): string {
 
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export function PortfolioContent({ project }: { project: Project }) {
+  const router = useRouter();
   const [activePlatform, setActivePlatform] = useState<string>(project?.socialMediaStats?.[0]?.platform || "");
   const tags = (project.tags || "").split(",").map((tag: string) => tag.trim()).filter(Boolean);
   const beforeLines = (project.beforeStats || "").split("\n").filter(Boolean);
@@ -115,13 +119,20 @@ export function PortfolioContent({ project }: { project: Project }) {
         
         {/* Navigation */}
         <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5 }}>
-          <Link 
-            href="/portfolio" 
-            className="inline-flex items-center gap-2 text-muted uppercase tracking-widest text-xs font-bold group mb-8 hover:text-[#ffbe00] transition-colors"
+          <button 
+            type="button"
+            onClick={() => {
+              if (typeof window !== "undefined" && window.history.length > 1) {
+                router.back();
+              } else {
+                router.push("/portfolio");
+              }
+            }}
+            className="inline-flex items-center gap-2 text-muted uppercase tracking-widest text-xs font-bold group mb-8 hover:text-[#ffbe00] transition-colors cursor-pointer"
           >
             <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" />
             Back to Case Studies & Portfolio
-          </Link>
+          </button>
         </motion.div>
 
         {/* Hero Header */}
@@ -208,7 +219,7 @@ export function PortfolioContent({ project }: { project: Project }) {
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img 
-              src={project.image} 
+              src={project.bannerImage || project.image} 
               alt={project.imageAltText || project.title}
               className="w-full h-auto max-h-[750px] object-contain rounded-[2.5rem] transition-transform duration-700 group-hover:scale-[1.01]"
             />

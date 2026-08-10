@@ -87,9 +87,17 @@ export default async function EditServicePage({
             </div>
           </div>
 
-          <div className="flex flex-col gap-2">
-            <label className="text-sm font-medium text-admin-text">Banner Image (Optional)</label>
-            <ImageUpload name="image" defaultValue={service.image || undefined} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium text-admin-text">Card Image (Services Grid Card)</label>
+              <ImageUpload name="cardImage" defaultValue={service.cardImage || undefined} />
+              <p className="text-xs text-admin-muted">Image displayed on service card in Homepage / Services page grid.</p>
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium text-admin-text">Header Banner Image (Detail Page)</label>
+              <ImageUpload name="image" defaultValue={service.bannerImage || service.image || undefined} />
+              <p className="text-xs text-admin-muted">Image displayed in hero banner on service detail page.</p>
+            </div>
           </div>
 
           <div className="flex flex-col gap-2">

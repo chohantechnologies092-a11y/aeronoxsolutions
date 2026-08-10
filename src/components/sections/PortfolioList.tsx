@@ -1,7 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
@@ -179,11 +180,33 @@ function matchesCategory(project: any, catId: string): boolean {
 }
 
 export function PortfolioList({ projects }: { projects: any[] }) {
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const initialCategory = searchParams.get("category") || "all";
+  const initialPage = searchParams.get("page") ? parseInt(searchParams.get("page")!, 10) : 1;
+
+  const [selectedCategory, setSelectedCategory] = useState<string>(initialCategory);
   const [activeLightboxImage, setActiveLightboxImage] = useState<string | null>(null);
   const [activeVideoUrl, setActiveVideoUrl] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [currentPage, setCurrentPage] = useState<number>(isNaN(initialPage) || initialPage < 1 ? 1 : initialPage);
   const ITEMS_PER_PAGE = 6;
+
+  // Sync state with URL if searchParams change (e.g. browser back/forward)
+  useEffect(() => {
+    const cat = searchParams.get("category") || "all";
+    const pageStr = searchParams.get("page");
+    const p = pageStr ? parseInt(pageStr, 10) : 1;
+    setSelectedCategory(cat);
+    setCurrentPage(isNaN(p) || p < 1 ? 1 : p);
+  }, [searchParams]);
+
+  const updateUrlParams = (newCat: string, newPage: number) => {
+    const params = new URLSearchParams(window.location.search);
+    params.set("category", newCat);
+    params.set("page", newPage.toString());
+    router.replace(`/portfolio?${params.toString()}`, { scroll: false });
+  };
 
   const serviceBoxes = [
     { 
@@ -263,10 +286,18 @@ export function PortfolioList({ projects }: { projects: any[] }) {
     setSelectedCategory(id);
     setSelectedPlatform("All Platforms");
     setCurrentPage(1);
+    updateUrlParams(id, 1);
     const targetEl = document.getElementById("service-detail-section");
     if (targetEl) {
       targetEl.scrollIntoView({ behavior: "smooth" });
     }
+  };
+
+  const handlePageChange = (newPage: number) => {
+    const validPage = Math.max(1, Math.min(newPage, totalPages || 1));
+    setCurrentPage(validPage);
+    updateUrlParams(selectedCategory, validPage);
+    document.getElementById("service-detail-section")?.scrollIntoView({ behavior: "smooth" });
   };
 
   // Helper to format video embed URLs
@@ -554,7 +585,7 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                           {/* Cover Image / Video Thumbnail */}
                           <div className="relative w-full aspect-[16/10] overflow-hidden border-b border-white/10 bg-black/40">
                             <Image
-                              src={project.image}
+                              src={project.cardImage || project.image}
                               alt={project.title}
                               fill
                               className="object-cover transition-transform duration-1000 group-hover:scale-105"
@@ -722,15 +753,11 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                         Page <strong className="text-[#ffbe00] font-black">{currentPage}</strong> of <strong className="text-white font-bold">{totalPages}</strong>
                       </span>
 
-
                       <div className="flex items-center gap-2 flex-wrap justify-center">
                         <button
                           type="button"
                           disabled={currentPage === 1}
-                          onClick={() => {
-                            setCurrentPage(prev => Math.max(prev - 1, 1));
-                            document.getElementById("service-detail-section")?.scrollIntoView({ behavior: "smooth" });
-                          }}
+                          onClick={() => handlePageChange(currentPage - 1)}
                           className="px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-white/5 border border-white/10 text-white hover:bg-[#ffbe00] hover:text-[#24182e] disabled:opacity-30 disabled:pointer-events-none transition-colors flex items-center gap-1.5"
                         >
                           <ChevronLeft size={14} /> Previous
@@ -740,10 +767,7 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                           <button
                             key={pageNum}
                             type="button"
-                            onClick={() => {
-                              setCurrentPage(pageNum);
-                              document.getElementById("service-detail-section")?.scrollIntoView({ behavior: "smooth" });
-                            }}
+                            onClick={() => handlePageChange(pageNum)}
                             className={`w-9 h-9 rounded-xl text-xs font-black transition-all ${
                               currentPage === pageNum
                                 ? "bg-[#ffbe00] text-[#24182e] shadow-lg shadow-[#ffbe00]/20 scale-105"
@@ -757,10 +781,7 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                         <button
                           type="button"
                           disabled={currentPage === totalPages}
-                          onClick={() => {
-                            setCurrentPage(prev => Math.min(prev + 1, totalPages));
-                            document.getElementById("service-detail-section")?.scrollIntoView({ behavior: "smooth" });
-                          }}
+                          onClick={() => handlePageChange(currentPage + 1)}
                           className="px-4 py-2 rounded-xl text-xs font-bold uppercase tracking-wider bg-white/5 border border-white/10 text-white hover:bg-[#ffbe00] hover:text-[#24182e] disabled:opacity-30 disabled:pointer-events-none transition-colors flex items-center gap-1.5"
                         >
                           Next <ChevronRight size={14} />

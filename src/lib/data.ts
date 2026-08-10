@@ -219,7 +219,7 @@ export async function getRolePermissions(): Promise<string[]> {
     console.error("Error fetching role permissions:", err);
   }
   // Default permissions for editor if not set
-  return ["/admin", "/admin/projects", "/admin/services", "/admin/blogs", "/admin/seo", "/admin/leads"];
+  return ["/admin", "/admin/projects", "/admin/services", "/admin/blogs", "/admin/seo", "/admin/leads", "/admin/graphic-design", "/admin/banners"];
 }
 
 export async function getAnalyticsEvents(): Promise<any[]> {

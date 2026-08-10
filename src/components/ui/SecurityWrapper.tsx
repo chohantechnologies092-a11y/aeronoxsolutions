@@ -4,11 +4,6 @@ import { useEffect } from "react";
 
 export function SecurityWrapper() {
   useEffect(() => {
-    // Disable right-click context menu
-    const handleContextMenu = (e: MouseEvent) => {
-      e.preventDefault();
-    };
-
     // Disable keyboard shortcuts for dev tools and viewing source
     const handleKeyDown = (e: KeyboardEvent) => {
       // Prevent F12
@@ -44,12 +39,10 @@ export function SecurityWrapper() {
       }
     };
 
-    document.addEventListener("contextmenu", handleContextMenu);
     document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("dragstart", handleDragStart);
 
     return () => {
-      document.removeEventListener("contextmenu", handleContextMenu);
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("dragstart", handleDragStart);
     };
