@@ -155,19 +155,29 @@ export function ServiceDetailClient({ service }: { service: Service }) {
           </div>
 
           {/* Hero Image */}
-          <div className="relative w-full aspect-video lg:aspect-[4/3] rounded-2xl overflow-hidden bg-card shadow-xl ring-1 ring-black/5 dark:ring-white/10">
+          <div className="relative w-full min-h-[300px] max-h-[500px] rounded-2xl overflow-hidden bg-card shadow-xl ring-1 ring-black/5 dark:ring-white/10 flex items-center justify-center p-3">
             {service.image ? (
-              <img 
-                src={service.image} 
-                alt={service.imageAltText || service.title}
-                className="w-full h-full object-cover"
-              />
+              <>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img 
+                  src={service.image} 
+                  alt=""
+                  className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-20 pointer-events-none"
+                />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img 
+                  src={service.image} 
+                  alt={service.imageAltText || service.title}
+                  className="relative z-10 w-auto h-auto max-w-full max-h-[460px] object-contain rounded-xl shadow-md"
+                />
+              </>
             ) : (
               <div className="w-full h-full flex items-center justify-center bg-card">
                 <IconComponent size={80} style={{ color: service.color }} className="opacity-20" />
               </div>
             )}
           </div>
+
         </div>
       </section>
 
@@ -182,9 +192,10 @@ export function ServiceDetailClient({ service }: { service: Service }) {
             <div>
               <h2 className="text-3xl font-bold text-foreground mb-6">Overview</h2>
               <div 
-                className="prose prose-lg dark:prose-invert max-w-none text-muted-foreground leading-relaxed prose-headings:text-foreground prose-a:text-primary hover:prose-a:underline break-words"
+                className="prose prose-lg dark:prose-invert max-w-none text-muted-foreground leading-relaxed prose-headings:text-foreground prose-a:text-primary hover:prose-a:underline break-words rich-content"
                 dangerouslySetInnerHTML={{ __html: service.content }}
               />
+
             </div>
 
             <hr className="border-black/5 dark:border-white/5" />

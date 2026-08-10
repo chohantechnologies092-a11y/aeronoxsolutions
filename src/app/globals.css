@@ -191,7 +191,7 @@
     padding: 6px !important;
   }
 
-  .rich-text-editor-container .ql-snow .ql-picker-item {
+  .rich-text-editor-container .ql-picker-item {
     color: #ffffff !important;
     padding: 4px 8px !important;
     border-radius: 6px !important;
@@ -201,4 +201,111 @@
     color: #ffbe00 !important;
     background-color: rgba(255, 190, 0, 0.15) !important;
   }
+
+  /* Rich Text & HTML Heading & Content Typography Overrides */
+  .rich-content h1,
+  .ql-editor h1 {
+    font-size: 2.25rem !important;
+    line-height: 2.5rem !important;
+    font-weight: 900 !important;
+    color: #ffffff !important;
+    margin-top: 2rem !important;
+    margin-bottom: 1rem !important;
+    letter-spacing: -0.02em !important;
+  }
+
+  .rich-content h2,
+  .ql-editor h2 {
+    font-size: 1.75rem !important;
+    line-height: 2.25rem !important;
+    font-weight: 900 !important;
+    color: #ffbe00 !important;
+    margin-top: 1.75rem !important;
+    margin-bottom: 0.875rem !important;
+    padding-bottom: 0.5rem !important;
+    border-bottom: 1px solid rgba(255, 190, 0, 0.2) !important;
+    letter-spacing: -0.01em !important;
+  }
+
+  .rich-content h3,
+  .ql-editor h3 {
+    font-size: 1.35rem !important;
+    line-height: 1.75rem !important;
+    font-weight: 800 !important;
+    color: #ffffff !important;
+    margin-top: 1.5rem !important;
+    margin-bottom: 0.75rem !important;
+  }
+
+  .rich-content h4,
+  .ql-editor h4 {
+    font-size: 1.15rem !important;
+    line-height: 1.5rem !important;
+    font-weight: 700 !important;
+    color: #ffbe00 !important;
+    margin-top: 1.25rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .rich-content h5,
+  .ql-editor h5,
+  .rich-content h6,
+  .ql-editor h6 {
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    color: #ffffff !important;
+    margin-top: 1rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+
+  .rich-content p,
+  .ql-editor p {
+    margin-bottom: 1rem !important;
+    line-height: 1.75 !important;
+    color: #dcd7e3 !important;
+  }
+
+  .rich-content blockquote,
+  .ql-editor blockquote {
+    border-left: 4px solid #ffbe00 !important;
+    padding-left: 1rem !important;
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
+    font-style: italic !important;
+    color: #fef08a !important;
+    background-color: rgba(255, 190, 0, 0.05) !important;
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+    border-radius: 0 0.75rem 0.75rem 0 !important;
+  }
+
+  .rich-content a,
+  .ql-editor a {
+    color: #ffbe00 !important;
+    text-decoration: underline !important;
+    font-weight: 600 !important;
+  }
+
+  /* Rich Text & HTML List Formatting Overrides for Bullet Points */
+  .ql-editor ul,
+  .rich-content ul:not(.space-y-2):not(.space-y-1):not(.space-y-3) {
+    list-style-type: disc !important;
+    padding-left: 1.5rem !important;
+    margin-top: 0.75rem !important;
+    margin-bottom: 0.75rem !important;
+  }
+
+  .ql-editor ol,
+  .rich-content ol:not(.space-y-2):not(.space-y-1):not(.space-y-3) {
+    list-style-type: decimal !important;
+    padding-left: 1.5rem !important;
+    margin-top: 0.75rem !important;
+    margin-bottom: 0.75rem !important;
+  }
+
+  .ql-editor li {
+    margin-top: 0.35rem !important;
+    margin-bottom: 0.35rem !important;
+  }
 }
+

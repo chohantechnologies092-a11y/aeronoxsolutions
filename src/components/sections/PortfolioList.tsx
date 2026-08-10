@@ -340,12 +340,8 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                     }`}>
                       <BoxIcon size={20} strokeWidth={2.5} />
                     </div>
-                    <span className={`px-2.5 py-1 rounded-full text-[10px] font-black tracking-wider shadow-lg border ${
-                      isActive ? "bg-[#1a1122] text-[#ffbe00] border-[#ffbe00]/30" : "bg-black/50 text-white border-white/10 backdrop-blur-sm"
-                    }`}>
-                      {count}
-                    </span>
                   </div>
+
 
                   <div>
                     <h3 className={`text-base md:text-lg font-black leading-tight mb-1 drop-shadow-md transition-colors ${
@@ -429,9 +425,6 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                     Explore our curated collections of logos and visual brand assets. Click any image for full-screen preview.
                   </p>
                 </div>
-                <span className="text-xs font-bold uppercase tracking-wider text-[#ff007a] bg-[#24182e] px-4 py-2 rounded-full border border-white/10">
-                  {filteredProjects.length} Galleries
-                </span>
               </div>
 
               {filteredProjects.length === 0 ? (
@@ -452,7 +445,6 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                         <div className="flex items-center gap-4">
                           <h4 className="text-2xl font-black text-foreground">{gallery.title}</h4>
                           <div className="h-[1px] flex-1 bg-gradient-to-r from-black/10 dark:from-white/20 to-transparent" />
-                          <span className="text-xs text-[#ff007a] font-bold uppercase tracking-widest">{images.length} Assets</span>
                         </div>
                         
                         {images.length === 0 ? (
@@ -497,16 +489,14 @@ export function PortfolioList({ projects }: { projects: any[] }) {
               <div className="mb-10 flex flex-col md:flex-row md:items-end justify-between gap-4 border-b border-gray-200 dark:border-white/10 pb-6">
                 <div>
                   <h3 className="text-2xl md:text-3xl font-black text-foreground tracking-tight">
-                    Projects Showcase ({filteredProjects.length})
+                    Projects Showcase
                   </h3>
                   <p className="text-sm text-muted mt-1 font-medium">
                     Delivered work under {activeOverview.title}.
                   </p>
                 </div>
-                <span className="text-xs font-bold uppercase tracking-wider text-[#ffbe00] bg-[#24182e] px-4 py-2 rounded-full border border-white/10">
-                  {filteredProjects.length} Projects
-                </span>
               </div>
+
 
               {selectedCategory === "marketing" && (
                 <div className="mb-10 flex flex-wrap items-center gap-2">
@@ -551,14 +541,6 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                       const beforeLines = (project.beforeStats || "").split("\n").filter(Boolean);
                       const afterLines = (project.afterStats || "").split("\n").filter(Boolean);
                       const isVideo = project.videoUrl || project.serviceCategory === "videography";
-                      
-                      // Bento Box Logic: Make specific indices span 2 columns to perfectly fill a 3-col grid with 6 items.
-                      // Row 1: index 0 (2 cols), index 1 (1 col)
-                      // Row 2: index 2 (1 col), index 3 (2 cols)
-                      // Row 3: index 4 (2 cols), index 5 (1 col)
-                      const isFeatured = i === 0 || i === 3 || i === 4;
-                      const cardSpanClass = isFeatured ? "md:col-span-2 lg:col-span-2" : "col-span-1";
-                      const imageContainerHeight = isFeatured ? "h-72 md:h-80" : "h-56 md:h-60";
 
                       return (
                         <motion.div
@@ -567,38 +549,38 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                           whileInView={{ opacity: 1, y: 0 }}
                           viewport={{ once: true }}
                           transition={{ duration: 0.5, delay: (i % 3) * 0.1 }}
-                          className={`rounded-[2.2rem] bg-[#1a1122]/90 border border-white/10 text-white shadow-2xl overflow-hidden flex flex-col group hover:border-[#ffbe00]/50 hover:shadow-[0_0_30px_rgba(255,190,0,0.15)] transition-all duration-700 relative ${cardSpanClass}`}
+                          className="rounded-[2.2rem] bg-[#1a1122]/90 border border-white/10 text-white shadow-2xl overflow-hidden flex flex-col group hover:border-[#ffbe00]/50 hover:shadow-[0_0_30px_rgba(255,190,0,0.15)] transition-all duration-700 relative col-span-1"
                         >
                           {/* Cover Image / Video Thumbnail */}
-                          <div className={`relative w-full overflow-hidden border-b border-white/10 ${imageContainerHeight}`}>
+                          <div className="relative w-full aspect-[16/10] overflow-hidden border-b border-white/10 bg-black/40">
                             <Image
                               src={project.image}
                               alt={project.title}
                               fill
                               className="object-cover transition-transform duration-1000 group-hover:scale-105"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-[#1a1122] via-transparent to-transparent z-10" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-[#1a1122] via-black/20 to-transparent opacity-70" />
                             
                             {/* Glassmorphism Hover Reveal */}
-                            <Link href={`/portfolio/${project.slug}`} className="absolute inset-0 z-40 bg-[#1a1122]/40 backdrop-blur-md flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 overflow-hidden">
-                              <div className="transform translate-y-10 group-hover:translate-y-0 transition-transform duration-700 ease-out flex flex-col items-center">
-                                <div className="w-16 h-16 rounded-full bg-[#ffbe00] text-[#1a1122] flex items-center justify-center mb-4 shadow-[0_0_30px_rgba(255,190,0,0.5)]">
-                                  <ArrowRight size={28} strokeWidth={3} className="-rotate-45" />
+                            <Link href={`/portfolio/${project.slug}`} className="absolute inset-0 z-40 bg-[#1a1122]/50 backdrop-blur-md flex flex-col items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 overflow-hidden">
+                              <div className="transform translate-y-6 group-hover:translate-y-0 transition-transform duration-500 ease-out flex flex-col items-center">
+                                <div className="w-14 h-14 rounded-full bg-[#ffbe00] text-[#1a1122] flex items-center justify-center mb-3 shadow-[0_0_25px_rgba(255,190,0,0.5)]">
+                                  <ArrowRight size={24} strokeWidth={3} className="-rotate-45" />
                                 </div>
-                                <span className="text-white font-black uppercase tracking-widest text-sm bg-black/50 px-6 py-2 rounded-full border border-white/20">
+                                <span className="text-white font-black uppercase tracking-widest text-xs bg-black/60 px-5 py-2 rounded-full border border-white/20">
                                   View Case Study
                                 </span>
                               </div>
                             </Link>
 
                             {/* Top Badges */}
-                            <div className="absolute top-4 left-4 right-4 flex items-start justify-between z-20 pointer-events-none">
-                              <div className="flex flex-wrap gap-2 max-w-[65%]">
+                            <div className="absolute top-3.5 left-3.5 right-3.5 flex items-start justify-between z-20 pointer-events-none">
+                              <div className="flex flex-wrap gap-1.5 max-w-[70%]">
                                 {(() => {
                                   const cat = project.serviceCategory || project.category || "";
                                   if (!cat) return (
-                                    <span className="px-3.5 py-1.5 rounded-full bg-[#090512]/80 backdrop-blur-md border border-white/10 text-white text-[9px] font-extrabold uppercase tracking-widest flex items-center gap-1.5 whitespace-nowrap shadow-lg">
-                                      <Sparkles size={11} className="text-[#ffbe00]" /> Digital Project
+                                    <span className="px-3 py-1 rounded-full bg-[#090512]/80 backdrop-blur-md border border-white/10 text-white text-[9px] font-extrabold uppercase tracking-widest flex items-center gap-1 shadow-lg">
+                                      <Sparkles size={10} className="text-[#ffbe00]" /> Digital Project
                                     </span>
                                   );
 
@@ -613,12 +595,12 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                                     "custom-software": "Custom Software"
                                   };
                                   
-                                  return cat.split(',').map((c: string, idx: number) => {
+                                  return cat.split(',').slice(0, 2).map((c: string, idx: number) => {
                                     const cleanCat = c.trim();
                                     const label = map[cleanCat] || cleanCat.replace(/-/g, " ");
                                     return (
-                                      <span key={idx} className="px-3.5 py-1.5 rounded-full bg-[#090512]/80 backdrop-blur-md border border-white/10 text-white text-[9px] font-extrabold uppercase tracking-widest flex items-center gap-1.5 whitespace-nowrap shadow-lg">
-                                        <Sparkles size={11} className="text-[#ffbe00]" /> {label}
+                                      <span key={idx} className="px-2.5 py-1 rounded-full bg-[#090512]/80 backdrop-blur-md border border-white/10 text-white text-[9px] font-extrabold uppercase tracking-widest flex items-center gap-1 shadow-lg">
+                                        <Sparkles size={10} className="text-[#ffbe00]" /> {label}
                                       </span>
                                     );
                                   });
@@ -626,8 +608,8 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                               </div>
 
                               {project.growthBadge && (
-                                <span className="px-3.5 py-1.5 rounded-full bg-[#ffbe00] text-[#1a1122] font-black text-[10px] md:text-[11px] uppercase tracking-wider shadow-xl flex items-center gap-1.5 shrink-0 ml-2 whitespace-nowrap text-right">
-                                  <TrendingUp size={12} strokeWidth={3} /> {project.growthBadge}
+                                <span className="px-3 py-1 rounded-full bg-[#ffbe00] text-[#1a1122] font-black text-[9px] uppercase tracking-wider shadow-xl flex items-center gap-1 shrink-0 whitespace-nowrap">
+                                  <TrendingUp size={11} strokeWidth={3} /> {project.growthBadge}
                                 </span>
                               )}
                             </div>
@@ -638,38 +620,41 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                                 onClick={() => setActiveVideoUrl(project.videoUrl)}
                                 className="absolute inset-0 flex items-center justify-center z-50 group/play"
                               >
-                                <div className="w-16 h-16 rounded-full bg-[#ff3b30] text-white flex items-center justify-center shadow-[0_0_30px_rgba(255,59,48,0.6)] group-hover/play:scale-110 transition-transform">
-                                  <Play size={28} className="fill-white translate-x-1" />
+                                <div className="w-14 h-14 rounded-full bg-[#ff3b30] text-white flex items-center justify-center shadow-[0_0_25px_rgba(255,59,48,0.6)] group-hover/play:scale-110 transition-transform">
+                                  <Play size={24} className="fill-white translate-x-0.5" />
                                 </div>
                               </button>
                             )}
-
-                            {/* Project Title Overlay */}
-                            <div className="absolute bottom-5 left-6 right-6 z-20">
-                              <h3 className={`font-black text-white leading-tight tracking-tight drop-shadow-2xl line-clamp-2 ${isFeatured ? 'text-2xl md:text-4xl' : 'text-xl md:text-2xl'}`}>
-                                {project.title}
-                              </h3>
-                            </div>
                           </div>
 
                           {/* Body Content */}
-                          <div className="p-6 md:p-8 flex-1 flex flex-col justify-between space-y-6 bg-gradient-to-b from-[#1a1122] to-[#090512]">
-                            <p className="text-[#dcd7e3]/80 text-sm leading-relaxed font-medium line-clamp-2">
-                              {project.description}
-                            </p>
+                          <div className="p-6 flex-1 flex flex-col justify-between space-y-4 bg-gradient-to-b from-[#1a1122] to-[#090512]">
+                            <div>
+                              {project.client && (
+                                <span className="block text-[10px] font-extrabold uppercase tracking-[0.2em] text-[#ffbe00] mb-1.5">
+                                  {project.client}
+                                </span>
+                              )}
+                              <h3 className="font-black text-white text-xl leading-snug tracking-tight mb-2.5 line-clamp-2 group-hover:text-[#ffbe00] transition-colors">
+                                {project.title}
+                              </h3>
+                              <p className="text-[#dcd7e3]/80 text-xs md:text-sm leading-relaxed font-medium line-clamp-2">
+                                {project.description}
+                              </p>
+                            </div>
 
                             {/* SYSTEM SCREENSHOTS / GALLERY IMAGES IF PRESENT (CUSTOM SOFTWARE / WEB DEV) */}
                             {project.galleryImages && project.galleryImages.length > 0 && (
-                              <div className="space-y-2 pt-2">
+                              <div className="space-y-2 pt-1">
                                 <span className="text-[10px] font-extrabold text-[#af52de] uppercase tracking-wider flex items-center gap-1.5">
                                   <Cpu size={12} /> Screenshots Gallery ({project.galleryImages.length})
                                 </span>
-                                <div className="flex items-center gap-3 overflow-x-auto pb-2 scrollbar-thin">
+                                <div className="flex items-center gap-2.5 overflow-x-auto pb-1 scrollbar-thin">
                                   {project.galleryImages.map((gImg: string, gIdx: number) => (
                                     <div 
                                       key={gIdx} 
                                       onClick={() => setActiveLightboxImage(gImg)}
-                                      className="relative w-20 h-14 rounded-xl bg-black/60 border border-white/10 p-1 flex items-center justify-center shrink-0 cursor-pointer hover:border-[#af52de] hover:scale-105 transition-all overflow-hidden shadow-md"
+                                      className="relative w-16 h-12 rounded-xl bg-black/60 border border-white/10 p-0.5 flex items-center justify-center shrink-0 cursor-pointer hover:border-[#af52de] hover:scale-105 transition-all overflow-hidden shadow-md"
                                     >
                                       {/* eslint-disable-next-line @next/next/no-img-element */}
                                       <img src={gImg} alt="Screenshot" className="object-cover w-full h-full rounded-lg" />
@@ -681,29 +666,43 @@ export function PortfolioList({ projects }: { projects: any[] }) {
 
                             {/* BEFORE VS AFTER METRICS (SEO & MARKETING) */}
                             {(project.beforeStats || project.afterStats) && (
-                              <div className="grid grid-cols-1 gap-3 bg-white/5 p-5 rounded-2xl border border-white/5">
+                              <div className="grid grid-cols-1 gap-2.5 bg-white/5 p-4 rounded-2xl border border-white/5">
                                 {beforeLines.length > 0 && (
-                                  <div className="bg-red-500/10 border border-red-500/20 p-3 rounded-xl">
-                                    <div className="flex items-center gap-2 text-red-400 font-extrabold uppercase text-[9px] md:text-[10px] tracking-widest mb-1.5">
+                                  <div className="bg-red-500/10 border border-red-500/20 p-2.5 rounded-xl">
+                                    <div className="flex items-center gap-1.5 text-red-400 font-extrabold uppercase text-[9px] tracking-widest mb-1">
                                       <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" /> BEFORE AERONOX
                                     </div>
-                                    <ul className="space-y-1 text-xs text-gray-300 font-medium">
-                                      {beforeLines.slice(0, 2).map((line: string, idx: number) => (
-                                        <li key={idx} className="line-clamp-1">{line}</li>
-                                      ))}
+                                    <ul className="space-y-0.5 text-xs text-gray-300 font-medium">
+                                      {beforeLines.slice(0, 2).map((line: string, idx: number) => {
+                                        const cleanText = line.replace(/^[•\-\*\s]+/, "").trim();
+                                        if (!cleanText) return null;
+                                        return (
+                                          <li key={idx} className="flex items-center gap-1.5 overflow-hidden">
+                                            <span className="text-red-400 font-bold shrink-0">•</span>
+                                            <span className="truncate text-[11px]">{cleanText}</span>
+                                          </li>
+                                        );
+                                      })}
                                     </ul>
                                   </div>
                                 )}
 
                                 {afterLines.length > 0 && (
-                                  <div className="bg-emerald-500/10 border border-emerald-500/20 p-3 rounded-xl">
-                                    <div className="flex items-center gap-2 text-emerald-400 font-extrabold uppercase text-[9px] md:text-[10px] tracking-widest mb-1.5">
+                                  <div className="bg-emerald-500/10 border border-emerald-500/20 p-2.5 rounded-xl">
+                                    <div className="flex items-center gap-1.5 text-emerald-400 font-extrabold uppercase text-[9px] tracking-widest mb-1">
                                       <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" /> AFTER AERONOX
                                     </div>
-                                    <ul className="space-y-1 text-xs text-emerald-100 font-bold">
-                                      {afterLines.slice(0, 2).map((line: string, idx: number) => (
-                                        <li key={idx} className="line-clamp-1">{line}</li>
-                                      ))}
+                                    <ul className="space-y-0.5 text-xs text-emerald-100 font-bold">
+                                      {afterLines.slice(0, 2).map((line: string, idx: number) => {
+                                        const cleanText = line.replace(/^[•\-\*\s]+/, "").trim();
+                                        if (!cleanText) return null;
+                                        return (
+                                          <li key={idx} className="flex items-center gap-1.5 overflow-hidden">
+                                            <span className="text-emerald-400 font-bold shrink-0">✓</span>
+                                            <span className="truncate text-[11px]">{cleanText}</span>
+                                          </li>
+                                        );
+                                      })}
                                     </ul>
                                   </div>
                                 )}
@@ -715,12 +714,14 @@ export function PortfolioList({ projects }: { projects: any[] }) {
                     })}
                   </div>
 
+
                   {/* PAGINATION CONTROLS */}
                   {totalPages > 1 && (
                     <div className="mt-12 flex flex-col sm:flex-row items-center justify-between gap-4 p-6 bg-[#24182e]/80 border border-white/15 rounded-3xl shadow-xl">
                       <span className="text-xs font-medium text-[#dcd7e3]/80">
-                        Showing <strong className="text-white font-bold">{startIndex + 1} – {Math.min(startIndex + ITEMS_PER_PAGE, filteredProjects.length)}</strong> of <strong className="text-[#ffbe00] font-black">{filteredProjects.length}</strong> Projects
+                        Page <strong className="text-[#ffbe00] font-black">{currentPage}</strong> of <strong className="text-white font-bold">{totalPages}</strong>
                       </span>
+
 
                       <div className="flex items-center gap-2 flex-wrap justify-center">
                         <button
