@@ -63,9 +63,10 @@ function parseMarkdown(md: string): string {
   let html = md;
 
   // Headings
-  html = html.replace(/^### (.*$)/gim, '<h3 class="text-xl md:text-2xl font-black text-white mt-8 mb-4 border-b border-white/10 pb-2 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-[#ffbe00]"></span><span>$1</span></h3>');
+  html = html.replace(/^### (.*$)/gim, '<h3 class="text-xl md:text-2xl font-black text-[#ffbe00] mt-8 mb-4 border-b border-white/10 pb-2 flex items-center gap-2"><span class="w-2 h-2 rounded-full bg-[#ffbe00]"></span><span>$1</span></h3>');
   html = html.replace(/^## (.*$)/gim, '<h2 class="text-2xl md:text-3xl font-black text-[#ffbe00] mt-10 mb-6 border-b border-[#ffbe00]/20 pb-3 tracking-tight">$1</h2>');
-  html = html.replace(/^# (.*$)/gim, '<h1 class="text-3xl md:text-4xl font-black text-white mt-10 mb-6">$1</h1>');
+  html = html.replace(/^# (.*$)/gim, '<h1 class="text-3xl md:text-4xl font-black text-[#ffbe00] mt-10 mb-6">$1</h1>');
+
 
   // Bold & Italic
   html = html.replace(/\*\*(.*?)\*\*/g, '<strong class="font-black text-white">$1</strong>');
