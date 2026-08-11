@@ -120,7 +120,10 @@ export function ServiceDetailClient({ service }: { service: Service }) {
     : getServiceFAQs(service.slug);
 
   return (
-    <article className="min-h-screen bg-mesh text-white font-sans selection:bg-[#ffbe00] selection:text-[#120b18] pb-24">
+    <article className="min-h-screen bg-[#090512] text-white font-sans selection:bg-[#ffbe00] selection:text-[#120b18] pb-24 relative overflow-hidden">
+      {/* Ambient Radial Background Glows */}
+      <div className="absolute top-0 left-1/4 w-[600px] h-[600px] bg-[#ffbe00]/10 rounded-full blur-[140px] pointer-events-none -z-10" />
+      <div className="absolute top-1/3 right-0 w-[500px] h-[500px] bg-purple-950/30 rounded-full blur-[140px] pointer-events-none -z-10" />
       
       {/* 1. Split Layout Hero */}
       <section className="pt-36 pb-16 px-6 max-w-7xl mx-auto">
