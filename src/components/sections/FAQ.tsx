@@ -31,14 +31,14 @@ export function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
 
   return (
-    <section className="py-24 md:py-32 bg-[#fcfcfd]">
-      <div className="max-w-4xl mx-auto px-6">
+    <section className="py-24 md:py-32 bg-[#090512] relative overflow-hidden">
+      <div className="max-w-4xl mx-auto px-6 relative z-10">
         
         <div className="text-center mb-16">
-          <p className="text-[#24182e] font-bold text-xs uppercase tracking-[0.4em] mb-4">Handling Objections</p>
-          <h2 className="text-4xl md:text-6xl font-black text-gray-900 tracking-tight leading-none mb-6">
+          <p className="text-[#ffbe00] font-black text-xs uppercase tracking-[0.4em] mb-4">Handling Objections</p>
+          <h2 className="text-4xl md:text-6xl font-black text-white tracking-tight leading-none mb-6">
             Straight Answers. <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#24182e] to-[#ffbe00]">No BS.</span>
+            <span className="text-gradient">No BS.</span>
           </h2>
         </div>
 
@@ -51,23 +51,23 @@ export function FAQ() {
                 key={index} 
                 className={`border rounded-2xl transition-all duration-300 overflow-hidden ${
                   isOpen 
-                    ? "bg-white border-[#ffbe00] shadow-[0_10px_30px_rgba(255,190,0,0.1)]" 
-                    : "bg-white border-gray-100 shadow-sm hover:border-gray-200"
+                    ? "bg-[#1a1122]/90 border-[#ffbe00] shadow-[0_10px_30px_rgba(255,190,0,0.15)]" 
+                    : "bg-[#1a1122]/70 border-white/10 shadow-sm hover:border-white/20"
                 }`}
               >
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : index)}
-                  className="w-full px-6 py-6 flex items-center justify-between text-left focus:outline-none"
+                  className="w-full px-6 py-6 flex items-center justify-between text-left focus:outline-none cursor-pointer"
                 >
-                  <span className={`font-black text-lg md:text-xl pr-8 transition-colors ${isOpen ? "text-[#24182e]" : "text-gray-900"}`}>
+                  <span className={`font-black text-lg md:text-xl pr-8 transition-colors ${isOpen ? "text-[#ffbe00]" : "text-white"}`}>
                     {faq.question}
                   </span>
                   <div 
                     className={`shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-transform duration-300 ${
-                      isOpen ? "bg-[#ffbe00] rotate-180" : "bg-gray-100 rotate-0"
+                      isOpen ? "bg-[#ffbe00] rotate-180" : "bg-white/10 rotate-0 text-white"
                     }`}
                   >
-                    <ChevronDown size={18} className={isOpen ? "text-[#24182e]" : "text-gray-500"} />
+                    <ChevronDown size={18} className={isOpen ? "text-[#120b18]" : "text-white/70"} />
                   </div>
                 </button>
                 
@@ -79,8 +79,8 @@ export function FAQ() {
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.3, ease: "easeInOut" }}
                     >
-                      <div className="px-6 pb-6 pt-0 text-gray-500 font-medium leading-relaxed">
-                        <p className="pt-4 border-t border-gray-100">
+                      <div className="px-6 pb-6 pt-0 text-[#dcd7e3]/80 font-medium leading-relaxed">
+                        <p className="pt-4 border-t border-white/10">
                           {faq.answer}
                         </p>
                       </div>

@@ -8,12 +8,14 @@ const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
   subsets: ["latin"],
   weight: ["500", "600", "700"],
+  display: "swap",
 });
 
 export async function generateMetadata(): Promise<Metadata> {

@@ -120,38 +120,38 @@ export function ServiceDetailClient({ service }: { service: Service }) {
     : getServiceFAQs(service.slug);
 
   return (
-    <article className="min-h-screen bg-background font-sans selection:bg-foreground selection:text-background pb-20">
+    <article className="min-h-screen bg-mesh text-white font-sans selection:bg-[#ffbe00] selection:text-[#120b18] pb-24">
       
       {/* 1. Split Layout Hero */}
-      <section className="pt-32 pb-16 px-6 max-w-7xl mx-auto">
+      <section className="pt-36 pb-16 px-6 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           
           {/* Hero Content */}
           <div className="flex flex-col items-start">
-            <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full bg-card shadow-sm ring-1 ring-black/5 dark:ring-white/10 text-sm font-semibold uppercase tracking-wider text-muted-foreground">
-              <IconComponent size={16} style={{ color: service.color }} />
+            <div className="inline-flex items-center gap-2 mb-6 px-4 py-2 rounded-full bg-[#ffbe00]/10 border border-[#ffbe00]/20 text-[#ffbe00] text-xs font-bold uppercase tracking-wider shadow-sm">
+              <IconComponent size={16} style={{ color: service.color || "#ffbe00" }} />
               Service Overview
             </div>
 
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-foreground leading-tight tracking-tight mb-6">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight tracking-tight mb-6">
               {service.title}
             </h1>
             
-            <p className="text-lg md:text-xl text-muted-foreground leading-relaxed mb-8">
+            <p className="text-lg md:text-xl text-[#dcd7e3]/80 font-medium leading-relaxed mb-8">
               {service.shortDescription}
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
               <Link 
                 href="/contact" 
-                className="inline-flex items-center justify-center px-8 py-4 text-white font-bold rounded-lg hover:opacity-90 transition-opacity shadow-md"
-                style={{ backgroundColor: service.color || "#3b82f6" }}
+                className="inline-flex items-center justify-center px-8 py-4 text-[#120b18] font-black uppercase tracking-wider text-xs rounded-2xl transition-all duration-300 hover:scale-105 shadow-[0_0_25px_rgba(255,190,0,0.3)]"
+                style={{ backgroundColor: service.color || "#ffbe00" }}
               >
-                Request a Proposal
+                Request a Proposal <ArrowRight size={16} className="ml-2" />
               </Link>
               <Link 
                 href="/portfolio" 
-                className="inline-flex items-center justify-center px-8 py-4 bg-card shadow-sm hover:shadow-md ring-1 ring-black/5 dark:ring-white/10 text-foreground font-bold rounded-lg transition-all"
+                className="inline-flex items-center justify-center px-8 py-4 bg-white/5 border border-white/15 hover:bg-white/10 text-white font-bold text-xs uppercase tracking-wider rounded-2xl transition-all"
               >
                 View Portfolio
               </Link>
@@ -159,7 +159,7 @@ export function ServiceDetailClient({ service }: { service: Service }) {
           </div>
 
           {/* Hero Image */}
-          <div className="relative w-full min-h-[300px] max-h-[500px] rounded-2xl overflow-hidden bg-card shadow-xl ring-1 ring-black/5 dark:ring-white/10 flex items-center justify-center p-3">
+          <div className="relative w-full min-h-[320px] max-h-[500px] rounded-[2.5rem] overflow-hidden bg-[#1a1122]/90 border border-white/15 shadow-2xl flex items-center justify-center p-4">
             {(service.bannerImage || service.image) ? (
               <>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -172,12 +172,12 @@ export function ServiceDetailClient({ service }: { service: Service }) {
                 <img 
                   src={(service.bannerImage || service.image) ?? undefined} 
                   alt={service.imageAltText || service.title}
-                  className="relative z-10 w-auto h-auto max-w-full max-h-[460px] object-contain rounded-xl shadow-md"
+                  className="relative z-10 w-auto h-auto max-w-full max-h-[460px] object-contain rounded-2xl shadow-2xl"
                 />
               </>
             ) : (
-              <div className="w-full h-full flex items-center justify-center bg-card">
-                <IconComponent size={80} style={{ color: service.color }} className="opacity-20" />
+              <div className="w-full h-full flex items-center justify-center bg-[#1a1122]">
+                <IconComponent size={80} style={{ color: service.color || "#ffbe00" }} className="opacity-30" />
               </div>
             )}
           </div>
@@ -186,41 +186,38 @@ export function ServiceDetailClient({ service }: { service: Service }) {
       </section>
 
       {/* 2. Main Content & Sidebar Layout */}
-      <section className="pt-16 px-6 max-w-7xl mx-auto">
+      <section className="pt-12 px-6 max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
           
           {/* Main Content Area */}
           <div className="lg:col-span-8 flex flex-col gap-16 min-w-0 break-words">
             
             {/* Overview (Rich Text) */}
-            <div>
-              <h2 className="text-3xl font-bold text-foreground mb-6">Overview</h2>
+            <div className="p-8 sm:p-10 rounded-[2.5rem] bg-[#1a1122]/90 border border-white/15 shadow-2xl">
+              <h2 className="text-3xl font-extrabold text-white mb-6 tracking-tight">Overview</h2>
               <div 
-                className="prose prose-lg dark:prose-invert max-w-none text-muted-foreground leading-relaxed prose-headings:text-foreground prose-a:text-primary hover:prose-a:underline break-words rich-content"
+                className="prose prose-lg dark:prose-invert max-w-none text-[#e2e8f0] leading-relaxed prose-headings:text-[#ffbe00] prose-a:text-[#ffbe00] hover:prose-a:underline break-words rich-content"
                 dangerouslySetInnerHTML={{ __html: service.content }}
               />
-
             </div>
-
-            <hr className="border-black/5 dark:border-white/5" />
 
             {/* Structured Capabilities */}
             <div>
-              <h2 className="text-3xl font-bold text-foreground mb-4">Core Capabilities</h2>
-              <p className="text-muted-foreground mb-8">We leverage industry-leading tools and methodologies to deliver exceptional results.</p>
+              <h2 className="text-3xl font-extrabold text-white mb-3 tracking-tight">Core Capabilities</h2>
+              <p className="text-[#dcd7e3]/70 font-medium mb-8">We leverage industry-leading tools and methodologies to deliver exceptional results.</p>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                 {capabilities.map((cap, idx) => {
                   const brandData = getBrandIcon(cap);
-                  const colorHex = service.color.replace('#', '');
+                  const colorHex = (service.color || "#ffbe00").replace('#', '');
                   
                   return (
                     <div 
                       key={idx}
-                      className="p-6 rounded-xl bg-card shadow-sm hover:shadow-md ring-1 ring-black/5 dark:ring-white/5 flex items-start gap-4 transition-all"
+                      className="p-6 rounded-2xl bg-[#1a1122]/90 border border-white/15 shadow-xl hover:border-[#ffbe00]/40 flex items-start gap-4 transition-all group"
                     >
                       <div 
-                        className="w-12 h-12 rounded-lg bg-background shadow-sm ring-1 ring-black/5 dark:ring-white/10 flex items-center justify-center flex-shrink-0"
+                        className="w-12 h-12 rounded-xl bg-black/40 border border-white/10 shadow-inner flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform"
                       >
                         {brandData ? (
                           <img 
@@ -230,15 +227,15 @@ export function ServiceDetailClient({ service }: { service: Service }) {
                             } 
                             alt={`${brandData.id} icon`} 
                             className="w-5 h-5 object-contain" 
-                            style={brandData.type === 'domain' ? { filter: 'grayscale(100%) opacity(60%)' } : { opacity: 0.9 }}
+                            style={brandData.type === 'domain' ? { filter: 'grayscale(100%) opacity(70%)' } : { opacity: 0.9 }}
                           />
                         ) : (
-                          <CheckCircle2 size={20} style={{ color: service.color }} />
+                          <CheckCircle2 size={20} style={{ color: service.color || "#ffbe00" }} />
                         )}
                       </div>
                       <div>
-                        <h4 className="font-bold text-foreground text-lg mb-1">{cap}</h4>
-                        <p className="text-sm text-muted-foreground">Expert execution and strategic implementation tailored for {cap}.</p>
+                        <h4 className="font-bold text-white text-lg mb-1">{cap}</h4>
+                        <p className="text-xs sm:text-sm text-[#dcd7e3]/70 font-medium">Expert execution and strategic implementation tailored for {cap}.</p>
                       </div>
                     </div>
                   );
@@ -246,58 +243,49 @@ export function ServiceDetailClient({ service }: { service: Service }) {
               </div>
             </div>
 
-            <hr className="border-black/5 dark:border-white/5" />
-
             {/* Structured Process */}
             <div>
-              <h2 className="text-3xl font-bold text-foreground mb-8">Our Process</h2>
+              <h2 className="text-3xl font-extrabold text-white mb-8 tracking-tight">Our Process</h2>
               <div className="space-y-6">
                 {processSteps.map((step, idx) => (
-                  <div key={step.id} className="flex gap-6 relative">
-                    {/* Vertical Line */}
-                    {idx !== processSteps.length - 1 && (
-                      <div className="absolute top-12 left-6 bottom-[-24px] w-px bg-border z-0" />
-                    )}
-                    
+                  <div key={step.id} className="p-6 rounded-2xl bg-[#1a1122]/90 border border-white/15 flex gap-6 relative shadow-lg">
                     <div 
-                      className="w-12 h-12 rounded-full border-2 border-background flex items-center justify-center flex-shrink-0 text-white font-bold relative z-10"
-                      style={{ backgroundColor: service.color }}
+                      className="w-12 h-12 rounded-2xl border border-white/20 flex items-center justify-center flex-shrink-0 text-[#120b18] font-black text-base shadow-lg"
+                      style={{ backgroundColor: service.color || "#ffbe00" }}
                     >
                       {step.id}
                     </div>
-                    <div className="pt-2 pb-4">
-                      <h3 className="text-xl font-bold text-foreground mb-2">{step.title}</h3>
-                      <p className="text-muted-foreground leading-relaxed">{step.desc}</p>
+                    <div>
+                      <h3 className="text-xl font-bold text-white mb-1.5">{step.title}</h3>
+                      <p className="text-xs sm:text-sm text-[#dcd7e3]/80 font-medium leading-relaxed">{step.desc}</p>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            <hr className="border-black/5 dark:border-white/5" />
-
             {/* Clean FAQs */}
             <div>
-              <h2 className="text-3xl font-bold text-foreground mb-8">Frequently Asked Questions</h2>
-              <div className="flex flex-col gap-3">
+              <h2 className="text-3xl font-extrabold text-white mb-8 tracking-tight">Frequently Asked Questions</h2>
+              <div className="flex flex-col gap-4">
                 {faqs.map((faq, idx) => {
                   const isActive = activeFaq === idx;
                   return (
                     <div
                       key={idx}
-                      className="bg-card shadow-sm ring-1 ring-black/5 dark:ring-white/5 rounded-xl overflow-hidden"
+                      className="bg-[#1a1122]/90 border border-white/15 rounded-2xl overflow-hidden shadow-lg transition-all"
                     >
                       <button
                         onClick={() => setActiveFaq(isActive ? null : idx)}
-                        className="w-full flex items-center justify-between p-5 text-left hover:bg-muted/50 transition-colors"
+                        className="w-full flex items-center justify-between p-6 text-left hover:bg-white/5 transition-colors cursor-pointer"
                       >
-                        <span className="text-lg font-semibold text-foreground">
+                        <span className="text-base sm:text-lg font-bold text-white pr-4">
                           {faq.question}
                         </span>
                         {isActive ? (
-                          <ChevronUp size={20} className="text-muted-foreground flex-shrink-0" />
+                          <ChevronUp size={20} className="text-[#ffbe00] flex-shrink-0" />
                         ) : (
-                          <ChevronDown size={20} className="text-muted-foreground flex-shrink-0" />
+                          <ChevronDown size={20} className="text-white/60 flex-shrink-0" />
                         )}
                       </button>
                       <AnimatePresence>
@@ -308,7 +296,7 @@ export function ServiceDetailClient({ service }: { service: Service }) {
                             exit={{ height: 0, opacity: 0 }}
                             transition={{ duration: 0.2 }}
                           >
-                            <div className="p-5 pt-0 text-muted-foreground border-t border-black/5 dark:border-white/5 leading-relaxed">
+                            <div className="p-6 pt-0 text-[#dcd7e3]/80 font-medium text-sm border-t border-white/5 leading-relaxed">
                               {faq.answer}
                             </div>
                           </motion.div>
@@ -324,49 +312,49 @@ export function ServiceDetailClient({ service }: { service: Service }) {
 
           {/* Sidebar Area */}
           <div className="lg:col-span-4">
-            <div className="sticky top-24 flex flex-col gap-6">
+            <div className="sticky top-28 flex flex-col gap-6">
               
               {/* Contact Card */}
-              <div className="bg-card rounded-2xl p-8 shadow-xl ring-1 ring-black/5 dark:ring-white/10">
+              <div className="bg-[#1a1122]/90 border border-white/15 rounded-[2rem] p-8 shadow-2xl backdrop-blur-2xl">
                 <div className="flex items-center gap-3 mb-6">
                   <span className="relative flex h-3 w-3">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
                   </span>
-                  <span className="text-sm font-semibold text-foreground uppercase tracking-wider">Available for new projects</span>
+                  <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">Available for new projects</span>
                 </div>
                 
-                <h3 className="text-2xl font-bold text-foreground mb-4">Need Expert Consultation?</h3>
-                <p className="text-muted-foreground mb-8">
-                  Discuss your requirements with our technical team and get a tailored execution plan.
+                <h3 className="text-2xl font-extrabold text-white mb-3 tracking-tight">Need Expert Consultation?</h3>
+                <p className="text-xs sm:text-sm text-[#dcd7e3]/70 font-medium mb-8 leading-relaxed">
+                  Discuss your requirements with our engineering leads and receive a custom architecture proposal.
                 </p>
                 
                 <div className="flex flex-col gap-4">
                   <Link 
                     href="/contact" 
-                    className="w-full flex items-center justify-center gap-2 px-6 py-4 text-white font-bold rounded-lg hover:opacity-90 transition-opacity"
-                    style={{ backgroundColor: service.color || "#3b82f6" }}
+                    className="w-full flex items-center justify-center gap-2 px-6 py-4 text-[#120b18] font-black text-xs uppercase tracking-wider rounded-2xl hover:scale-[1.02] transition-all shadow-lg"
+                    style={{ backgroundColor: service.color || "#ffbe00" }}
                   >
                     Schedule a Call
-                    <ArrowRight size={18} />
+                    <ArrowRight size={16} />
                   </Link>
                   <a 
-                    href="mailto:contact@aeronoxsolutions.com" 
-                    className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-muted/50 hover:bg-muted text-foreground font-semibold rounded-lg transition-colors"
+                    href={`mailto:${service.email || "info@aeronoxsolutions.com"}`}
+                    className="w-full flex items-center justify-center gap-2 px-6 py-4 bg-white/5 hover:bg-white/10 text-white font-bold text-xs uppercase tracking-wider rounded-2xl border border-white/15 transition-all"
                   >
-                    <Mail size={18} className="text-muted-foreground" />
+                    <Mail size={16} className="text-[#ffbe00]" />
                     Send an Email
                   </a>
                 </div>
               </div>
 
               {/* Quick Info Card */}
-              <div className="bg-card shadow-md ring-1 ring-black/5 dark:ring-white/10 rounded-xl p-6">
-                <h4 className="font-bold text-foreground mb-4">Why choose us?</h4>
-                <ul className="space-y-3">
-                  {["Dedicated project manager", "Transparent communication", "Agile methodology", "Long-term support"].map((item, i) => (
-                    <li key={i} className="flex items-center gap-3 text-sm text-muted-foreground">
-                      <CheckCircle2 size={16} style={{ color: service.color }} />
+              <div className="bg-[#1a1122]/90 border border-white/15 rounded-[2rem] p-6 shadow-xl">
+                <h4 className="font-extrabold text-white mb-4">Why choose us?</h4>
+                <ul className="space-y-3.5">
+                  {["Dedicated engineering leads", "Transparent 2-4 hr SLA", "Agile MVP sprints", "Long-term support"].map((item, i) => (
+                    <li key={i} className="flex items-center gap-3 text-xs font-semibold text-[#dcd7e3]">
+                      <CheckCircle2 size={16} style={{ color: service.color || "#ffbe00" }} />
                       {item}
                     </li>
                   ))}
