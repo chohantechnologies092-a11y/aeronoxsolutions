@@ -64,10 +64,23 @@ export default async function AdminMessages() {
                 <tr key={msg.id} className="border-b border-admin-border hover:bg-white/3 transition-colors">
                   <td className="px-6 py-4 align-top">
                     <p className="font-semibold text-admin-text whitespace-nowrap">{msg.name}</p>
-                    <a href={`mailto:${msg.email}`} className="text-xs text-cyan-600 dark:text-[#00c2ff] hover:underline whitespace-nowrap">{msg.email}</a>
+                    <a href={`mailto:${msg.email}`} className="text-xs text-cyan-600 dark:text-[#00c2ff] hover:underline block whitespace-nowrap">{msg.email}</a>
+                    {msg.phone && <a href={`tel:${msg.phone}`} className="text-xs text-admin-muted hover:underline block whitespace-nowrap mt-0.5">{msg.phone}</a>}
                   </td>
-                  <td className="px-6 py-4">
-                    <p className="text-admin-text">{msg.message}</p>
+                  <td className="px-6 py-4 align-top">
+                    <div className="flex flex-wrap items-center gap-2 mb-2">
+                      {msg.service && (
+                        <span className="px-2 py-0.5 rounded-md bg-[#ffbe00]/10 text-[#ffbe00] text-xs font-medium border border-[#ffbe00]/20">
+                          {msg.service}
+                        </span>
+                      )}
+                      {msg.budget && (
+                        <span className="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-500 text-xs font-medium border border-emerald-500/20">
+                          Budget: {msg.budget}
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-admin-text text-sm leading-relaxed">{msg.message}</p>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap align-top">
                     <span className="flex items-center gap-1.5 text-admin-muted text-xs">

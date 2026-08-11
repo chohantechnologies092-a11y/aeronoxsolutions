@@ -1,9 +1,11 @@
 "use server";
 
 import { db } from "@/lib/firebase-admin";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
+import { getSettings } from "@/lib/data";
+import { sendLeadNotificationEmail } from "@/lib/email";
 
 // Helper for dates
 const getNow = () => new Date().toISOString();
@@ -107,6 +109,7 @@ export async function createProject(formData: FormData) {
 
   revalidatePath("/portfolio");
   revalidatePath("/admin/projects");
+  revalidateTag("projects", "default");
   redirect("/admin/projects");
 }
 
@@ -120,6 +123,7 @@ export async function deleteProject(id: string) {
   revalidatePath("/portfolio");
   revalidatePath("/admin/projects");
   revalidatePath("/");
+  revalidateTag("projects", "default");
 }
 
 export async function updateProject(id: string, formData: FormData) {
@@ -216,6 +220,7 @@ export async function updateProject(id: string, formData: FormData) {
 
   revalidatePath("/portfolio");
   revalidatePath("/admin/projects");
+  revalidateTag("projects", "default");
   redirect("/admin/projects");
 }
 
@@ -229,6 +234,7 @@ export async function updateProjectOrder(orderedIds: string[]) {
   revalidatePath("/portfolio");
   revalidatePath("/admin/projects");
   revalidatePath("/");
+  revalidateTag("projects", "default");
 }
 
 export async function toggleProjectHomeStatus(id: string, showOnHome: boolean) {
@@ -239,6 +245,7 @@ export async function toggleProjectHomeStatus(id: string, showOnHome: boolean) {
   revalidatePath("/portfolio");
   revalidatePath("/admin/projects");
   revalidatePath("/");
+  revalidateTag("projects", "default");
 }
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -255,12 +262,22 @@ export async function createService(formData: FormData) {
   const rawSlug = formData.get("slug") as string;
   const image = formData.get("image") as string | null;
   const cardImage = formData.get("cardImage") as string | null;
+  const portfolioCardImage = formData.get("portfolioCardImage") as string | null;
   const bannerImage = (formData.get("bannerImage") as string | null) || image;
   const capabilities = formData.get("capabilities") as string | null;
   const showOnHome = formData.get("showOnHome") === "on";
   const metaTitle = formData.get("metaTitle") as string | null;
   const metaDescription = formData.get("metaDescription") as string | null;
   const imageAltText = formData.get("imageAltText") as string | null;
+  const faqsRaw = formData.get("faqs") as string | null;
+  let faqs: any[] = [];
+  try {
+    if (faqsRaw) {
+      faqs = JSON.parse(faqsRaw);
+    }
+  } catch {
+    faqs = [];
+  }
 
   if (!title || !shortDescription) {
     throw new Error("Title and short description are required.");
@@ -274,12 +291,14 @@ export async function createService(formData: FormData) {
     shortDescription,
     content: content || "",
     cardImage: cardImage || null,
+    portfolioCardImage: portfolioCardImage || cardImage || null,
     bannerImage: bannerImage || null,
     image: image || cardImage || bannerImage || null,
     icon: icon || "search",
     color: color || "#ffbe00",
     bentoClass: bentoClass || "md:col-span-1",
     capabilities: capabilities || "",
+    faqs: faqs || [],
     showOnHome,
     metaTitle: metaTitle || null,
     metaDescription: metaDescription || null,
@@ -289,8 +308,11 @@ export async function createService(formData: FormData) {
   });
 
   revalidatePath("/services");
+  revalidatePath(`/services/${slug}`);
+  revalidatePath("/portfolio");
   revalidatePath("/admin/services");
   revalidatePath("/");
+  revalidateTag("services", "default");
   redirect("/admin/services");
 }
 
@@ -304,12 +326,22 @@ export async function updateService(id: string, formData: FormData) {
   const rawSlug = formData.get("slug") as string;
   const image = formData.get("image") as string | null;
   const cardImage = formData.get("cardImage") as string | null;
+  const portfolioCardImage = formData.get("portfolioCardImage") as string | null;
   const bannerImage = (formData.get("bannerImage") as string | null) || image;
   const capabilities = formData.get("capabilities") as string | null;
   const showOnHome = formData.get("showOnHome") === "on";
   const metaTitle = formData.get("metaTitle") as string | null;
   const metaDescription = formData.get("metaDescription") as string | null;
   const imageAltText = formData.get("imageAltText") as string | null;
+  const faqsRaw = formData.get("faqs") as string | null;
+  let faqs: any[] = [];
+  try {
+    if (faqsRaw) {
+      faqs = JSON.parse(faqsRaw);
+    }
+  } catch {
+    faqs = [];
+  }
 
   if (!title || !shortDescription) {
     throw new Error("Title and short description are required.");
@@ -323,12 +355,14 @@ export async function updateService(id: string, formData: FormData) {
     shortDescription,
     content: content || "",
     cardImage: cardImage || null,
+    portfolioCardImage: portfolioCardImage || cardImage || null,
     bannerImage: bannerImage || null,
     image: image || cardImage || bannerImage || null,
     icon: icon || "search",
     color: color || "#ffbe00",
     bentoClass: bentoClass || "md:col-span-1",
     capabilities: capabilities || "",
+    faqs: faqs || [],
     showOnHome,
     metaTitle: metaTitle || null,
     metaDescription: metaDescription || null,
@@ -337,8 +371,11 @@ export async function updateService(id: string, formData: FormData) {
   });
 
   revalidatePath("/services");
+  revalidatePath(`/services/${slug}`);
+  revalidatePath("/portfolio");
   revalidatePath("/admin/services");
   revalidatePath("/");
+  revalidateTag("services", "default");
   redirect("/admin/services");
 }
 
@@ -347,6 +384,7 @@ export async function deleteService(id: string) {
   revalidatePath("/services");
   revalidatePath("/admin/services");
   revalidatePath("/");
+  revalidateTag("services", "default");
 }
 
 export async function updateServiceOrder(orderedIds: string[]) {
@@ -359,6 +397,7 @@ export async function updateServiceOrder(orderedIds: string[]) {
   revalidatePath("/services");
   revalidatePath("/admin/services");
   revalidatePath("/");
+  revalidateTag("services", "default");
 }
 
 export async function toggleServiceHomeStatus(id: string, showOnHome: boolean) {
@@ -369,6 +408,7 @@ export async function toggleServiceHomeStatus(id: string, showOnHome: boolean) {
   revalidatePath("/services");
   revalidatePath("/admin/services");
   revalidatePath("/");
+  revalidateTag("services", "default");
 }
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -433,6 +473,7 @@ export async function createBlog(formData: FormData) {
 
   revalidatePath("/blog");
   revalidatePath("/admin/blogs");
+  revalidateTag("blogs", "default");
   redirect("/admin/blogs");
 }
 
@@ -488,6 +529,7 @@ export async function updateBlog(id: string, formData: FormData) {
   revalidatePath("/blog");
   revalidatePath(`/blog/${slug}`);
   revalidatePath("/admin/blogs");
+  revalidateTag("blogs", "default");
   redirect("/admin/blogs");
 }
 
@@ -498,12 +540,14 @@ export async function toggleBlogPublishStatus(id: string, published: boolean) {
   });
   revalidatePath("/blog");
   revalidatePath("/admin/blogs");
+  revalidateTag("blogs", "default");
 }
 
 export async function deleteBlog(id: string) {
   await db.collection("blogs").doc(id).delete();
   revalidatePath("/blog");
   revalidatePath("/admin/blogs");
+  revalidateTag("blogs", "default");
 }
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -527,6 +571,7 @@ export async function upsertSEO(formData: FormData) {
 
   revalidatePath("/");
   revalidatePath("/admin/seo");
+  revalidateTag("seo", "default");
   redirect("/admin/seo");
 }
 
@@ -552,15 +597,18 @@ export async function upsertPageSEO(pageSlug: string, formData: FormData) {
   }
   
   revalidatePath("/admin/seo");
+  revalidateTag("seo", "default");
   redirect("/admin/seo");
 }
 
 export async function upsertPageBanner(pageSlug: string, formData: FormData) {
   const bannerImage = formData.get("bannerImage") as string;
+  const portfolioAllImage = formData.get("portfolioAllImage") as string | null;
 
   const seoRef = db.collection("seo").doc(pageSlug);
   await seoRef.set({
     bannerImage: bannerImage || null,
+    ...(portfolioAllImage !== undefined && { portfolioAllImage: portfolioAllImage || null }),
     updatedAt: getNow(),
   }, { merge: true });
 
@@ -570,6 +618,7 @@ export async function upsertPageBanner(pageSlug: string, formData: FormData) {
     revalidatePath(`/${pageSlug}`);
   }
   
+  revalidatePath("/portfolio");
   revalidatePath("/admin/banners");
   redirect(`/admin/banners?page=${pageSlug}`);
 }
@@ -651,9 +700,11 @@ export async function upsertSettings(formData: FormData) {
 }
 
 export async function fetchSettingsAction() {
-  const doc = await db.collection("settings").doc("global").get();
-  if (!doc.exists) return null;
-  return doc.data();
+  try {
+    return await getSettings();
+  } catch {
+    return null;
+  }
 }
 
 
@@ -684,6 +735,16 @@ export async function submitLead(formData: FormData) {
     updatedAt: getNow(),
   });
 
+  sendLeadNotificationEmail({
+    name,
+    email,
+    phone,
+    message,
+    websiteUrl,
+    source: "Hero Audit Form",
+  }).catch((err) => console.error("Error triggering lead email from submitLead:", err));
+
+  revalidatePath("/admin/leads");
   return { success: true };
 }
 
@@ -811,15 +872,20 @@ export async function updateTeamMemberOrder(orderedIds: string[]) {
 // ────────────────────────────────────────────────────────────────────────────
 
 export async function getUsers() {
-  const snapshot = await db.collection("users").get();
-  return snapshot.docs.map((doc: any) => {
-    const data = doc.data();
-    return {
-      id: doc.id,
-      email: data.email,
-      role: data.role || "admin",
-    };
-  });
+  try {
+    const snapshot = await db.collection("users").get();
+    return snapshot.docs.map((doc: any) => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        email: data.email,
+        role: data.role || "admin",
+      };
+    });
+  } catch (err) {
+    console.warn("Error fetching users from DB:", err);
+    return [];
+  }
 }
 
 export async function createUser(formData: FormData) {

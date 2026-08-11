@@ -6,15 +6,15 @@ const nextConfig = {
     },
   },
   images: {
-    unoptimized: false,
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'images.unsplash.com',
+        hostname: '**',
       },
       {
-        protocol: 'https',
-        hostname: 'res.cloudinary.com',
+        protocol: 'http',
+        hostname: '**',
       },
     ],
   },

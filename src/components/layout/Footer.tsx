@@ -32,11 +32,11 @@ export function Footer() {
       <div className="absolute bottom-0 right-1/4 w-[500px] h-[500px] bg-[#24182e]/20 rounded-full blur-[150px] pointer-events-none" />
 
       <div className="relative mx-auto max-w-7xl px-6 lg:px-8 z-10">
-        
+
         {/* Top CTA Banner inside Footer */}
         <div className="mb-20 p-8 md:p-12 rounded-[2.5rem] bg-gradient-to-r from-[#24182e] via-[#1a1122] to-[#140c1e] border border-white/15 shadow-2xl relative overflow-hidden group">
           <div className="absolute top-0 right-0 w-96 h-96 bg-[#ffbe00]/15 rounded-full blur-[100px] pointer-events-none transform translate-x-1/3 -translate-y-1/3 group-hover:scale-110 transition-transform duration-700" />
-          
+
           <div className="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8 text-center lg:text-left">
             <div>
               <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#ffbe00]/10 border border-[#ffbe00]/30 text-[#ffbe00] text-xs font-black uppercase tracking-widest mb-3">
@@ -71,7 +71,7 @@ export function Footer() {
 
         {/* Main Footer Links Grid */}
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-8 pb-16 border-b border-white/10">
-          
+
           {/* Column 1: Brand Info & Registration */}
           <div className="lg:col-span-4">
             <Link href="/" className="inline-block group mb-6">
@@ -83,7 +83,7 @@ export function Footer() {
                 className="object-contain h-11 w-auto group-hover:opacity-80 transition-opacity"
               />
             </Link>
-            
+
             <p className="text-sm leading-relaxed text-[#dcd7e3]/70 max-w-sm mb-6 font-medium">
               {siteConfig.description}
             </p>
@@ -202,11 +202,7 @@ export function Footer() {
                   </Link>
                 </li>
               ))}
-              <li>
-                <Link href="/blog" className="hover:text-[#ffbe00] transition-colors">
-                  Blog & Articles
-                </Link>
-              </li>
+
             </ul>
           </div>
 
@@ -230,7 +226,14 @@ export function Footer() {
               </li>
               <li className="flex items-start gap-3">
                 <MapPin size={18} className="mt-0.5 shrink-0 text-[#ffbe00]" />
-                <span className="leading-relaxed">{siteConfig.address}</span>
+                <a 
+                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(siteConfig.address)}`}
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="hover:text-[#ffbe00] transition-colors leading-relaxed"
+                >
+                  {siteConfig.address}
+                </a>
               </li>
               <li className="pt-2">
                 <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold">

@@ -115,7 +115,9 @@ export function ServiceDetailClient({ service }: { service: Service }) {
     ? service.capabilities.split(',').map((c: string) => c.trim()).filter(Boolean)
     : getServiceCapabilities(service.slug);
     
-  const faqs = getServiceFAQs(service.slug);
+  const faqs = service.faqs && Array.isArray(service.faqs) && service.faqs.length > 0 
+    ? service.faqs 
+    : getServiceFAQs(service.slug);
 
   return (
     <article className="min-h-screen bg-background font-sans selection:bg-foreground selection:text-background pb-20">

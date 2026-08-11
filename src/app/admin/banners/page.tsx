@@ -60,14 +60,26 @@ export default async function AdminBanners({ searchParams }: { searchParams: Pro
             
             <div className="flex flex-col gap-2">
               <label className="text-sm font-medium text-admin-text">
-                {currentPage === "global" ? "Default Banner Image" : "Page Banner Image"}
+                {currentPage === "global" ? "Default Banner Image" : "Page Hero Banner Image"}
               </label>
               <ImageUpload name="bannerImage" defaultValue={seo.bannerImage || ""} />
             </div>
 
+            {currentPage === "portfolio" && (
+              <div className="flex flex-col gap-2 pt-4 border-t border-admin-border">
+                <label className="text-sm font-medium text-admin-text">
+                  Portfolio "All Work" Service Card Image
+                </label>
+                <ImageUpload name="portfolioAllImage" defaultValue={seo.portfolioAllImage || ""} />
+                <p className="text-xs text-admin-muted">
+                  Image shown on the "All Work" capability card on the Portfolio page (/portfolio).
+                </p>
+              </div>
+            )}
+
             <div className="pt-4 border-t border-admin-border flex justify-end">
               <button type="submit" className="px-5 py-2.5 rounded-lg bg-accent text-[#24182e] font-bold hover:bg-white transition-colors">
-                Save Banner
+                Save Banner Settings
               </button>
             </div>
           </form>

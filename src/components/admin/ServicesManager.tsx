@@ -50,6 +50,22 @@ function SortableServiceRow({ service, isPending }: { service: any, isPending: b
           <GripVertical size={18} />
         </button>
       </td>
+      <td className="py-4 px-4 w-16">
+        {service.portfolioCardImage || service.cardImage || service.image ? (
+          <div className="w-12 h-10 rounded-lg overflow-hidden relative border border-white/10 bg-black/40">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img 
+              src={service.portfolioCardImage || service.cardImage || service.image} 
+              alt={service.title} 
+              className="w-full h-full object-cover"
+            />
+          </div>
+        ) : (
+          <div className="w-12 h-10 rounded-lg bg-black/20 border border-admin-border flex items-center justify-center text-[10px] text-muted">
+            No Img
+          </div>
+        )}
+      </td>
       <td className="py-4 px-6">
         <div className="flex items-center gap-2">
           <p className="font-medium text-admin-text">{service.title}</p>
@@ -210,6 +226,7 @@ export function ServicesManager({ initialServices }: { initialServices: any[] })
             <thead>
               <tr className="border-b border-admin-border bg-black/10 dark:bg-black/20">
                 <th className="py-4 px-4 w-10"></th>
+                <th className="py-4 px-4 text-sm font-semibold text-muted">Image</th>
                 <th className="py-4 px-6 text-sm font-semibold text-muted">Service Title</th>
                 <th className="py-4 px-6 text-sm font-semibold text-muted">Slug</th>
                 <th className="py-4 px-6 text-sm font-semibold text-muted">Bento Class</th>

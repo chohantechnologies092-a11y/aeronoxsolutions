@@ -2,6 +2,7 @@ import { updateService } from "@/lib/actions";
 import { Button } from "@/components/ui/Button";
 import { RichTextEditor } from "@/components/editor/RichTextEditor";
 import { ImageUpload } from "@/components/ui/ImageUpload";
+import { FaqManagerInput } from "@/components/admin/FaqManagerInput";
 import { getServiceById } from "@/lib/data";
 import { notFound } from "next/navigation";
 
@@ -87,11 +88,16 @@ export default async function EditServicePage({
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="flex flex-col gap-2">
-              <label className="text-sm font-medium text-admin-text">Card Image (Services Grid Card)</label>
+              <label className="text-sm font-medium text-admin-text">Card Image (Services Grid)</label>
               <ImageUpload name="cardImage" defaultValue={service.cardImage || undefined} />
               <p className="text-xs text-admin-muted">Image displayed on service card in Homepage / Services page grid.</p>
+            </div>
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-medium text-admin-text">Portfolio Capability Card Image</label>
+              <ImageUpload name="portfolioCardImage" defaultValue={service.portfolioCardImage || service.cardImage || undefined} />
+              <p className="text-xs text-admin-muted">Image displayed on the service box on Portfolio page (/portfolio).</p>
             </div>
             <div className="flex flex-col gap-2">
               <label className="text-sm font-medium text-admin-text">Header Banner Image (Detail Page)</label>
@@ -123,6 +129,10 @@ export default async function EditServicePage({
               className="bg-black/10 dark:bg-black/20 border border-admin-border rounded-lg px-4 py-3 text-admin-text placeholder:text-muted focus:outline-none focus:border-accent transition-colors"
               placeholder="e.g. React, Node.js, Next.js, Figma"
             />
+          </div>
+
+          <div className="pt-4 border-t border-admin-border">
+            <FaqManagerInput defaultFaqs={service.faqs || []} />
           </div>
 
           <div className="flex items-center gap-2">

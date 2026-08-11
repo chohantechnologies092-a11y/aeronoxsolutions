@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { PortfolioList } from "@/components/sections/PortfolioList";
-import { getPageSEO, getSEO, getProjects } from "@/lib/data";
+import { getPageSEO, getSEO, getProjects, getServices } from "@/lib/data";
 import Image from "next/image";
 
 export async function generateMetadata() {
@@ -18,8 +18,12 @@ export async function generateMetadata() {
 export const revalidate = 0; // Disable caching for dynamic data
 
 export default async function PortfolioPage() {
-  const projects = await getProjects();
-  const pageSeo = await getPageSEO("portfolio");
+  const [projects, services, pageSeo] = await Promise.all([
+    getProjects(),
+    getServices(),
+    getPageSEO("portfolio"),
+  ]);
+
   const bannerImage = pageSeo?.bannerImage || "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop";
 
   return (
@@ -60,7 +64,7 @@ export default async function PortfolioPage() {
         </div>
       </div>
       <Suspense fallback={<div className="min-h-[400px] bg-mesh" />}>
-        <PortfolioList projects={projects} />
+        <PortfolioList projects={projects} services={services} pageSeo={pageSeo} />
       </Suspense>
     </>
   );

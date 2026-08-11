@@ -179,7 +179,7 @@ function matchesCategory(project: any, catId: string): boolean {
   return false;
 }
 
-export function PortfolioList({ projects }: { projects: any[] }) {
+export function PortfolioList({ projects, services = [], pageSeo }: { projects: any[]; services?: any[]; pageSeo?: any }) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -208,6 +208,54 @@ export function PortfolioList({ projects }: { projects: any[] }) {
     router.replace(`/portfolio?${params.toString()}`, { scroll: false });
   };
 
+  const getServiceBoxImage = (boxId: string, defaultImage: string): string => {
+    if (boxId === "all") {
+      return pageSeo?.portfolioAllImage || defaultImage;
+    }
+    const match = services.find((s: any) => {
+      if (!s) return false;
+      const sSlug = (s.slug || "").toLowerCase().trim();
+      const sTitle = (s.title || "").toLowerCase().trim();
+      const sId = (s.id || "").toLowerCase().trim();
+
+      if (sSlug === boxId || sId === boxId) return true;
+
+      if (boxId === "web-dev" && (
+        sSlug.includes("web") || sSlug.includes("dev") || sSlug.includes("site") ||
+        sTitle.includes("web") || sTitle.includes("dev") || sTitle.includes("site")
+      )) return true;
+
+      if (boxId === "seo" && (
+        sSlug.includes("seo") || sSlug.includes("search") || sSlug.includes("engine") || sSlug.includes("optimization") ||
+        sTitle.includes("seo") || sTitle.includes("search") || sTitle.includes("engine") || sTitle.includes("optimization")
+      )) return true;
+
+      if (boxId === "graphic-design" && (
+        sSlug.includes("graphic") || sSlug.includes("logo") || sSlug.includes("design") || sSlug.includes("brand") ||
+        sTitle.includes("graphic") || sTitle.includes("logo") || sTitle.includes("design") || sTitle.includes("brand")
+      )) return true;
+
+      if (boxId === "marketing" && (
+        sSlug.includes("market") || sSlug.includes("social") || sSlug.includes("media") || sSlug.includes("ad") ||
+        sTitle.includes("market") || sTitle.includes("social") || sTitle.includes("media") || sTitle.includes("ad")
+      )) return true;
+
+      if (boxId === "custom-software" && (
+        sSlug.includes("soft") || sSlug.includes("custom") || sSlug.includes("saas") || sSlug.includes("app") ||
+        sTitle.includes("soft") || sTitle.includes("custom") || sTitle.includes("saas") || sTitle.includes("app")
+      )) return true;
+
+      return false;
+    });
+
+    if (match) {
+      const customImg = match.portfolioCardImage || match.cardImage || match.image || match.bannerImage;
+      if (customImg) return customImg;
+    }
+
+    return defaultImage;
+  };
+
   const serviceBoxes = [
     { 
       id: "all", 
@@ -215,7 +263,7 @@ export function PortfolioList({ projects }: { projects: any[] }) {
       subtitle: "Complete agency client portfolio", 
       icon: Sparkles, 
       color: "#ffbe00",
-      image: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop"
+      image: getServiceBoxImage("all", "https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop")
     },
     { 
       id: "web-dev", 
@@ -223,7 +271,7 @@ export function PortfolioList({ projects }: { projects: any[] }) {
       subtitle: "Simple details, live links & Next.js sites", 
       icon: Code2, 
       color: "#6a35ff",
-      image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2072&auto=format&fit=crop"
+      image: getServiceBoxImage("web-dev", "https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2072&auto=format&fit=crop")
     },
     { 
       id: "seo", 
@@ -231,7 +279,7 @@ export function PortfolioList({ projects }: { projects: any[] }) {
       subtitle: "Before vs After metrics & ROI stats", 
       icon: Search, 
       color: "#00c2ff",
-      image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop"
+      image: getServiceBoxImage("seo", "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2015&auto=format&fit=crop")
     },
     { 
       id: "graphic-design", 
@@ -239,7 +287,7 @@ export function PortfolioList({ projects }: { projects: any[] }) {
       subtitle: "Pure brand logo & design image gallery", 
       icon: Palette, 
       color: "#ff007a",
-      image: "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=2071&auto=format&fit=crop"
+      image: getServiceBoxImage("graphic-design", "https://images.unsplash.com/photo-1626785774573-4b799315345d?q=80&w=2071&auto=format&fit=crop")
     },
     { 
       id: "marketing", 
@@ -247,7 +295,7 @@ export function PortfolioList({ projects }: { projects: any[] }) {
       subtitle: "Social campaigns & ad creatives", 
       icon: TrendingUp, 
       color: "#ff3b30",
-      image: "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1974&auto=format&fit=crop"
+      image: getServiceBoxImage("marketing", "https://images.unsplash.com/photo-1611162617474-5b21e879e113?q=80&w=1974&auto=format&fit=crop")
     },
     { 
       id: "custom-software", 
@@ -255,7 +303,7 @@ export function PortfolioList({ projects }: { projects: any[] }) {
       subtitle: "SaaS platforms & system screenshots", 
       icon: Cpu, 
       color: "#af52de",
-      image: "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070&auto=format&fit=crop"
+      image: getServiceBoxImage("custom-software", "https://images.unsplash.com/photo-1518770660439-4636190af475?q=80&w=2070&auto=format&fit=crop")
     },
   ];
 

@@ -86,7 +86,21 @@ export default async function AdminLeads() {
                   <td className="px-6 py-4 align-top">
                     <p className="font-semibold text-admin-text whitespace-nowrap">{lead.name}</p>
                     <a href={`mailto:${lead.email}`} className="text-xs text-[#ffbe00] hover:underline block whitespace-nowrap">{lead.email}</a>
-                    <a href={`tel:${lead.phone}`} className="text-xs text-admin-text/80 hover:underline block whitespace-nowrap mt-1">{lead.phone}</a>
+                    {lead.phone && lead.phone !== 'N/A' && (
+                      <a href={`tel:${lead.phone}`} className="text-xs text-admin-text/80 hover:underline block whitespace-nowrap mt-0.5">{lead.phone}</a>
+                    )}
+                    <div className="flex flex-wrap items-center gap-1.5 mt-2">
+                      {lead.service && (
+                        <span className="px-2 py-0.5 rounded-md bg-[#ffbe00]/10 text-[#ffbe00] text-[11px] font-medium border border-[#ffbe00]/20">
+                          {lead.service}
+                        </span>
+                      )}
+                      {lead.budget && (
+                        <span className="px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-500 text-[11px] font-medium border border-emerald-500/20">
+                          {lead.budget}
+                        </span>
+                      )}
+                    </div>
                   </td>
                   <td className="px-6 py-4 align-top">
                     {lead.websiteUrl ? (
