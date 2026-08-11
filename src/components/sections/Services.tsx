@@ -45,9 +45,9 @@ export function Services({ services, limit }: ServicesProps) {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-white/80 text-[10px] font-extrabold uppercase tracking-[0.3em] mb-6 backdrop-blur-md"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#ffbe00]/10 border border-[#ffbe00]/25 text-[#ffbe00] text-xs font-black uppercase tracking-[0.25em] mb-6 backdrop-blur-md shadow-[0_0_20px_rgba(255,190,0,0.15)]"
           >
-            <Sparkles size={12} className="text-[#ffbe00]" />
+            <Sparkles size={13} className="text-[#ffbe00]" />
             Our Capabilities
           </motion.div>
           <motion.h2 
@@ -55,7 +55,7 @@ export function Services({ services, limit }: ServicesProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1 }}
-            className="text-4xl md:text-6xl font-black text-foreground tracking-tight leading-[1.1] max-w-4xl mx-auto"
+            className="text-4xl md:text-6xl font-black text-white tracking-tight leading-[1.1] max-w-4xl mx-auto"
           >
             Digital Engineering & <br className="hidden sm:block" />
             <span className="text-gradient">Exponential Growth.</span>
