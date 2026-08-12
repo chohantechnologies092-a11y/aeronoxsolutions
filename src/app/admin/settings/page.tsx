@@ -8,6 +8,9 @@ export default async function AdminSettings() {
       twitter: "",
       facebook: "",
       instagram: "",
+      youtube: "",
+      tiktok: "",
+      pinterest: "",
     }
   };
 
@@ -69,6 +72,33 @@ export default async function AdminSettings() {
             <input 
               type="url" id="instagram" name="instagram" defaultValue={settings.socials?.instagram}
               placeholder="https://instagram.com/yourbrand"
+              className="bg-black/10 dark:bg-black/20 border border-admin-border rounded-lg px-4 py-3 text-admin-text focus:border-accent outline-none"
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label htmlFor="youtube" className="text-sm font-medium text-admin-text">YouTube URL</label>
+            <input 
+              type="url" id="youtube" name="youtube" defaultValue={settings.socials?.youtube}
+              placeholder="https://youtube.com/@yourbrand"
+              className="bg-black/10 dark:bg-black/20 border border-admin-border rounded-lg px-4 py-3 text-admin-text focus:border-accent outline-none"
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label htmlFor="tiktok" className="text-sm font-medium text-admin-text">TikTok URL</label>
+            <input 
+              type="url" id="tiktok" name="tiktok" defaultValue={settings.socials?.tiktok}
+              placeholder="https://tiktok.com/@yourbrand"
+              className="bg-black/10 dark:bg-black/20 border border-admin-border rounded-lg px-4 py-3 text-admin-text focus:border-accent outline-none"
+            />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <label htmlFor="pinterest" className="text-sm font-medium text-admin-text">Pinterest URL</label>
+            <input 
+              type="url" id="pinterest" name="pinterest" defaultValue={settings.socials?.pinterest}
+              placeholder="https://pinterest.com/yourbrand"
               className="bg-black/10 dark:bg-black/20 border border-admin-border rounded-lg px-4 py-3 text-admin-text focus:border-accent outline-none"
             />
           </div>

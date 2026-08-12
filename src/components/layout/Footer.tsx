@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Mail, MapPin, Phone, ArrowUp, ArrowUpRight, Sparkles, ShieldCheck, Clock } from "lucide-react";
-import { FaLinkedin, FaXTwitter, FaFacebook, FaInstagram, FaWhatsapp } from "react-icons/fa6";
-import { navLinks, siteConfig } from "@/lib/constants";
+import { FaLinkedin, FaXTwitter, FaFacebook, FaInstagram, FaWhatsapp, FaYoutube, FaTiktok, FaPinterest } from "react-icons/fa6";
+import { navLinks, siteConfig, services } from "@/lib/constants";
 import { fetchSettingsAction } from "@/lib/actions";
 
 export function Footer() {
@@ -144,6 +144,39 @@ export function Footer() {
                   <FaInstagram size={18} />
                 </a>
               )}
+              {socials.youtube && (
+                <a
+                  href={socials.youtube}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-gray-300 transition-all hover:border-[#FF0000] hover:bg-[#FF0000] hover:text-white shadow-md"
+                  aria-label="YouTube"
+                >
+                  <FaYoutube size={18} />
+                </a>
+              )}
+              {socials.tiktok && (
+                <a
+                  href={socials.tiktok}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-gray-300 transition-all hover:border-[#000000] hover:bg-white hover:text-black shadow-md"
+                  aria-label="TikTok"
+                >
+                  <FaTiktok size={18} />
+                </a>
+              )}
+              {socials.pinterest && (
+                <a
+                  href={socials.pinterest}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/10 bg-white/5 text-gray-300 transition-all hover:border-[#E60023] hover:bg-[#E60023] hover:text-white shadow-md"
+                  aria-label="Pinterest"
+                >
+                  <FaPinterest size={18} />
+                </a>
+              )}
             </div>
           </div>
 
@@ -153,36 +186,14 @@ export function Footer() {
               Our Capabilities
             </h4>
             <ul className="space-y-3.5 text-sm font-medium text-[#dcd7e3]/80">
-              <li>
-                <Link href="/portfolio" className="hover:text-[#ffbe00] transition-colors flex items-center gap-1.5 group">
-                  <ArrowUpRight size={14} className="opacity-40 group-hover:opacity-100 transition-opacity" />
-                  SEO & Search Engine Optimization
-                </Link>
-              </li>
-              <li>
-                <Link href="/portfolio" className="hover:text-[#ffbe00] transition-colors flex items-center gap-1.5 group">
-                  <ArrowUpRight size={14} className="opacity-40 group-hover:opacity-100 transition-opacity" />
-                  Web & E-Commerce Engineering
-                </Link>
-              </li>
-              <li>
-                <Link href="/portfolio" className="hover:text-[#ffbe00] transition-colors flex items-center gap-1.5 group">
-                  <ArrowUpRight size={14} className="opacity-40 group-hover:opacity-100 transition-opacity" />
-                  Growth & Performance Marketing
-                </Link>
-              </li>
-              <li>
-                <Link href="/portfolio" className="hover:text-[#ffbe00] transition-colors flex items-center gap-1.5 group">
-                  <ArrowUpRight size={14} className="opacity-40 group-hover:opacity-100 transition-opacity" />
-                  AI & Workflow Automation
-                </Link>
-              </li>
-              <li>
-                <Link href="/portfolio" className="hover:text-[#ffbe00] transition-colors flex items-center gap-1.5 group">
-                  <ArrowUpRight size={14} className="opacity-40 group-hover:opacity-100 transition-opacity" />
-                  Outbound B2B Lead Generation
-                </Link>
-              </li>
+              {services.map((service) => (
+                <li key={service.id}>
+                  <Link href={`/services/${service.id}`} className="hover:text-[#ffbe00] transition-colors flex items-center gap-1.5 group">
+                    <ArrowUpRight size={14} className="opacity-40 group-hover:opacity-100 transition-opacity" />
+                    {service.title}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 

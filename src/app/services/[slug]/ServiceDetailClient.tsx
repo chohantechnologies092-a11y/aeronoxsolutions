@@ -103,6 +103,20 @@ const processSteps = [
   { id: "04", title: "Delivery & Scale", desc: "Smooth launch followed by iterative improvements and data-driven adjustments for maximum growth." },
 ];
 
+// Helper to map service slug to portfolio category
+const getPortfolioCategory = (slug: string) => {
+  const s = (slug || "").toLowerCase();
+  if (s.includes('web') || s.includes('dev') || s.includes('e-commerce') || s.includes('site')) return 'web-dev';
+  if (s.includes('seo') || s.includes('search')) return 'seo';
+  if (s.includes('graphic') || s.includes('design') || s.includes('logo')) return 'graphic-design';
+  if (s.includes('video') || s.includes('motion')) return 'videography';
+  if (s.includes('market') || s.includes('social') || s.includes('ad')) return 'marketing';
+  if (s.includes('ai') || s.includes('auto') || s.includes('bot')) return 'ai-automation';
+  if (s.includes('tele') || s.includes('call') || s.includes('lead')) return 'telemarketing';
+  if (s.includes('soft') || s.includes('custom') || s.includes('saas') || s.includes('app')) return 'custom-software';
+  return 'all';
+};
+
 export function ServiceDetailClient({ service }: { service: Service }) {
   const [activeFaq, setActiveFaq] = useState<number | null>(null);
   
@@ -118,6 +132,8 @@ export function ServiceDetailClient({ service }: { service: Service }) {
   const faqs = service.faqs && Array.isArray(service.faqs) && service.faqs.length > 0 
     ? service.faqs 
     : getServiceFAQs(service.slug);
+
+  const portfolioCategory = getPortfolioCategory(service.slug);
 
   return (
     <article className="min-h-screen bg-[#090512] text-white font-sans selection:bg-[#ffbe00] selection:text-[#120b18] pb-24 relative overflow-hidden">
@@ -143,34 +159,12 @@ export function ServiceDetailClient({ service }: { service: Service }) {
             <p className="text-lg md:text-xl text-[#dcd7e3]/80 font-medium leading-relaxed mb-8">
               {service.shortDescription}
             </p>
-            
-            <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-              <Link 
-                href="/contact" 
-                className="inline-flex items-center justify-center px-8 py-4 text-[#120b18] font-black uppercase tracking-wider text-xs rounded-2xl transition-all duration-300 hover:scale-105 shadow-[0_0_25px_rgba(255,190,0,0.3)]"
-                style={{ backgroundColor: service.color || "#ffbe00" }}
-              >
-                Request a Proposal <ArrowRight size={16} className="ml-2" />
-              </Link>
-              <Link 
-                href="/portfolio" 
-                className="inline-flex items-center justify-center px-8 py-4 bg-white/5 border border-white/15 hover:bg-white/10 text-white font-bold text-xs uppercase tracking-wider rounded-2xl transition-all"
-              >
-                View Portfolio
-              </Link>
-            </div>
           </div>
 
           {/* Hero Image */}
-          <div className="relative w-full min-h-[320px] max-h-[500px] rounded-[2.5rem] overflow-hidden bg-[#1a1122]/90 border border-white/15 shadow-2xl flex items-center justify-center p-4">
+          <div className="relative w-full min-h-[320px] max-h-[500px] flex items-center justify-center">
             {(service.bannerImage || service.image) ? (
               <>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img 
-                  src={(service.bannerImage || service.image) ?? undefined} 
-                  alt=""
-                  className="absolute inset-0 w-full h-full object-cover blur-2xl opacity-20 pointer-events-none"
-                />
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img 
                   src={(service.bannerImage || service.image) ?? undefined} 
@@ -179,7 +173,7 @@ export function ServiceDetailClient({ service }: { service: Service }) {
                 />
               </>
             ) : (
-              <div className="w-full h-full flex items-center justify-center bg-[#1a1122]">
+              <div className="w-full h-full flex items-center justify-center">
                 <IconComponent size={80} style={{ color: service.color || "#ffbe00" }} className="opacity-30" />
               </div>
             )}
@@ -267,10 +261,27 @@ export function ServiceDetailClient({ service }: { service: Service }) {
               </div>
             </div>
 
+            {/* CTA Buttons */}
+            <div className="flex flex-col sm:flex-row gap-4 mt-4">
+              <Link 
+                href="/contact" 
+                className="inline-flex items-center justify-center px-8 py-4 text-[#120b18] font-black uppercase tracking-wider text-xs rounded-2xl transition-all duration-300 hover:scale-105 shadow-[0_0_25px_rgba(255,190,0,0.3)]"
+                style={{ backgroundColor: service.color || "#ffbe00" }}
+              >
+                Request a Proposal <ArrowRight size={16} className="ml-2" />
+              </Link>
+              <Link 
+                href={`/portfolio?category=${portfolioCategory}`} 
+                className="inline-flex items-center justify-center px-8 py-4 bg-white/5 border border-white/15 hover:bg-white/10 text-white font-bold text-xs uppercase tracking-wider rounded-2xl transition-all"
+              >
+                View Portfolio
+              </Link>
+            </div>
+
             {/* Clean FAQs */}
             <div>
               <h2 className="text-3xl font-extrabold text-white mb-8 tracking-tight">Frequently Asked Questions</h2>
-              <div className="flex flex-col gap-4">
+              <div className="flex flex-col gap-4 mb-10">
                 {faqs.map((faq, idx) => {
                   const isActive = activeFaq === idx;
                   return (

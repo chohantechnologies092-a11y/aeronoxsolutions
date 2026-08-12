@@ -91,6 +91,17 @@ export default async function AdminSEO({ searchParams }: { searchParams: Promise
               />
             </div>
 
+            <div className="flex flex-col gap-2">
+              <label htmlFor="bannerImage" className="text-sm font-medium text-admin-text">
+                Banner/Hero Image URL (Optional)
+              </label>
+              <input 
+                type="text" id="bannerImage" name="bannerImage" defaultValue={seo.bannerImage || ""}
+                className="bg-black/10 dark:bg-black/20 border border-admin-border rounded-lg px-4 py-3 text-admin-text focus:border-accent outline-none"
+                placeholder="https://images.unsplash.com/..."
+              />
+            </div>
+
             <div className="pt-4 border-t border-admin-border flex justify-end">
               <button type="submit" className="px-5 py-2.5 rounded-lg bg-accent text-[#24182e] font-bold hover:bg-white transition-colors">
                 Save Page Settings

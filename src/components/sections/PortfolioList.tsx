@@ -78,7 +78,7 @@ const SERVICE_OVERVIEWS: Record<string, {
     gradient: "from-[#2e1818] via-[#241111] to-[#180b0b]"
   },
   "marketing": {
-    title: "Social Media Marketing",
+    title: "Social Media Management",
     subtitle: "Full-funnel customer acquisition, paid media strategy, and conversion rate optimization (CRO).",
     description: "We execute aggressive multi-channel marketing campaigns that lower CAC, increase LTV, and scale monthly recurring revenue (MRR).",
     icon: TrendingUp,
@@ -291,7 +291,7 @@ export function PortfolioList({ projects, services = [], pageSeo }: { projects: 
     },
     { 
       id: "marketing", 
-      title: "Social Media Marketing", 
+      title: "Social Media Management", 
       subtitle: "Social campaigns & ad creatives", 
       icon: TrendingUp, 
       color: "#ff3b30",
@@ -428,9 +428,6 @@ export function PortfolioList({ projects, services = [], pageSeo }: { projects: 
                     }`}>
                       {box.title}
                     </h3>
-                    <p className="text-xs text-white/80 font-medium line-clamp-2 drop-shadow-sm">
-                      {box.subtitle}
-                    </p>
                   </div>
                 </div>
               </button>
@@ -655,35 +652,7 @@ export function PortfolioList({ projects, services = [], pageSeo }: { projects: 
                             {/* Top Badges */}
                             <div className="absolute top-3.5 left-3.5 right-3.5 flex items-start justify-between z-20 pointer-events-none">
                               <div className="flex flex-wrap gap-1.5 max-w-[70%]">
-                                {(() => {
-                                  const cat = project.serviceCategory || project.category || "";
-                                  if (!cat) return (
-                                    <span className="px-3 py-1 rounded-full bg-[#090512]/80 backdrop-blur-md border border-white/10 text-white text-[9px] font-extrabold uppercase tracking-widest flex items-center gap-1 shadow-lg">
-                                      <Sparkles size={10} className="text-[#ffbe00]" /> Digital Project
-                                    </span>
-                                  );
-
-                                  const map: Record<string, string> = {
-                                    "web-dev": "Web Development",
-                                    "seo": "SEO",
-                                    "graphic-design": "Graphic Design",
-                                    "videography": "Videography",
-                                    "marketing": "Social Media Marketing",
-                                    "ai-automation": "AI Automation",
-                                    "telemarketing": "Telemarketing",
-                                    "custom-software": "Custom Software"
-                                  };
-                                  
-                                  return cat.split(',').slice(0, 2).map((c: string, idx: number) => {
-                                    const cleanCat = c.trim();
-                                    const label = map[cleanCat] || cleanCat.replace(/-/g, " ");
-                                    return (
-                                      <span key={idx} className="px-2.5 py-1 rounded-full bg-[#090512]/80 backdrop-blur-md border border-white/10 text-white text-[9px] font-extrabold uppercase tracking-widest flex items-center gap-1 shadow-lg">
-                                        <Sparkles size={10} className="text-[#ffbe00]" /> {label}
-                                      </span>
-                                    );
-                                  });
-                                })()}
+                                {/* Service tags removed as per user request */}
                               </div>
 
                               {project.growthBadge && (

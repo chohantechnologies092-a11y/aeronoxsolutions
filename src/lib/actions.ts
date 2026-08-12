@@ -685,13 +685,19 @@ export async function upsertSettings(formData: FormData) {
   const twitter = formData.get("twitter") as string;
   const facebook = formData.get("facebook") as string;
   const instagram = formData.get("instagram") as string;
+  const youtube = formData.get("youtube") as string;
+  const tiktok = formData.get("tiktok") as string;
+  const pinterest = formData.get("pinterest") as string;
 
   await db.collection("settings").doc("global").set({
     socials: {
       linkedin: linkedin || "",
       twitter: twitter || "",
       facebook: facebook || "",
-      instagram: instagram || ""
+      instagram: instagram || "",
+      youtube: youtube || "",
+      tiktok: tiktok || "",
+      pinterest: pinterest || ""
     },
     updatedAt: getNow()
   }, { merge: true });
