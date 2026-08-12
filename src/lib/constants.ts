@@ -12,6 +12,9 @@ export const siteConfig = {
     twitter: "https://twitter.com/aeronoxsolutions",
     facebook: "https://facebook.com/aeronoxsolutions",
     instagram: "https://instagram.com/aeronoxsolutions",
+    youtube: "",
+    tiktok: "",
+    pinterest: "",
   }
 };
 
