@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import { LayoutShell } from "@/components/layout/LayoutShell";
-import { getSEO } from "@/lib/data";
+import { getSEO, getServices } from "@/lib/data";
 import "./globals.css";
 
 const inter = Inter({
@@ -65,7 +65,10 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await auth();
+  const [session, services] = await Promise.all([
+    auth(),
+    getServices()
+  ]);
   return (
     <html lang="en" className="dark antialiased" suppressHydrationWarning>
       <head>
@@ -81,7 +84,7 @@ export default async function RootLayout({
           enableSystem={false}
           disableTransitionOnChange
         >
-          <LayoutShell>{children}</LayoutShell>
+          <LayoutShell services={services}>{children}</LayoutShell>
           {!session && (
             <>
               <ClientTracker />

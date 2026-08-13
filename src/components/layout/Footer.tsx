@@ -5,10 +5,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { Mail, MapPin, Phone, ArrowUp, ArrowUpRight, Sparkles, ShieldCheck, Clock } from "lucide-react";
 import { FaLinkedin, FaXTwitter, FaFacebook, FaInstagram, FaWhatsapp, FaYoutube, FaTiktok, FaPinterest } from "react-icons/fa6";
-import { navLinks, siteConfig, services } from "@/lib/constants";
+import { navLinks, siteConfig, services as defaultServices } from "@/lib/constants";
 import { fetchSettingsAction } from "@/lib/actions";
 
-export function Footer() {
+export function Footer({ services = defaultServices }: { services?: any[] }) {
   const [socials, setSocials] = useState(siteConfig.socials);
 
   useEffect(() => {
@@ -188,7 +188,7 @@ export function Footer() {
             <ul className="space-y-3.5 text-sm font-medium text-[#dcd7e3]/80">
               {services.map((service) => (
                 <li key={service.id}>
-                  <Link href={`/services/${service.id}`} className="hover:text-[#ffbe00] transition-colors flex items-center gap-1.5 group">
+                  <Link href={`/services/${service.slug || service.id}`} className="hover:text-[#ffbe00] transition-colors flex items-center gap-1.5 group">
                     <ArrowUpRight size={14} className="opacity-40 group-hover:opacity-100 transition-opacity" />
                     {service.title}
                   </Link>
@@ -196,7 +196,7 @@ export function Footer() {
               ))}
             </ul>
           </div>
-
+          
           {/* Column 3: Quick Navigation */}
           <div className="lg:col-span-2">
             <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[#ffbe00] mb-6">
@@ -237,9 +237,9 @@ export function Footer() {
               </li>
               <li className="flex items-start gap-3">
                 <MapPin size={18} className="mt-0.5 shrink-0 text-[#ffbe00]" />
-                <a 
+                <a
                   href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(siteConfig.address)}`}
-                  target="_blank" 
+                  target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-[#ffbe00] transition-colors leading-relaxed"
                 >

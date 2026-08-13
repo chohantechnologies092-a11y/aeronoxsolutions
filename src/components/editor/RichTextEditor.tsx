@@ -25,6 +25,20 @@ interface RichTextEditorProps {
 export function RichTextEditor({ name, defaultValue = "", placeholder }: RichTextEditorProps) {
   const quillRef = useRef<any>(null);
   const [selectedImg, setSelectedImg] = useState<HTMLImageElement | null>(null);
+  // Track whether the editor has been initialized to prevent content loss
+  const initializedRef = useRef(false);
+
+  // On mount: pre-populate the hidden input with defaultValue
+  // This ensures data is captured even if user never types in the editor
+  useEffect(() => {
+    if (!initializedRef.current) {
+      const hiddenInput = document.getElementById(`${name}-hidden`) as HTMLInputElement;
+      if (hiddenInput && defaultValue) {
+        hiddenInput.value = defaultValue;
+      }
+      initializedRef.current = true;
+    }
+  }, [name, defaultValue]);
 
   // Sync content to hidden input whenever Quill updates
   const syncToHiddenInput = (html: string) => {
@@ -150,7 +164,12 @@ export function RichTextEditor({ name, defaultValue = "", placeholder }: RichTex
       handlers: {
         image: imageHandler
       }
-    }
+    },
+    // CRITICAL: matchVisual:false prevents Quill's clipboard module from stripping
+    // links and other HTML attributes when loading initial content.
+    clipboard: {
+      matchVisual: false,
+    },
   }), []);
 
   const formats = [
@@ -397,6 +416,9 @@ export function RichTextEditor({ name, defaultValue = "", placeholder }: RichTex
         theme="snow"
         defaultValue={defaultValue}
         onChange={(content) => {
+          if (content.length > 500000) {
+            alert("⚠️ Warning: Your content is very large, likely because you pasted an image directly. This might fail to save. Please delete the pasted image and use the Image Upload button in the toolbar instead.");
+          }
           syncToHiddenInput(content);
         }}
         modules={modules}

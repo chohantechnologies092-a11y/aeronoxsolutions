@@ -109,7 +109,7 @@ export async function createProject(formData: FormData) {
 
   revalidatePath("/portfolio");
   revalidatePath("/admin/projects");
-  revalidateTag("projects", "default");
+  revalidateTag("projects");
   redirect("/admin/projects");
 }
 
@@ -123,7 +123,7 @@ export async function deleteProject(id: string) {
   revalidatePath("/portfolio");
   revalidatePath("/admin/projects");
   revalidatePath("/");
-  revalidateTag("projects", "default");
+  revalidateTag("projects");
 }
 
 export async function updateProject(id: string, formData: FormData) {
@@ -220,7 +220,7 @@ export async function updateProject(id: string, formData: FormData) {
 
   revalidatePath("/portfolio");
   revalidatePath("/admin/projects");
-  revalidateTag("projects", "default");
+  revalidateTag("projects");
   redirect("/admin/projects");
 }
 
@@ -234,7 +234,7 @@ export async function updateProjectOrder(orderedIds: string[]) {
   revalidatePath("/portfolio");
   revalidatePath("/admin/projects");
   revalidatePath("/");
-  revalidateTag("projects", "default");
+  revalidateTag("projects");
 }
 
 export async function toggleProjectHomeStatus(id: string, showOnHome: boolean) {
@@ -245,7 +245,7 @@ export async function toggleProjectHomeStatus(id: string, showOnHome: boolean) {
   revalidatePath("/portfolio");
   revalidatePath("/admin/projects");
   revalidatePath("/");
-  revalidateTag("projects", "default");
+  revalidateTag("projects");
 }
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -255,6 +255,7 @@ export async function toggleProjectHomeStatus(id: string, showOnHome: boolean) {
 export async function createService(formData: FormData) {
   const title = formData.get("title") as string;
   const shortDescription = formData.get("shortDescription") as string;
+  const overview = formData.get("overview") as string;
   const content = formData.get("content") as string;
   const icon = formData.get("icon") as string;
   const color = formData.get("color") as string;
@@ -289,6 +290,7 @@ export async function createService(formData: FormData) {
     title,
     slug,
     shortDescription,
+    overview: overview || "",
     content: content || "",
     cardImage: cardImage || null,
     portfolioCardImage: portfolioCardImage || cardImage || null,
@@ -312,13 +314,14 @@ export async function createService(formData: FormData) {
   revalidatePath("/portfolio");
   revalidatePath("/admin/services");
   revalidatePath("/");
-  revalidateTag("services", "default");
+  revalidateTag("services");
   redirect("/admin/services");
 }
 
 export async function updateService(id: string, formData: FormData) {
   const title = formData.get("title") as string;
   const shortDescription = formData.get("shortDescription") as string;
+  const overview = formData.get("overview") as string;
   const content = formData.get("content") as string;
   const icon = formData.get("icon") as string;
   const color = formData.get("color") as string;
@@ -353,6 +356,7 @@ export async function updateService(id: string, formData: FormData) {
     title,
     slug,
     shortDescription,
+    overview: overview || "",
     content: content || "",
     cardImage: cardImage || null,
     portfolioCardImage: portfolioCardImage || cardImage || null,
@@ -375,7 +379,7 @@ export async function updateService(id: string, formData: FormData) {
   revalidatePath("/portfolio");
   revalidatePath("/admin/services");
   revalidatePath("/");
-  revalidateTag("services", "default");
+  revalidateTag("services");
   redirect("/admin/services");
 }
 
@@ -384,7 +388,7 @@ export async function deleteService(id: string) {
   revalidatePath("/services");
   revalidatePath("/admin/services");
   revalidatePath("/");
-  revalidateTag("services", "default");
+  revalidateTag("services");
 }
 
 export async function updateServiceOrder(orderedIds: string[]) {
@@ -397,7 +401,7 @@ export async function updateServiceOrder(orderedIds: string[]) {
   revalidatePath("/services");
   revalidatePath("/admin/services");
   revalidatePath("/");
-  revalidateTag("services", "default");
+  revalidateTag("services");
 }
 
 export async function toggleServiceHomeStatus(id: string, showOnHome: boolean) {
@@ -408,7 +412,7 @@ export async function toggleServiceHomeStatus(id: string, showOnHome: boolean) {
   revalidatePath("/services");
   revalidatePath("/admin/services");
   revalidatePath("/");
-  revalidateTag("services", "default");
+  revalidateTag("services");
 }
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -473,7 +477,7 @@ export async function createBlog(formData: FormData) {
 
   revalidatePath("/blog");
   revalidatePath("/admin/blogs");
-  revalidateTag("blogs", "default");
+  revalidateTag("blogs");
   redirect("/admin/blogs");
 }
 
@@ -529,7 +533,7 @@ export async function updateBlog(id: string, formData: FormData) {
   revalidatePath("/blog");
   revalidatePath(`/blog/${slug}`);
   revalidatePath("/admin/blogs");
-  revalidateTag("blogs", "default");
+  revalidateTag("blogs");
   redirect("/admin/blogs");
 }
 
@@ -540,14 +544,14 @@ export async function toggleBlogPublishStatus(id: string, published: boolean) {
   });
   revalidatePath("/blog");
   revalidatePath("/admin/blogs");
-  revalidateTag("blogs", "default");
+  revalidateTag("blogs");
 }
 
 export async function deleteBlog(id: string) {
   await db.collection("blogs").doc(id).delete();
   revalidatePath("/blog");
   revalidatePath("/admin/blogs");
-  revalidateTag("blogs", "default");
+  revalidateTag("blogs");
 }
 
 // ────────────────────────────────────────────────────────────────────────────
@@ -571,7 +575,7 @@ export async function upsertSEO(formData: FormData) {
 
   revalidatePath("/");
   revalidatePath("/admin/seo");
-  revalidateTag("seo", "default");
+  revalidateTag("seo");
   redirect("/admin/seo");
 }
 
@@ -597,7 +601,7 @@ export async function upsertPageSEO(pageSlug: string, formData: FormData) {
   }
   
   revalidatePath("/admin/seo");
-  revalidateTag("seo", "default");
+  revalidateTag("seo");
   redirect("/admin/seo");
 }
 
@@ -646,6 +650,7 @@ export async function createClient(formData: FormData) {
 
   revalidatePath("/admin/clients");
   revalidatePath("/");
+  revalidateTag("clients");
   return { success: true };
 }
 
@@ -667,6 +672,7 @@ export async function updateClient(id: string, formData: FormData) {
 
   revalidatePath("/admin/clients");
   revalidatePath("/");
+  revalidateTag("clients");
   return { success: true };
 }
 
@@ -674,6 +680,7 @@ export async function deleteClient(id: string) {
   await db.collection("clients").doc(id).delete();
   revalidatePath("/admin/clients");
   revalidatePath("/");
+  revalidateTag("clients");
 }
 
 // ────────────────────────────────────────────────────────────────────────────

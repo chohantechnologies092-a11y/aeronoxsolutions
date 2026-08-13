@@ -125,8 +125,15 @@ export default function NewServicePage() {
           </div>
           
           <div className="flex flex-col gap-2">
+            <label className="text-sm font-medium text-admin-text">Overview</label>
+            <RichTextEditor name="overview" defaultValue="" />
+            <p className="text-xs text-admin-muted">This content appears in the Overview section of the service page.</p>
+          </div>
+          
+          <div className="flex flex-col gap-2">
             <label className="text-sm font-medium text-admin-text">Detailed Content</label>
             <RichTextEditor name="content" defaultValue="" />
+            <p className="text-xs text-admin-muted">This content appears below the overview or as the main detail.</p>
           </div>
 
           {/* SEO & ACCESSIBILITY SECTION */}

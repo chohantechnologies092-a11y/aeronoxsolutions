@@ -138,6 +138,7 @@ export const getServiceBySlug = unstable_cache(
 
     return fallbackMatch || null;
   },
+  // Next.js unstable_cache automatically appends function args to keyParts, making a unique cache entry per slug
   ["service-by-slug"],
   { revalidate: 300, tags: ["services"] }
 );
@@ -368,6 +369,7 @@ export const getServiceById = unstable_cache(
     }
     return DEFAULT_SERVICES.find((s) => s.id === id || s.slug === id) || null;
   },
+  // Next.js unstable_cache automatically appends function args to keyParts, making a unique cache entry per id
   ["service-by-id"],
   { revalidate: 300, tags: ["services"] }
 );

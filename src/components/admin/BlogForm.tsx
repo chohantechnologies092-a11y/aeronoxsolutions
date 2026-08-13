@@ -125,7 +125,7 @@ export function BlogForm({ initialData, action, isEdit = false }: BlogFormProps)
         </div>
 
         {/* Tab 1: Content & Basic Info */}
-        <div className={activeTab === "content" ? "space-y-6" : "hidden"}>
+        <div className={activeTab === "content" ? "space-y-6" : "space-y-6 invisible h-0 overflow-hidden pointer-events-none absolute"}>
           <div className="bg-admin-card p-6 rounded-2xl border border-admin-border space-y-5">
             {/* Article Title */}
             <div>
@@ -227,7 +227,7 @@ export function BlogForm({ initialData, action, isEdit = false }: BlogFormProps)
         </div>
 
         {/* Tab 2: SEO & Meta Tags */}
-        <div className={activeTab === "seo" ? "space-y-6" : "hidden"}>
+        <div className={activeTab === "seo" ? "space-y-6" : "space-y-6 invisible h-0 overflow-hidden pointer-events-none absolute"}>
           <div className="bg-admin-card p-6 rounded-2xl border border-admin-border space-y-6">
             <div>
               <h3 className="text-base font-bold text-admin-text flex items-center gap-2">
@@ -323,7 +323,7 @@ export function BlogForm({ initialData, action, isEdit = false }: BlogFormProps)
         </div>
 
         {/* Tab 3: Publishing & Category */}
-        <div className={activeTab === "publishing" ? "space-y-6" : "hidden"}>
+        <div className={activeTab === "publishing" ? "space-y-6" : "space-y-6 invisible h-0 overflow-hidden pointer-events-none absolute"}>
           <div className="bg-admin-card p-6 rounded-2xl border border-admin-border space-y-6">
             {/* Category & Tags */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5">

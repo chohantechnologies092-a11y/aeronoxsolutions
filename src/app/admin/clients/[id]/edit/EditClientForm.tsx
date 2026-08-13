@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Upload, Loader2 } from "lucide-react";
+import { ArrowLeft, Upload, Loader2, X } from "lucide-react";
 import { updateClient } from "@/lib/actions";
 
 type Client = {
@@ -53,6 +53,10 @@ export default function EditClientForm({ client }: { client: Client }) {
     }
   };
 
+  const handleRemoveLogo = () => {
+    setLogoPreview(null);
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
@@ -61,7 +65,7 @@ export default function EditClientForm({ client }: { client: Client }) {
     if (logoPreview) {
       formData.set("logo", logoPreview);
     } else {
-      alert("Please upload a logo.");
+      alert("Please upload a logo first.");
       setLoading(false);
       return;
     }
@@ -173,13 +177,22 @@ export default function EditClientForm({ client }: { client: Client }) {
             <label className="block text-sm font-medium text-admin-muted mb-2">
               Client Logo <span className="text-red-600 dark:text-red-400">*</span>
             </label>
-            <div className="flex items-center gap-6">
-              {logoPreview && (
-                <div className="w-24 h-24 relative rounded-lg overflow-hidden border border-admin-border bg-white">
+            <div className="flex flex-col gap-4">
+              {logoPreview ? (
+                <div className="relative w-32 h-32 rounded-lg overflow-hidden border border-admin-border bg-white group">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={logoPreview} alt="Logo preview" className="w-full h-full object-contain p-2" />
+                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <button
+                      type="button"
+                      onClick={handleRemoveLogo}
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-red-500/80 text-white rounded-lg hover:bg-red-500 transition-colors font-medium text-xs"
+                    >
+                      <X size={14} /> Remove
+                    </button>
+                  </div>
                 </div>
-              )}
+              ) : null}
               
               <div className="flex-1">
                 <label className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-white/20 rounded-lg cursor-pointer bg-black/10 dark:bg-black/20 hover:bg-black/40 transition-colors">
@@ -190,7 +203,7 @@ export default function EditClientForm({ client }: { client: Client }) {
                       <Upload className="w-8 h-8 text-muted mb-2" />
                     )}
                     <p className="text-sm text-admin-muted">
-                      <span className="font-semibold">Click to upload</span> or drag and drop
+                      <span className="font-semibold">{logoPreview ? "Click to replace logo" : "Click to upload"}</span> or drag and drop
                     </p>
                     <p className="text-xs text-muted mt-1">SVG, PNG, JPG (max 2MB)</p>
                   </div>
