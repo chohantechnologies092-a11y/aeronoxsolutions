@@ -27,16 +27,19 @@ export function RichTextEditor({ name, defaultValue = "", placeholder }: RichTex
   const [selectedImg, setSelectedImg] = useState<HTMLImageElement | null>(null);
   // Track whether the editor has been initialized to prevent content loss
   const initializedRef = useRef(false);
+  // Controlled HTML content for hidden input
+  const [htmlContent, setHtmlContent] = useState<string>(defaultValue ?? '');
 
-  // On mount: pre-populate the hidden input with defaultValue
-  // This ensures data is captured even if user never types in the editor
+  // Update Quill editor content when defaultValue or name changes (e.g., after async fetch)
   useEffect(() => {
-    if (!initializedRef.current) {
-      const hiddenInput = document.getElementById(`${name}-hidden`) as HTMLInputElement;
-      if (hiddenInput && defaultValue) {
-        hiddenInput.value = defaultValue;
+    if (quillRef.current) {
+      const editor = quillRef.current.getEditor();
+      // Only set if different to avoid cursor jump
+      if (defaultValue && editor && editor.root.innerHTML !== defaultValue) {
+        editor.root.innerHTML = defaultValue;
+        // Ensure hidden input reflects the new content
+        syncToHiddenInput(defaultValue);
       }
-      initializedRef.current = true;
     }
   }, [name, defaultValue]);
 
@@ -46,6 +49,7 @@ export function RichTextEditor({ name, defaultValue = "", placeholder }: RichTex
     if (hiddenInput) {
       hiddenInput.value = html;
     }
+    setHtmlContent(html);
   };
 
   // Image Upload Handler
@@ -408,7 +412,7 @@ export function RichTextEditor({ name, defaultValue = "", placeholder }: RichTex
       `}} />
       
       {/* Hidden input to store the HTML content for the form action */}
-      <input type="hidden" name={name} id={`${name}-hidden`} defaultValue={defaultValue} />
+      <input type="hidden" name={name} id={`${name}-hidden`} value={htmlContent} onChange={() => {}} />
       
       <ReactQuill
         // @ts-expect-error - ReactQuill types are outdated and don't include ref

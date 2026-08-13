@@ -41,7 +41,8 @@ export default async function BlogPostPage({ params }: Props) {
     notFound();
   }
 
-  const isHtml = post.content.includes("<p>") || post.content.includes("<h") || post.content.includes("<div>");
+  const content = (post.content || "").replace(/&nbsp;/g, ' ').replace(/\u00A0/g, ' ');
+  const isHtml = content.includes("<p>") || content.includes("<h") || content.includes("<div>");
 
   return (
     <article className="mesh-bg pt-32 pb-24 relative min-h-screen">
@@ -89,10 +90,10 @@ export default async function BlogPostPage({ params }: Props) {
         {/* Article Body */}
         <div className="rounded-[2rem] bg-[#1a1122]/80 border border-white/10 shadow-2xl backdrop-blur-sm p-6 sm:p-10 overflow-hidden">
           {isHtml ? (
-            <div className="blog-content" dangerouslySetInnerHTML={{ __html: post.content }} />
+            <div className="blog-content" dangerouslySetInnerHTML={{ __html: content }} />
           ) : (
             <div className="space-y-6">
-              {post.content.split("\n\n").map((paragraph: string, index: number) => {
+              {content.split("\n\n").map((paragraph: string, index: number) => {
                 if (paragraph.startsWith("## ")) return <h2 key={index} className="font-display text-xl sm:text-2xl font-bold text-white pt-4">{paragraph.replace("## ", "")}</h2>;
                 return <p key={index} className="text-[#dcd7e3]/80 leading-relaxed">{paragraph}</p>;
               })}
@@ -115,7 +116,6 @@ export default async function BlogPostPage({ params }: Props) {
           color: #c8c2d4;
           font-size: 1.0625rem;
           line-height: 1.85;
-          word-break: break-word;
           overflow-wrap: break-word;
           max-width: 100%;
         }

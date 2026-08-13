@@ -176,21 +176,6 @@ export function PortfolioContent({ project }: { project: Project }) {
                 </div>
               </div>
             )}
-            
-            <div className="flex flex-wrap gap-4">
-              {project.liveUrl && (
-                <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-[#24182e] hover:text-[#ffbe00] transition-colors bg-[#ffbe00] hover:bg-[#24182e] hover:text-white px-6 py-3 rounded-2xl shadow-lg font-black tracking-wide text-xs uppercase group">
-                  <ExternalLink size={16} className="group-hover:scale-110 transition-transform" />
-                  <span>Visit Live Website</span>
-                </a>
-              )}
-              {project.githubUrl && (
-                <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white bg-[#24182e] hover:bg-[#ffbe00] hover:text-[#24182e] transition-colors px-6 py-3 rounded-2xl shadow-md font-black tracking-wide text-xs uppercase group">
-                  <Code size={16} className="group-hover:scale-110 transition-transform" />
-                  <span>Tech Repository</span>
-                </a>
-              )}
-            </div>
           </motion.div>
         </motion.header>
 
@@ -462,10 +447,36 @@ export function PortfolioContent({ project }: { project: Project }) {
                 <div className="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-[#ffbe00] to-[#24182e]" />
                 
                 <div 
-                  className="max-w-none text-[#dcd7e3] space-y-4 break-words overflow-hidden rich-content"
-                  dangerouslySetInnerHTML={{ __html: parseMarkdown(project.content) }}
+                  className="max-w-none text-[#dcd7e3] space-y-4 overflow-hidden rich-content"
+                  dangerouslySetInnerHTML={{ __html: parseMarkdown((project.content || "").replace(/&nbsp;/g, ' ').replace(/\u00A0/g, ' ')) }}
                 />
 
+              </div>
+            </motion.div>
+          )}
+
+          {/* PROJECT LINKS */}
+          {(project.liveUrl || project.githubUrl) && (
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7 }}
+              className="flex justify-center mt-12"
+            >
+              <div className="flex flex-wrap justify-center gap-4">
+                {project.liveUrl && (
+                  <a href={project.liveUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-[#24182e] hover:text-[#ffbe00] transition-colors bg-[#ffbe00] hover:bg-[#24182e] hover:text-white px-8 py-4 rounded-2xl shadow-lg font-black tracking-wide text-sm uppercase group">
+                    <ExternalLink size={18} className="group-hover:scale-110 transition-transform" />
+                    <span>Visit Live Website</span>
+                  </a>
+                )}
+                {project.githubUrl && (
+                  <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-white bg-[#24182e] hover:bg-[#ffbe00] hover:text-[#24182e] transition-colors px-8 py-4 rounded-2xl shadow-md font-black tracking-wide text-sm uppercase group border border-white/10 hover:border-[#ffbe00]">
+                    <Code size={18} className="group-hover:scale-110 transition-transform" />
+                    <span>Tech Repository</span>
+                  </a>
+                )}
               </div>
             </motion.div>
           )}

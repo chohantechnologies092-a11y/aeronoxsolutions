@@ -70,10 +70,10 @@ export function Footer({ services = defaultServices }: { services?: any[] }) {
         </div>
 
         {/* Main Footer Links Grid */}
-        <div className="grid gap-12 lg:grid-cols-12 lg:gap-8 pb-16 border-b border-white/10">
+        <div className="grid gap-12 md:grid-cols-2 lg:grid-cols-12 lg:gap-8 pb-16 border-b border-white/10">
 
           {/* Column 1: Brand Info & Registration */}
-          <div className="lg:col-span-4">
+          <div className="md:col-span-2 lg:col-span-5 lg:pr-12">
             <Link href="/" className="inline-block group mb-6">
               <Image
                 src="/logo_wht2.png"
@@ -180,25 +180,10 @@ export function Footer({ services = defaultServices }: { services?: any[] }) {
             </div>
           </div>
 
-          {/* Column 2: Core Capabilities */}
+
+
+          {/* Column 2: Quick Navigation */}
           <div className="lg:col-span-3">
-            <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[#ffbe00] mb-6">
-              Our Capabilities
-            </h4>
-            <ul className="space-y-3.5 text-sm font-medium text-[#dcd7e3]/80">
-              {services.map((service) => (
-                <li key={service.id}>
-                  <Link href={`/services/${service.slug || service.id}`} className="hover:text-[#ffbe00] transition-colors flex items-center gap-1.5 group">
-                    <ArrowUpRight size={14} className="opacity-40 group-hover:opacity-100 transition-opacity" />
-                    {service.title}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-          
-          {/* Column 3: Quick Navigation */}
-          <div className="lg:col-span-2">
             <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[#ffbe00] mb-6">
               Navigation
             </h4>
@@ -217,8 +202,8 @@ export function Footer({ services = defaultServices }: { services?: any[] }) {
             </ul>
           </div>
 
-          {/* Column 4: Contact Info & Support */}
-          <div className="lg:col-span-3">
+          {/* Column 3: Contact Info & Support */}
+          <div className="lg:col-span-4">
             <h4 className="text-xs font-black uppercase tracking-[0.2em] text-[#ffbe00] mb-6">
               Global Contact & Support
             </h4>

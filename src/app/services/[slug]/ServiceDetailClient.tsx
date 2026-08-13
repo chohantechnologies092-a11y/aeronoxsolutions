@@ -187,15 +187,15 @@ export function ServiceDetailClient({ service }: { service: Service }) {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16">
           
           {/* Main Content Area */}
-          <div className="lg:col-span-8 flex flex-col gap-16 min-w-0 break-words">
+          <div className="lg:col-span-8 flex flex-col gap-16 min-w-0">
             
             {/* Overview (Rich Text) */}
             {(service.overview || service.content) && (
               <div className="p-8 sm:p-10 rounded-[2.5rem] bg-[#1a1122]/90 border border-white/15 shadow-2xl">
                 <h2 className="text-3xl font-extrabold text-white mb-6 tracking-tight">Overview</h2>
                 <div 
-                  className="prose prose-lg dark:prose-invert max-w-none text-[#e2e8f0] leading-relaxed prose-headings:text-[#ffbe00] prose-a:text-[#ffbe00] hover:prose-a:underline break-words rich-content"
-                  dangerouslySetInnerHTML={{ __html: service.overview || service.content }}
+                  className="prose prose-lg dark:prose-invert max-w-none text-[#e2e8f0] leading-relaxed prose-headings:text-[#ffbe00] prose-a:text-[#ffbe00] hover:prose-a:underline rich-content"
+                  dangerouslySetInnerHTML={{ __html: (service.overview || service.content || "").replace(/&nbsp;/g, ' ').replace(/\u00A0/g, ' ') }}
                 />
               </div>
             )}
@@ -205,8 +205,8 @@ export function ServiceDetailClient({ service }: { service: Service }) {
               <div className="p-8 sm:p-10 rounded-[2.5rem] bg-[#1a1122]/90 border border-white/15 shadow-2xl">
                 <h2 className="text-3xl font-extrabold text-white mb-6 tracking-tight">Detailed Features</h2>
                 <div 
-                  className="prose prose-lg dark:prose-invert max-w-none text-[#e2e8f0] leading-relaxed prose-headings:text-[#ffbe00] prose-a:text-[#ffbe00] hover:prose-a:underline break-words rich-content"
-                  dangerouslySetInnerHTML={{ __html: service.content }}
+                  className="prose prose-lg dark:prose-invert max-w-none text-[#e2e8f0] leading-relaxed prose-headings:text-[#ffbe00] prose-a:text-[#ffbe00] hover:prose-a:underline rich-content"
+                  dangerouslySetInnerHTML={{ __html: (service.content || "").replace(/&nbsp;/g, ' ').replace(/\u00A0/g, ' ') }}
                 />
               </div>
             )}
