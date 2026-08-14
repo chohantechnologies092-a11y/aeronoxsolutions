@@ -1,9 +1,10 @@
-import { getPageSEO, getSEO, getServices, getProjects, getClients } from "@/lib/data";
+import { getPageSEO, getSEO, getServices, getProjects, getClients, getTestimonials } from "@/lib/data";
 import { Hero } from "@/components/sections/Hero";
 import { LogoMarquee } from "@/components/sections/LogoMarquee";
 import { Services } from "@/components/sections/Services";
 import { Portfolio } from "@/components/sections/Portfolio";
 import { AboutAgency } from "@/components/sections/AboutAgency";
+import { Testimonials } from "@/components/sections/Testimonials";
 import { FAQ } from "@/components/sections/FAQ";
 
 export async function generateMetadata() {
@@ -20,10 +21,11 @@ export async function generateMetadata() {
 export const revalidate = 0;
 
 export default async function HomePage() {
-  const [services, projects, clients] = await Promise.all([
+  const [services, projects, clients, testimonials] = await Promise.all([
     getServices(),
     getProjects(),
     getClients(),
+    getTestimonials(),
   ]);
 
   return (
@@ -32,8 +34,11 @@ export default async function HomePage() {
       <LogoMarquee clients={clients} />
       <Services services={services} limit={3} />
       <Portfolio projects={projects} />
+      <Testimonials testimonials={testimonials} />
       <AboutAgency />
       <FAQ />
     </>
   );
 }
+
+// Force Turbopack recompile to clear hydration mismatch

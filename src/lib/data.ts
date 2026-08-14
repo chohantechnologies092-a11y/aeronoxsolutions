@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { db } from "@/lib/firebase-admin";
 import { ALL_PROJECTS } from "@/lib/projects-data";
-import { blogPosts } from "@/lib/constants";
+import { blogPosts, testimonials as fallbackTestimonials } from "@/lib/constants";
 import { unstable_cache } from "next/cache";
 
 function handleDbError(fnName: string, err: any) {
@@ -227,6 +227,22 @@ export const getClients = unstable_cache(
   },
   ["clients-list"],
   { revalidate: 300, tags: ["clients"] }
+);
+
+export const getTestimonials = unstable_cache(
+  async (): Promise<any[]> => {
+    try {
+      const snapshot = await db.collection("testimonials").orderBy("createdAt", "desc").get();
+      if (snapshot.docs.length > 0) {
+        return snapshot.docs.map((doc: any) => ({ id: doc.id, ...doc.data() }));
+      }
+    } catch (err) {
+      handleDbError("getTestimonials", err);
+    }
+    return fallbackTestimonials as any[];
+  },
+  ["testimonials-list"],
+  { revalidate: 300, tags: ["testimonials"] }
 );
 
 export const getBlogs = unstable_cache(

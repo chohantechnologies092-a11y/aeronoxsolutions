@@ -8,7 +8,7 @@ import { siteConfig } from "@/lib/constants";
 import { 
   LayoutDashboard, FolderKanban, FileText, Search, LogOut, Globe, 
   Layers, Users, Settings, Magnet, BarChart3, Menu, X, ChevronLeft, 
-  ChevronRight, Sun, Moon, Building2, ImageIcon
+  ChevronRight, Sun, Moon, Building2, ImageIcon, MessageSquareQuote
 } from "lucide-react";
 
 const navItems = [
@@ -19,6 +19,7 @@ const navItems = [
   { href: "/admin/graphic-design", label: "Graphic Galleries", icon: ImageIcon },
   { href: "/admin/services", label: "Services", icon: Layers },
   { href: "/admin/clients", label: "Clients", icon: Users },
+  { href: "/admin/testimonials", label: "Client Reviews", icon: MessageSquareQuote },
   { href: "/admin/blogs", label: "Blogs", icon: FileText },
   { href: "/admin/seo", label: "SEO Settings", icon: Search },
   { href: "/admin/banners", label: "Page Banners", icon: ImageIcon },

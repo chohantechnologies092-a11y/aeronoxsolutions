@@ -1,6 +1,6 @@
 "use server";
 
-import { db } from "@/lib/firebase-admin";
+import { db, storage } from "@/lib/firebase-admin";
 import { revalidatePath, revalidateTag } from "next/cache";
 import bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
@@ -987,3 +987,109 @@ export async function resetAnalyticsData() {
 }
 
 
+
+async function handleImageUpload(formData: FormData): Promise<string | null> {
+  const imageFile = formData.get("imageFile") as File | null;
+  
+  if (imageFile && imageFile.size > 0) {
+    const buffer = Buffer.from(await imageFile.arrayBuffer());
+    const filename = "testimonials/" + Date.now() + "_" + imageFile.name.replace(/[^a-zA-Z0-9.-]/g, "_");
+    const bucket = storage.bucket();
+    const fileRef = bucket.file(filename);
+    
+    await fileRef.save(buffer, { contentType: imageFile.type });
+    
+    const bucketName = bucket.name;
+    const encodedPath = encodeURIComponent(filename);
+    return "https://firebasestorage.googleapis.com/v0/b/" + bucketName + "/o/" + encodedPath + "?alt=media";
+  }
+  
+  // Fallback to text URL if provided
+  return (formData.get("image") as string) || null;
+}
+
+export async function createTestimonial(formData: FormData) {
+  const author = formData.get("author") as string;
+  const role = formData.get("role") as string;
+  const quote = formData.get("quote") as string;
+  const ratingStr = formData.get("rating") as string;
+  const rating = ratingStr ? parseInt(ratingStr, 10) : 5;
+  const isActive = formData.get("isActive") === "true" || formData.get("isActive") === "on";
+
+  if (!author || !quote) {
+    throw new Error("Author and Quote are required.");
+  }
+
+  const imageUrl = await handleImageUpload(formData);
+
+  await db.collection("testimonials").add({
+    author,
+    role: role || "",
+    quote,
+    image: imageUrl,
+    rating,
+    isActive,
+    createdAt: getNow(),
+    updatedAt: getNow(),
+  });
+
+  revalidatePath("/");
+  revalidatePath("/admin/testimonials");
+  // revalidateTag("testimonials");
+  redirect("/admin/testimonials");
+}
+
+export async function updateTestimonial(id: string, formData: FormData) {
+  const author = formData.get("author") as string;
+  const role = formData.get("role") as string;
+  const quote = formData.get("quote") as string;
+  const ratingStr = formData.get("rating") as string;
+  const rating = ratingStr ? parseInt(ratingStr, 10) : 5;
+  const isActive = formData.get("isActive") === "true" || formData.get("isActive") === "on";
+
+  if (!author || !quote) {
+    throw new Error("Author and Quote are required.");
+  }
+
+  const imageUrl = await handleImageUpload(formData);
+  
+  const updateData: any = {
+    author,
+    role: role || "",
+    quote,
+    rating,
+    isActive,
+    updatedAt: getNow(),
+  };
+
+  if (imageUrl) {
+    updateData.image = imageUrl;
+  } else if (formData.get("removeImage") === "true") {
+    updateData.image = null;
+  }
+
+  await db.collection("testimonials").doc(id).set(updateData, { merge: true });
+
+  revalidatePath("/");
+  revalidatePath("/admin/testimonials");
+  // revalidateTag("testimonials");
+  redirect("/admin/testimonials");
+}
+
+export async function deleteTestimonial(id: string) {
+  await db.collection("testimonials").doc(id).delete();
+  revalidatePath("/");
+  revalidatePath("/admin/testimonials");
+  // revalidateTag("testimonials");
+}
+
+export async function toggleTestimonialActive(id: string, isActive: boolean) {
+  await db.collection("testimonials").doc(id).set({
+    isActive,
+    updatedAt: getNow(),
+  }, { merge: true });
+
+  revalidatePath("/");
+  revalidatePath("/admin/testimonials");
+  // revalidateTag("testimonials");
+}

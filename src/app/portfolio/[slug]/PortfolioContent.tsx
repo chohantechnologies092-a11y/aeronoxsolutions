@@ -401,7 +401,7 @@ export function PortfolioContent({ project }: { project: Project }) {
           )}
 
           {/* CHALLENGE VS SOLUTION CARDS */}
-          {(project.challenge || project.solution) && (
+          {(project.challenge?.trim() || project.solution?.trim()) && (
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -409,7 +409,7 @@ export function PortfolioContent({ project }: { project: Project }) {
               transition={{ duration: 0.7 }}
               className="grid grid-cols-1 md:grid-cols-2 gap-8"
             >
-              {project.challenge && (
+              {project.challenge?.trim() && (
                 <div className="p-8 bg-gradient-to-br from-[#24182e] via-[#1a1122] to-[#140c1e] text-white rounded-[2rem] border border-amber-500/30 shadow-2xl relative overflow-hidden">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 rounded-full blur-2xl pointer-events-none" />
                   <h4 className="text-xl font-black text-amber-400 uppercase tracking-tight mb-3 flex items-center gap-2 relative z-10">
@@ -421,7 +421,7 @@ export function PortfolioContent({ project }: { project: Project }) {
                 </div>
               )}
 
-              {project.solution && (
+              {project.solution?.trim() && (
                 <div className="p-8 bg-gradient-to-br from-[#24182e] via-[#1a1122] to-[#120b18] text-white rounded-[2rem] border border-[#ffbe00]/30 shadow-2xl relative overflow-hidden">
                   <div className="absolute top-0 right-0 w-32 h-32 bg-[#ffbe00]/10 rounded-full blur-2xl pointer-events-none" />
                   <h4 className="text-xl font-black text-[#ffbe00] uppercase tracking-tight mb-3 flex items-center gap-2 relative z-10">
@@ -436,7 +436,7 @@ export function PortfolioContent({ project }: { project: Project }) {
           )}
 
           {/* DETAILED CONTENT */}
-          {project.content && (
+          {project.content && project.content.replace(/<p><br><\/p>/gi, '').replace(/<p>&nbsp;<\/p>/gi, '').replace(/<p>\s*<\/p>/gi, '').replace(/&nbsp;/gi, '').trim().length > 0 && (
             <motion.div 
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}

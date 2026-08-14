@@ -81,59 +81,58 @@ export function Portfolio({ projects }: { projects: any[] }) {
                 transition={{ duration: 0.7, delay: i * 0.15, ease: [0.21, 0.47, 0.32, 0.98] }}
               >
                 <Link href={`/portfolio/${project.slug}`} className="block h-full outline-none">
-                  <div className="group relative h-[450px] sm:h-[500px] w-full rounded-2xl overflow-hidden border border-white/10 bg-white/5 transform transition-transform duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_-15px_rgba(255,190,0,0.15)]">
+                  <div className="group flex flex-col h-full w-full rounded-[2rem] overflow-hidden border border-white/10 bg-[#120b18] hover:bg-[#1a1122]/90 transition-colors duration-500 hover:shadow-[0_20px_40px_-15px_rgba(255,190,0,0.15)] relative">
                     
-                    {/* Background Image */}
-                    <Image
-                      src={project.image}
-                      alt={project.title}
-                      fill
-                      className="object-cover transform transition-transform duration-1000 group-hover:scale-110"
-                    />
-                    
-                    {/* Dark Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-b from-[#090512]/10 via-[#090512]/40 to-[#090512] transition-opacity duration-500 opacity-90 group-hover:opacity-100" />
-                    
-                    {/* Top Badges */}
-                    <div className="absolute top-5 left-5 right-5 flex items-start justify-between z-20">
-                      <div className="bg-black/40 backdrop-blur-md border border-white/10 px-4 py-2 rounded-full">
-                        <span className="text-[9px] font-black uppercase tracking-[0.2em] text-white">
-                          {project.serviceCategory ? project.serviceCategory.replace("-", " ") : firstTag}
-                        </span>
-                      </div>
-
-                      {project.growthBadge && (
-                        <div className="bg-accent text-[#090512] px-3 py-1.5 rounded-full font-black text-[10px] uppercase tracking-wider shadow-[0_0_15px_rgba(255,190,0,0.3)]">
-                          {project.growthBadge}
+                    {/* Image Area - Top Half */}
+                    <div className="relative h-[240px] w-full overflow-hidden bg-white/5 shrink-0">
+                      <Image
+                        src={project.image}
+                        alt={project.title}
+                        fill
+                        className="object-cover transform transition-transform duration-700 group-hover:scale-105"
+                      />
+                      
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#120b18] via-transparent to-transparent opacity-80" />
+                      
+                      {/* Top Badges */}
+                      <div className="absolute top-4 left-4 right-4 flex items-start justify-between z-20">
+                        <div className="bg-black/60 backdrop-blur-md border border-white/10 px-4 py-1.5 rounded-full">
+                          <span className="text-[10px] font-bold uppercase tracking-widest text-white">
+                            {project.serviceCategory ? project.serviceCategory.replace("-", " ") : firstTag}
+                          </span>
                         </div>
-                      )}
+
+                        {project.growthBadge && (
+                          <div className="bg-[#ffbe00] text-[#120b18] px-3 py-1.5 rounded-full font-black text-[10px] uppercase tracking-wider shadow-lg">
+                            {project.growthBadge}
+                          </div>
+                        )}
+                      </div>
                     </div>
 
-                    {/* Bottom Content Area */}
-                    <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 z-20 flex flex-col justify-end h-full">
-                      <div className="transform transition-transform duration-500 translate-y-8 group-hover:translate-y-0">
-                        {project.client && (
-                          <span className="block text-[10px] font-black uppercase tracking-[0.2em] text-accent mb-3 drop-shadow-md">
-                            {project.client}
-                          </span>
-                        )}
-                        
-                        <h3 className="text-2xl sm:text-3xl font-black text-white mb-4 leading-tight drop-shadow-lg pr-8">
-                          {project.title}
-                        </h3>
-                        
-                        <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
-                          <p className="text-white/70 font-medium text-sm leading-relaxed line-clamp-3 mb-6">
-                            {project.description}
-                          </p>
-                          
-                          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-accent">
-                            <span className="relative overflow-hidden">
-                              <span className="inline-block transition-transform duration-300 group-hover:-translate-y-full">Explore Project</span>
-                              <span className="absolute top-0 left-0 inline-block transition-transform duration-300 translate-y-full group-hover:translate-y-0 text-white">Explore Project</span>
-                            </span>
-                            <ArrowUpRight size={14} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300 text-white" />
-                          </div>
+                    {/* Content Area - Bottom Half */}
+                    <div className="flex flex-col flex-grow p-6 sm:p-8 z-20 relative bg-gradient-to-b from-[#120b18] to-[#090512]">
+                      {project.client && (
+                        <span className="block text-[10px] font-black uppercase tracking-[0.2em] text-[#ffbe00] mb-3">
+                          {project.client}
+                        </span>
+                      )}
+                      
+                      <h3 className="text-xl sm:text-2xl font-bold text-white mb-4 leading-tight group-hover:text-[#ffbe00] transition-colors line-clamp-2">
+                        {project.title}
+                      </h3>
+                      
+                      <p className="text-white/60 font-medium text-sm leading-relaxed line-clamp-2 mb-6">
+                        {project.description}
+                      </p>
+                      
+                      <div className="flex items-center gap-2 mt-auto pt-4 border-t border-white/5 text-xs font-bold uppercase tracking-widest text-[#ffbe00]">
+                        <span className="relative overflow-hidden flex-grow">
+                          <span className="inline-block transition-transform duration-300 group-hover:-translate-y-full">Explore Project</span>
+                          <span className="absolute top-0 left-0 inline-block transition-transform duration-300 translate-y-full group-hover:translate-y-0 text-white">Explore Project</span>
+                        </span>
+                        <div className="w-10 h-10 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-[#ffbe00] group-hover:text-[#120b18] transition-all">
+                          <ArrowUpRight size={16} className="group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
                         </div>
                       </div>
                     </div>

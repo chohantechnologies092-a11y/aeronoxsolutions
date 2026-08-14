@@ -127,13 +127,22 @@ export function ServiceDetailClient({ service }: { service: Service }) {
 
   const capabilities: string[] = service.capabilities && service.capabilities.trim() !== "" 
     ? service.capabilities.split(',').map((c: string) => c.trim()).filter(Boolean)
-    : getServiceCapabilities(service.slug);
+    : [];
     
   const faqs = service.faqs && Array.isArray(service.faqs) && service.faqs.length > 0 
     ? service.faqs 
-    : getServiceFAQs(service.slug);
+    : [];
 
   const portfolioCategory = getPortfolioCategory(service.slug);
+
+  const cleanHtml = (html?: string | null) => {
+    if (!html) return false;
+    const clean = html.replace(/<p><br><\/p>/gi, '').replace(/<p>&nbsp;<\/p>/gi, '').replace(/<p>\s*<\/p>/gi, '').replace(/&nbsp;/gi, '').trim();
+    return clean.length > 0;
+  };
+
+  const hasOverview = cleanHtml(service.overview);
+  const hasContent = cleanHtml(service.content);
 
   return (
     <article className="min-h-screen bg-[#090512] text-white font-sans selection:bg-[#ffbe00] selection:text-[#120b18] pb-24 relative overflow-hidden">
@@ -190,18 +199,18 @@ export function ServiceDetailClient({ service }: { service: Service }) {
           <div className="lg:col-span-8 flex flex-col gap-16 min-w-0">
             
             {/* Overview (Rich Text) */}
-            {(service.overview || service.content) && (
+            {(hasOverview || hasContent) && (
               <div className="p-8 sm:p-10 rounded-[2.5rem] bg-[#1a1122]/90 border border-white/15 shadow-2xl">
                 <h2 className="text-3xl font-extrabold text-white mb-6 tracking-tight">Overview</h2>
                 <div 
                   className="prose prose-lg dark:prose-invert max-w-none text-[#e2e8f0] leading-relaxed prose-headings:text-[#ffbe00] prose-a:text-[#ffbe00] hover:prose-a:underline rich-content"
-                  dangerouslySetInnerHTML={{ __html: (service.overview || service.content || "").replace(/&nbsp;/g, ' ').replace(/\u00A0/g, ' ') }}
+                  dangerouslySetInnerHTML={{ __html: (hasOverview ? service.overview : service.content || "").replace(/&nbsp;/g, ' ').replace(/\u00A0/g, ' ') }}
                 />
               </div>
             )}
 
             {/* Detailed Content (Rich Text) */}
-            {service.overview && service.content && (
+            {hasOverview && hasContent && (
               <div className="p-8 sm:p-10 rounded-[2.5rem] bg-[#1a1122]/90 border border-white/15 shadow-2xl">
                 <h2 className="text-3xl font-extrabold text-white mb-6 tracking-tight">Detailed Features</h2>
                 <div 
@@ -212,46 +221,48 @@ export function ServiceDetailClient({ service }: { service: Service }) {
             )}
 
             {/* Structured Capabilities */}
-            <div>
-              <h2 className="text-3xl font-extrabold text-white mb-3 tracking-tight">Core Capabilities</h2>
-              <p className="text-[#dcd7e3]/70 font-medium mb-8">We leverage industry-leading tools and methodologies to deliver exceptional results.</p>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-                {capabilities.map((cap, idx) => {
-                  const brandData = getBrandIcon(cap);
-                  const colorHex = (service.color || "#ffbe00").replace('#', '');
-                  
-                  return (
-                    <div 
-                      key={idx}
-                      className="p-6 rounded-2xl bg-[#1a1122]/90 border border-white/15 shadow-xl hover:border-[#ffbe00]/40 flex items-start gap-4 transition-all group"
-                    >
+            {capabilities.length > 0 && (
+              <div>
+                <h2 className="text-3xl font-extrabold text-white mb-3 tracking-tight">Core Capabilities</h2>
+                <p className="text-[#dcd7e3]/70 font-medium mb-8">We leverage industry-leading tools and methodologies to deliver exceptional results.</p>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  {capabilities.map((cap, idx) => {
+                    const brandData = getBrandIcon(cap);
+                    const colorHex = (service.color || "#ffbe00").replace('#', '');
+                    
+                    return (
                       <div 
-                        className="w-12 h-12 rounded-xl bg-black/40 border border-white/10 shadow-inner flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform"
+                        key={idx}
+                        className="p-6 rounded-2xl bg-[#1a1122]/90 border border-white/15 shadow-xl hover:border-[#ffbe00]/40 flex items-start gap-4 transition-all group"
                       >
-                        {brandData ? (
-                          <img 
-                            src={brandData.type === 'simple' 
-                              ? `https://cdn.simpleicons.org/${brandData.id}/${colorHex}`
-                              : `https://www.google.com/s2/favicons?domain=${brandData.id}&sz=128`
-                            } 
-                            alt={`${brandData.id} icon`} 
-                            className="w-5 h-5 object-contain" 
-                            style={brandData.type === 'domain' ? { filter: 'grayscale(100%) opacity(70%)' } : { opacity: 0.9 }}
-                          />
-                        ) : (
-                          <CheckCircle2 size={20} style={{ color: service.color || "#ffbe00" }} />
-                        )}
+                        <div 
+                          className="w-12 h-12 rounded-xl bg-black/40 border border-white/10 shadow-inner flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform"
+                        >
+                          {brandData ? (
+                            <img 
+                              src={brandData.type === 'simple' 
+                                ? `https://cdn.simpleicons.org/${brandData.id}/${colorHex}`
+                                : `https://www.google.com/s2/favicons?domain=${brandData.id}&sz=128`
+                              } 
+                              alt={`${brandData.id} icon`} 
+                              className="w-5 h-5 object-contain" 
+                              style={brandData.type === 'domain' ? { filter: 'grayscale(100%) opacity(70%)' } : { opacity: 0.9 }}
+                            />
+                          ) : (
+                            <CheckCircle2 size={20} style={{ color: service.color || "#ffbe00" }} />
+                          )}
+                        </div>
+                        <div>
+                          <h4 className="font-bold text-white text-lg mb-1">{cap}</h4>
+                          <p className="text-xs sm:text-sm text-[#dcd7e3]/70 font-medium">Expert execution and strategic implementation tailored for {cap}.</p>
+                        </div>
                       </div>
-                      <div>
-                        <h4 className="font-bold text-white text-lg mb-1">{cap}</h4>
-                        <p className="text-xs sm:text-sm text-[#dcd7e3]/70 font-medium">Expert execution and strategic implementation tailored for {cap}.</p>
-                      </div>
-                    </div>
-                  );
-                })}
+                    );
+                  })}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Structured Process */}
             <div>
@@ -292,48 +303,50 @@ export function ServiceDetailClient({ service }: { service: Service }) {
             </div>
 
             {/* Clean FAQs */}
-            <div>
-              <h2 className="text-3xl font-extrabold text-white mb-8 tracking-tight">Frequently Asked Questions</h2>
-              <div className="flex flex-col gap-4 mb-10">
-                {faqs.map((faq, idx) => {
-                  const isActive = activeFaq === idx;
-                  return (
-                    <div
-                      key={idx}
-                      className="bg-[#1a1122]/90 border border-white/15 rounded-2xl overflow-hidden shadow-lg transition-all"
-                    >
-                      <button
-                        onClick={() => setActiveFaq(isActive ? null : idx)}
-                        className="w-full flex items-center justify-between p-6 text-left hover:bg-white/5 transition-colors cursor-pointer"
+            {faqs.length > 0 && (
+              <div>
+                <h2 className="text-3xl font-extrabold text-white mb-8 tracking-tight">Frequently Asked Questions</h2>
+                <div className="flex flex-col gap-4 mb-10">
+                  {faqs.map((faq, idx) => {
+                    const isActive = activeFaq === idx;
+                    return (
+                      <div
+                        key={idx}
+                        className="bg-[#1a1122]/90 border border-white/15 rounded-2xl overflow-hidden shadow-lg transition-all"
                       >
-                        <span className="text-base sm:text-lg font-bold text-white pr-4">
-                          {faq.question}
-                        </span>
-                        {isActive ? (
-                          <ChevronUp size={20} className="text-[#ffbe00] flex-shrink-0" />
-                        ) : (
-                          <ChevronDown size={20} className="text-white/60 flex-shrink-0" />
-                        )}
-                      </button>
-                      <AnimatePresence>
-                        {isActive && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            transition={{ duration: 0.2 }}
-                          >
-                            <div className="p-6 pt-0 text-[#dcd7e3]/80 font-medium text-sm border-t border-white/5 leading-relaxed">
-                              {faq.answer}
-                            </div>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  );
-                })}
+                        <button
+                          onClick={() => setActiveFaq(isActive ? null : idx)}
+                          className="w-full flex items-center justify-between p-6 text-left hover:bg-white/5 transition-colors cursor-pointer"
+                        >
+                          <span className="text-base sm:text-lg font-bold text-white pr-4">
+                            {faq.question}
+                          </span>
+                          {isActive ? (
+                            <ChevronUp size={20} className="text-[#ffbe00] flex-shrink-0" />
+                          ) : (
+                            <ChevronDown size={20} className="text-white/60 flex-shrink-0" />
+                          )}
+                        </button>
+                        <AnimatePresence>
+                          {isActive && (
+                            <motion.div
+                              initial={{ height: 0, opacity: 0 }}
+                              animate={{ height: "auto", opacity: 1 }}
+                              exit={{ height: 0, opacity: 0 }}
+                              transition={{ duration: 0.2 }}
+                            >
+                              <div className="p-6 pt-0 text-[#dcd7e3]/80 font-medium text-sm border-t border-white/5 leading-relaxed">
+                                {faq.answer}
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
+            )}
 
           </div>
 
