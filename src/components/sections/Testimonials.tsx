@@ -103,6 +103,7 @@ export function Testimonials({ testimonials = [] }: { testimonials?: any[] }) {
               
               {testimonial.videoUrl ? (
                 <div className="w-full relative rounded-xl overflow-hidden shadow-md aspect-video mb-6 border border-white/10 z-10 bg-black shrink-0">
+                  {/* @ts-ignore */}
                   <ReactPlayer 
                     url={testimonial.videoUrl} 
                     controls 
