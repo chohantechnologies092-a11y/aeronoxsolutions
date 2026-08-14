@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Star, ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import dynamic from "next/dynamic";
 
-const ReactPlayer = dynamic(() => import("react-player"), { ssr: false });
+const ReactPlayer: any = dynamic(() => import("react-player"), { ssr: false });
 
 export function Testimonials({ testimonials = [] }: { testimonials?: any[] }) {
   const displayTestimonials = testimonials.filter(t => t.isActive !== false);
@@ -103,7 +103,6 @@ export function Testimonials({ testimonials = [] }: { testimonials?: any[] }) {
               
               {testimonial.videoUrl ? (
                 <div className="w-full relative rounded-xl overflow-hidden shadow-md aspect-video mb-6 border border-white/10 z-10 bg-black shrink-0">
-                  {/* @ts-ignore */}
                   <ReactPlayer 
                     url={testimonial.videoUrl} 
                     controls 
