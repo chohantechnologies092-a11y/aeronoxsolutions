@@ -24,6 +24,7 @@ export default async function AdminSettings() {
     { href: "/admin/graphic-design", label: "Graphic Galleries" },
     { href: "/admin/services", label: "Services" },
     { href: "/admin/clients", label: "Clients" },
+    { href: "/admin/testimonials", label: "Client Reviews" },
     { href: "/admin/blogs", label: "Blogs" },
     { href: "/admin/seo", label: "Global SEO" },
     { href: "/admin/banners", label: "Page Banners" },
