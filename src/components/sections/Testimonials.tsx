@@ -109,14 +109,14 @@ export function Testimonials({ testimonials = [] }: { testimonials?: any[] }) {
                     width="100%"
                     height="100%"
                     className="absolute top-0 left-0"
-                    config={{
+                    config={({
                       facebook: {
                         attributes: {
                           'data-show-text': false,
                           'data-show-captions': true
                         }
                       }
-                    }}
+                    } as any)}
                   />
                 </div>
               ) : (
