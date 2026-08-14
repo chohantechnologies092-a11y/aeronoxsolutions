@@ -31,8 +31,10 @@ export const db: any = getApps().length ? getFirestore() : {
     doc: () => ({
       get: async () => ({ exists: false, data: () => null }),
       set: async () => {},
+      update: async () => {},
       delete: async () => {},
     }),
+    add: async () => ({ id: "mock-id" }),
     where: () => ({
       limit: () => ({
         get: async () => ({ empty: true, docs: [] })
@@ -47,4 +49,11 @@ export const db: any = getApps().length ? getFirestore() : {
 };
 
 export const auth: any = getApps().length ? getAuth() : {} as any;
-export const storage: any = getApps().length ? getStorage() : {} as any;
+export const storage: any = getApps().length ? getStorage() : {
+  bucket: () => ({
+    file: () => ({
+      save: async () => {},
+    }),
+    name: "mock-bucket"
+  })
+};

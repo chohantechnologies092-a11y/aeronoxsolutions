@@ -34,9 +34,9 @@ export default async function HomePage() {
       <LogoMarquee clients={clients} />
       <Services services={services} limit={3} />
       <Portfolio projects={projects} />
-      <Testimonials testimonials={testimonials} />
       <AboutAgency />
       <FAQ />
+      <Testimonials testimonials={testimonials} />
     </>
   );
 }

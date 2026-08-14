@@ -1022,11 +1022,14 @@ export async function createTestimonial(formData: FormData) {
 
   const imageUrl = await handleImageUpload(formData);
 
+  const videoUrl = formData.get("video") as string | null;
+
   await db.collection("testimonials").add({
     author,
     role: role || "",
     quote,
     image: imageUrl,
+    videoUrl: videoUrl || null,
     rating,
     isActive,
     createdAt: getNow(),
@@ -1036,7 +1039,7 @@ export async function createTestimonial(formData: FormData) {
   revalidatePath("/");
   revalidatePath("/admin/testimonials");
   // revalidateTag("testimonials");
-  redirect("/admin/testimonials");
+  return { success: true };
 }
 
 export async function updateTestimonial(id: string, formData: FormData) {
@@ -1053,6 +1056,8 @@ export async function updateTestimonial(id: string, formData: FormData) {
 
   const imageUrl = await handleImageUpload(formData);
   
+  const videoUrl = formData.get("video") as string | null;
+  
   const updateData: any = {
     author,
     role: role || "",
@@ -1061,6 +1066,10 @@ export async function updateTestimonial(id: string, formData: FormData) {
     isActive,
     updatedAt: getNow(),
   };
+
+  if (videoUrl !== undefined) {
+    updateData.videoUrl = videoUrl || null;
+  }
 
   if (imageUrl) {
     updateData.image = imageUrl;
@@ -1073,7 +1082,7 @@ export async function updateTestimonial(id: string, formData: FormData) {
   revalidatePath("/");
   revalidatePath("/admin/testimonials");
   // revalidateTag("testimonials");
-  redirect("/admin/testimonials");
+  return { success: true };
 }
 
 export async function deleteTestimonial(id: string) {

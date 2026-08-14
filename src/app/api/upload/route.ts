@@ -41,7 +41,10 @@ export async function POST(request: Request) {
     // Try uploading to Cloudinary with a 6-second timeout race
     const uploadPromise = new Promise<string>((resolve, reject) => {
       const uploadStream = cloudinary.uploader.upload_stream(
-        { folder: "aeronox_uploads" },
+        { 
+          folder: "aeronox_uploads",
+          resource_type: "auto"
+        },
         (error: any, result: any) => {
           if (error) reject(error);
           else resolve(result?.secure_url as string);

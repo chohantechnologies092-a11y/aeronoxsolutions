@@ -4,6 +4,8 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Save, Loader2, Quote } from "lucide-react";
 import { createTestimonial, updateTestimonial } from "@/lib/actions";
+import { ImageUpload } from "@/components/ui/ImageUpload";
+import { VideoUpload } from "@/components/ui/VideoUpload";
 
 export function TestimonialForm({ initialData }: { initialData?: any }) {
   const router = useRouter();
@@ -20,10 +22,10 @@ export function TestimonialForm({ initialData }: { initialData?: any }) {
       } else {
         await createTestimonial(formData);
       }
-      // router.push("/admin/testimonials") is handled by redirect in the action
-    } catch (error) {
+      router.push("/admin/testimonials");
+    } catch (error: any) {
       console.error("Error saving testimonial:", error);
-      alert("Failed to save testimonial. Please check the console for details.");
+      alert(`Failed to save testimonial. Error: ${error?.message || "Unknown error"}. Check console.`);
       setIsSubmitting(false);
     }
   }
@@ -95,6 +97,13 @@ export function TestimonialForm({ initialData }: { initialData?: any }) {
                   />
                 </div>
               </div>
+
+              <div className="pt-4 border-t border-admin-border/50">
+                <label className="block text-sm font-medium text-admin-muted mb-3">
+                  Video Review (Optional)
+                </label>
+                <VideoUpload name="video" defaultValue={initialData?.videoUrl} />
+              </div>
             </div>
           </div>
         </div>
@@ -135,18 +144,7 @@ export function TestimonialForm({ initialData }: { initialData?: any }) {
                 <label className="block text-sm font-medium text-admin-muted mb-1">
                   Client Image
                 </label>
-                <input
-                  type="file"
-                  name="imageFile"
-                  accept="image/*"
-                  className="w-full bg-black/5 dark:bg-white/5 border border-admin-border rounded-xl px-4 py-2.5 text-sm text-admin-text focus:outline-none focus:border-[#ffbe00] transition-colors file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#ffbe00] file:text-black hover:file:bg-[#e5ab00] cursor-pointer"
-                />
-                {initialData?.image && (
-                  <div className="mt-2 text-sm text-admin-muted flex items-center gap-2">
-                    <span>Current:</span>
-                    <img src={initialData.image} alt="Current" className="w-8 h-8 rounded-full object-cover" />
-                  </div>
-                )}
+                <ImageUpload name="image" defaultValue={initialData?.image} />
               </div>
 
               <div>
