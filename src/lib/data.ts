@@ -114,7 +114,7 @@ export const getServices = unstable_cache(
     return DEFAULT_SERVICES;
   },
   ["services-list"],
-  { revalidate: 300, tags: ["services"] }
+  { revalidate: 1, tags: ["services"] }
 );
 
 export const getServiceBySlug = unstable_cache(
@@ -140,7 +140,7 @@ export const getServiceBySlug = unstable_cache(
   },
   // Next.js unstable_cache automatically appends function args to keyParts, making a unique cache entry per slug
   ["service-by-slug"],
-  { revalidate: 300, tags: ["services"] }
+  { revalidate: 1, tags: ["services"] }
 );
 
 export const getProjects = unstable_cache(
@@ -195,7 +195,7 @@ export const getProjects = unstable_cache(
     return ALL_PROJECTS;
   },
   ["projects-list"],
-  { revalidate: 300, tags: ["projects"] }
+  { revalidate: 1, tags: ["projects"] }
 );
 
 export const getProjectBySlug = unstable_cache(
@@ -212,7 +212,7 @@ export const getProjectBySlug = unstable_cache(
     return ALL_PROJECTS.find((p) => p.slug === slug) || null;
   },
   ["project-by-slug"],
-  { revalidate: 300, tags: ["projects"] }
+  { revalidate: 1, tags: ["projects"] }
 );
 
 export const getClients = unstable_cache(
@@ -226,7 +226,7 @@ export const getClients = unstable_cache(
     }
   },
   ["clients-list"],
-  { revalidate: 300, tags: ["clients"] }
+  { revalidate: 1, tags: ["clients"] }
 );
 
 export const getTestimonials = unstable_cache(
@@ -242,7 +242,7 @@ export const getTestimonials = unstable_cache(
     return fallbackTestimonials as any[];
   },
   ["testimonials-list"],
-  { revalidate: 300, tags: ["testimonials"] }
+  { revalidate: 1, tags: ["testimonials"] }
 );
 
 export const getBlogs = unstable_cache(
@@ -258,7 +258,7 @@ export const getBlogs = unstable_cache(
     return blogPosts as any[];
   },
   ["blogs-list"],
-  { revalidate: 300, tags: ["blogs"] }
+  { revalidate: 1, tags: ["blogs"] }
 );
 
 export const getBlogBySlug = unstable_cache(
@@ -274,7 +274,7 @@ export const getBlogBySlug = unstable_cache(
     return blogPosts.find((b: any) => b.slug === slug) || null;
   },
   ["blog-by-slug"],
-  { revalidate: 300, tags: ["blogs"] }
+  { revalidate: 1, tags: ["blogs"] }
 );
 
 export const getBlogById = unstable_cache(
@@ -290,7 +290,7 @@ export const getBlogById = unstable_cache(
     return blogPosts.find((b: any) => (b as any).id === id || b.slug === id) || null;
   },
   ["blog-by-id"],
-  { revalidate: 300, tags: ["blogs"] }
+  { revalidate: 1, tags: ["blogs"] }
 );
 
 export const getSEO = unstable_cache(
@@ -306,7 +306,7 @@ export const getSEO = unstable_cache(
     return null;
   },
   ["seo-global"],
-  { revalidate: 300, tags: ["seo"] }
+  { revalidate: 1, tags: ["seo"] }
 );
 
 export const getPageSEO = unstable_cache(
@@ -322,7 +322,7 @@ export const getPageSEO = unstable_cache(
     return null;
   },
   ["seo-page"],
-  { revalidate: 300, tags: ["seo"] }
+  { revalidate: 1, tags: ["seo"] }
 );
 
 export const getSettings = unstable_cache(
@@ -338,7 +338,7 @@ export const getSettings = unstable_cache(
     return null;
   },
   ["settings-global"],
-  { revalidate: 300, tags: ["settings"] }
+  { revalidate: 1, tags: ["settings"] }
 );
 
 export async function getMessages(): Promise<any[]> {
@@ -387,7 +387,7 @@ export const getServiceById = unstable_cache(
   },
   // Next.js unstable_cache automatically appends function args to keyParts, making a unique cache entry per id
   ["service-by-id"],
-  { revalidate: 300, tags: ["services"] }
+  { revalidate: 1, tags: ["services"] }
 );
 
 export const getProjectById = unstable_cache(
@@ -403,7 +403,7 @@ export const getProjectById = unstable_cache(
     return ALL_PROJECTS.find((p) => p.id === id) || null;
   },
   ["project-by-id"],
-  { revalidate: 300, tags: ["projects"] }
+  { revalidate: 1, tags: ["projects"] }
 );
 
 export async function getClientById(id: string): Promise<any> {
@@ -441,7 +441,7 @@ export const getCompanyProfile = unstable_cache(
     return null;
   },
   ["company-profile"],
-  { revalidate: 300, tags: ["company"] }
+  { revalidate: 1, tags: ["company"] }
 );
 
 export const getTeamMembers = unstable_cache(
@@ -463,7 +463,7 @@ export const getTeamMembers = unstable_cache(
     }
   },
   ["team-members"],
-  { revalidate: 300, tags: ["team"] }
+  { revalidate: 1, tags: ["team"] }
 );
 
 export async function getRolePermissions(): Promise<string[]> {
